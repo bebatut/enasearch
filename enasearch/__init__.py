@@ -1,11 +1,21 @@
 #!/usr/bin/env python
 
 import requests
-import misc
+import pickle
 from pprint import pprint
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
 lengthLimit = 100000
+
+
+def load_object(filepath):
+    """Load object from a pickle file
+
+    filepath: path to pickle file with serialized data
+    """
+    with open(filepath, 'rb') as input:
+        obj = pickle.load(input)
+    return obj
 
 
 def get_results(verbose=True):
@@ -14,9 +24,10 @@ def get_results(verbose=True):
 
     verbose: boolean to define the printing info
     """
-    results = misc.get_results("data/ena_domain_results.csv")
+    results = load_object("data/result_description")
     if verbose:
-        pprint(results)
+        for result in results:
+            print("%s: %s" % (result, results[result]["description"]))
     return results
 
 
@@ -69,6 +80,7 @@ def check_length(length):
 
 def get_graphical_image(ids, featureRange, sequenceRange):
     url = baseUrl + "data/view/graphics/" 
+
 
 def retrieve_data(
     ids, display, download = None, file = None, offset = 0, length = 100000, 
