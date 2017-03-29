@@ -19,7 +19,7 @@ def cmp(la, lb):
 
 def test_get_results():
     """Test get_results function"""
-    results = enasearch.get_results(verbose=True)
+    results = enasearch.get_results(verbose=False)
     exp_results = [
         'wgs_set', 'analysis_study', 'study', 'read_run', 'coding_release',
         'coding_update', 'analysis', 'environmental', 'tsa_set',

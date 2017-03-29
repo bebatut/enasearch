@@ -4,6 +4,7 @@ import requests
 import pickle
 from pprint import pprint
 
+
 baseUrl = 'http://www.ebi.ac.uk/ena/'
 lengthLimit = 100000
 
@@ -18,17 +19,68 @@ def load_object(filepath):
     return obj
 
 
+results = load_object("data/result_description")
+
+
 def get_results(verbose=True):
     """Return the list of results in ENA as a dictionary with the key being the
     result id and the value the result description
 
     verbose: boolean to define the printing info
     """
-    results = load_object("data/result_description")
     if verbose:
         for result in results:
             print("%s: %s" % (result, results[result]["description"]))
     return results
+
+
+def check_result(result):
+    """Check if result is in the list of possible results in ENA
+
+    result: id of result to check
+    """
+    possible_results = get_results(verbose=False)
+    if result not in possible_results:
+        err_str = "The result value (%s) does not correspond to a " % (result)
+        err_str += "possible result value in ENA"
+        raise ValueError(err_str)
+
+
+def get_result(result, verbose=False):
+    """Return info about a result
+
+    result: id of the result (partition of ENA db), accessible with get_results
+    """
+    results = get_results(verbose=False)
+    check_result(result)
+    result_info = results["result"]
+    if verbose:
+        pprint(result_info)
+    return result_info
+
+
+def get_filter_fields(result, verbose=False):
+    """Get the filter fields of a result to build a query
+
+    result: id of the result (partition of ENA db), accessible with get_results
+    """
+    result_info = get_result(result)
+    filter_fields = result_info["filter_fields"]
+    if verbose:
+        pprint(filter_fields)
+    return filter_fields
+
+
+def get_returnable_fields(result, verbose=False):
+    """Get the returnable fields of a result
+
+    result: id of the result (partition of ENA db), accessible with get_results
+    """
+    result_info = get_result(result)
+    returnable_fields = result_info["returnable_fields"]
+    if verbose:
+        pprint(returnable_fields)
+    return returnable_fields
 
 
 def check_display(display):
@@ -55,18 +107,6 @@ def check_download(download):
         raise ValueError(err_str)
 
 
-def check_result(result):
-    """Check if result is in the list of possible results in ENA
-
-    result: id of result to check
-    """
-    possible_results = get_results(verbose=False)
-    if result not in possible_results:
-        err_str = "The result value (%s) does not correspond to a " % (result)
-        err_str += "possible result value in ENA"
-        raise ValueError(err_str)
-
-
 def check_length(length):
     """Check if length is below the maximum length
 
@@ -86,12 +126,12 @@ def retrieve_data(
     ids, display, download = None, file = None, offset = 0, length = 100000, 
     range = None, expanded = None, res_range = None, header = None):
     url = baseUrl + "data/view/"
-
     check_display(display)
     
 
 def retrieve_taxon(domain):
     url = baseUrl + "data/view/Taxon"
+
 
 def retrieve_marker(domain):
     url = baseUrl + "data/warehouse/search?"
@@ -100,23 +140,24 @@ def retrieve_marker(domain):
 def get_search_result_number(query, result, need_check_result = True):
     """Get the number of results for a query on a result
 
-    query: query string, made up of filtering conditions, joined by logical 
+    query: query string, made up of filtering conditions (filter fields can be 
+    accessed with get_filter_fields), joined by logical 
     ANDs, ORs and NOTs and bound by double quotes
-    result: id of the result (partition of ENA db)
+    result: id of the result (partition of ENA db), accessible with get_results
     """
     url = baseUrl + "data/warehouse/search?"
-    url += "query=%s" + query
+    url += "query=%s" % (query)
 
     if need_check_result:
         check_result(result)
-    url += "&result=%s" + result
+    url += "&result=%s" % (result)
 
     url += "&resultcount"
     r = requests.get(
         url,
         headers={"accept": "application/json"})
     r.raise_for_status()
-    return r.json()
+    return int(r.text.split("\n")[0].split(": ")[1])
 
 
 def search_data(
