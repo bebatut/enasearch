@@ -208,6 +208,22 @@ def get_graphical_image(ids, featureRange, sequenceRange):
     print(url)
 
 
+def check_download_file_options(download, file):
+    """Check that download and file options are correctly defined
+
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the data (used with download option)
+    """
+    if file is None:
+        err_str = "download option should come along with a filepath"
+        raise ValueError(err_str)
+    if download is None:
+        err_str = "file option should come along with a download option"
+        raise ValueError(err_str)
+    check_download_option(download)
+
+
 def retrieve_data(
     ids, display, download=None, file=None, offset=0, length=100000,
     range=None, expanded=None, res_range=None, header=None
@@ -226,8 +242,11 @@ def retrieve_data(
     header:
     """
     url = baseUrl + "data/view/"
-    check_display(display)
-    print(url)
+    check_display_option(display)
+
+    if download is not None or file is not None:
+        check_download_file_options(download, file)
+        url += "download=%s" + download
 
 
 def retrieve_taxon(domain):
