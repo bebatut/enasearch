@@ -2,7 +2,6 @@
 
 import click
 import ebisearch
-from pprint import pprint
 
 
 @click.group()
