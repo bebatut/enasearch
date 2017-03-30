@@ -80,7 +80,7 @@ def get_results(filepath, filters, return_fields):
 
 
 def get_special_filters(filepath):
-    """Extract the special (taxonomy or geospatial) filter
+    """Extract the special (taxonomy or geospatial) filter description
 
     filepath: path with csv with filter description
     """
@@ -94,6 +94,39 @@ def get_special_filters(filepath):
             filters[function]["parameters"] = row["Parameters"].split(",")
             filters[function]["example"] = row["Example"]
     return filters
+
+
+def get_filter_types():
+    """Extract filter types
+    """
+    filter_types = {}
+    filter_types["Boolean"] = {
+        "operators": ["="],
+        "values": ["yes", "true", "no", "false"]
+    }
+    filter_types["Controlled vocabulary"] = {
+        "operators": ["=", "!="],
+        "value": "A text value from the controlled vocabulary enclosed in \
+        double quotes"
+    }
+    filter_types["Date"] = {
+        "operators": ["=", "!=", "<", "<=", ">", ">="],
+        "value": "A date in the format YYYY-MM-DD"
+    }
+    filter_types["Number"] = {
+        "operators": ["=", "!=", "<", "<=", ">", ">="],
+        "value": "Any integer"
+    }
+    filter_types["Text"] = {
+        "operators": ["=", "!="],
+        "value": "Any text value enclosed in double quotes. Wildcard (*) can \
+        be used at the start and/or end of the text value."
+    }
+    filter_types["Geospatial"] = get_special_filters(
+        "data/geospatial_filters.csv")
+    filter_types["Taxonomy"] = get_special_filters(
+        "data/taxonomy_filters.csv")
+    return filter_types
 
 
 def save_object(obj, filename):
@@ -117,11 +150,8 @@ def serialize_ena_data_descriptors():
         return_fields)
     save_object(results, "data/result_description")
 
-    get_special_filters("data/geospatial_filters.csv")
-    save_object(results, "data/geospatial_filters")
-
-    get_special_filters("data/taxonomy_filters.csv")
-    save_object(results, "data/taxonomy_filters")
+    filter_types = get_filter_types()
+    save_object(filter_types, "data/filter_types")
 
 
 if __name__ == "__main__":
