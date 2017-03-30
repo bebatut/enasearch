@@ -81,3 +81,18 @@ def test_get_sortable_fields():
         result="sequence_update",
         verbose=False)
     assert "haplotype" in sortable_fields
+
+
+def test_search_data():
+    """Test search_data function"""
+    search_data = enasearch.search_data(
+        query="tax_tree(7147) AND dataclass=STD",
+        result="coding_update",
+        display="fasta",
+        offset=0,
+        length=20,
+        download=None,
+        file=None,
+        fields=None,
+        sortfields=None)
+    assert ">ENA|AAA03162|AAA03162.2" in search_data

@@ -301,26 +301,63 @@ def search_data(
     query are accessible with get_filter_fields and the type of filters with
     get_filter_types
     result: id of the result (partition of ENA db), accessible with get_results
-    display:
-    download:
-    file:
+    display: display option to specify the display format (accessible with
+    get_display_options)
     offset:
     length:
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the search (used with download
+    option)
+    fields: comma-separated list of fields to return (only if display=report,
+    list of returnable fields accessible with get_returnable_fields)
+    sortfields: comma-separated list of fields to sort the results (only if
+    display=report, list of sortable fields accessible with
+    get_sortable_fields)
     """
     url = baseUrl + "data/warehouse/search?"
-    url += "query=%s" + query
+    url += "query=%s" % (query)
 
     check_result(result)
-    url += "&result=%s" + result
+    url += "&result=%s" % (result)
 
-    check_display(display)
-    url += "&display=%s" + display
-
-    if download is not None:
-        check_download(download)
-        url += "download=%s" + download
+    check_display_option(display)
+    url += "&display=%s" % (display)
 
     check_length(length)
+    url += "&length=%s" % (length)
+    result_nb = get_search_result_number(query, result)
+    if offset > result_nb:
+        err_str = "The offset value must be lower than the possible number of "
+        err_str += "results for the query"
+        raise ValueError(err_str)
+    url += "&offset=%s" % (offset)
+
+    if display == "report":
+        if fields is None:
+            err_str = "A list of comma-separated fields to return must be "
+            err_str += "provided if display=report"
+            raise ValueError(err_str)
+        check_returnable_fields(fields.split(","), result)
+        url += "&fields=%s" % (fields)
+        if sortfields is not None:
+            check_sortable_fields(fields)
+            url += "&sortfields=%s" % (sortfields)
+
+    if download is not None or file is not None:
+        check_download_file_options(download, file)
+        url += "&download=%s" % (download)
+
+        r = requests.get(url, stream=True)
+        r.raise_for_status()
+        with open(file, "ab") as fd:
+            for chunk in r.iter_content(chunk_size=128):
+                fd.write(chunk)
+
+    else:
+        r = requests.get(url)
+        r.raise_for_status()
+        return r.text
 
 
 def retrieve_filereport(accession, result, fields=None):
