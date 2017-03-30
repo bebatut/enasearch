@@ -24,6 +24,24 @@ def get_filter_fields(result):
     enasearch.get_filter_fields(verbose=True)
 
 
+@click.command('get_returnable_fields', short_help='Get returnable fields')
+@click.option(
+    '--result',
+    help='Id of a result (accessible with get_results)')
+def get_returnable_fields(result):
+    """Get the fields of a result that can returned in a report"""
+    enasearch.get_returnable_fields(verbose=True)
+
+
+@click.command('get_sortable_fields', short_help='Get sortnable fields')
+@click.option(
+    '--result',
+    help='Id of a result (accessible with get_results)')
+def get_sortable_fields(result):
+    """Get the fields of a result that can sorted for a report"""
+    enasearch.get_sortable_fields(verbose=True)
+
+
 @click.command('get_filter_types', short_help='Get filter types')
 def get_filter_types():
     """Get the types of filters usable to build a query"""
@@ -46,6 +64,8 @@ def get_download_options():
 
 main.add_command(get_results)
 main.add_command(get_filter_fields)
+main.add_command(get_returnable_fields)
+main.add_command(get_sortable_fields)
 main.add_command(get_filter_types)
 main.add_command(get_display_options)
 main.add_command(get_download_options)

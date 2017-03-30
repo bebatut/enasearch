@@ -90,6 +90,47 @@ def get_returnable_fields(result, verbose=False):
     return returnable_fields
 
 
+def check_returnable_fields(fields, result):
+    """Check that some fields are returnable fields of a resut
+
+    fields: list of fields to check
+    result: id of the result (partition of ENA db), accessible with get_results
+    """
+    returnable_fields = get_returnable_fields(result, verbose=False)
+    for field in fields:
+        if field not in returnable_fields:
+            err_str = "The field %s is not a returnable field for " % (field)
+            err_str += "result %s" % (result)
+            raise ValueError(err_str)
+
+
+def get_sortable_fields(result, verbose=False):
+    """Get the sortable fields of a result
+
+    result: id of the result (partition of ENA db), accessible with get_results
+    verbose: boolean to define the printing info
+    """
+    check_result(result)
+    sortable_fields = get_filter_fields(result, verbose=False)
+    if verbose:
+        pprint(sortable_fields)
+    return sortable_fields
+
+
+def check_sortable_fields(fields, result):
+    """Check that some fields are sortable fields of a resut
+
+    fields: list of fields to check
+    result: id of the result (partition of ENA db), accessible with get_results
+    """
+    sortable_fields = get_sortable_fields(result, verbose=False)
+    for field in fields:
+        if field not in sortable_fields:
+            err_str = "The field %s is not a sortable field for " % (field)
+            err_str += "result %s" % (result)
+            raise ValueError(err_str)
+
+
 def get_filter_types(verbose=False):
     """Get the types of filters usable to build a query
 

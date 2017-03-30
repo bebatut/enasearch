@@ -57,3 +57,27 @@ def test_get_download_options():
     download_options = enasearch.get_download_options(verbose=False)
     assert "gzip" in download_options
     assert "txt" in download_options
+
+
+def test_get_filter_fields():
+    """Test get_filter_fields function"""
+    filter_fields = enasearch.get_filter_fields(
+        result="assembly",
+        verbose=False)
+    assert "accession" in filter_fields
+
+
+def test_get_returnable_fields():
+    """Test get_returnable_fields function"""
+    returnable_fields = enasearch.get_returnable_fields(
+        result="read_study",
+        verbose=False)
+    assert "secondary_study_accession" in returnable_fields
+
+
+def test_get_sortable_fields():
+    """Test get_sortable_fields function"""
+    sortable_fields = enasearch.get_returnable_fields(
+        result="sequence_update",
+        verbose=False)
+    assert "haplotype" in sortable_fields
