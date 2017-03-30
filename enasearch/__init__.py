@@ -159,8 +159,8 @@ def check_display_option(display):
     """
     display_options = get_display_options(verbose=False)
     if display not in display_options:
-        err_str = "The display value does not correspond to a possible display"
-        err_str += "value in ENA"
+        err_str = "The display value (%s) does not correspond to a possible \
+        display value in ENA" % (display)
         raise ValueError(err_str)
 
 
