@@ -294,8 +294,8 @@ def get_search_result_number(query, result, need_check_result=True):
 
 
 def search_data(
-    query, result, display, offset=0, length=100000, download=None, file=None,
-    fields=None, sortfields=None
+    query, result, display, offset=0, length=lengthLimit, download=None,
+    file=None, fields=None, sortfields=None
 ):
     """Search ENA data
 
@@ -306,8 +306,8 @@ def search_data(
     result: id of the result (partition of ENA db), accessible with get_results
     display: display option to specify the display format (accessible with
     get_display_options)
-    offset:
-    length:
+    offset: first record to get
+    length: number of records to retrieve
     download: download option to specify that records are to be saved in a file
     (used with file option, accessible with get_download_options)
     file: filepath to save the content of the search (used with download
