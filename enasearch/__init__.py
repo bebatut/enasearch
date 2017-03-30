@@ -57,7 +57,7 @@ def get_result(result, verbose=False):
     """
     results = get_results(verbose=False)
     check_result(result)
-    result_info = results["result"]
+    result_info = results[result]
     if verbose:
         pprint(result_info)
     return result_info
@@ -82,6 +82,7 @@ def get_returnable_fields(result, verbose=False):
     result: id of the result (partition of ENA db), accessible with get_results
     verbose: boolean to define the printing info
     """
+    check_result(result)
     result_info = get_result(result)
     returnable_fields = result_info["returnable_fields"]
     if verbose:
