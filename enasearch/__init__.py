@@ -20,6 +20,7 @@ def load_object(filepath):
 
 
 results = load_object("data/result_description")
+filter_types = load_object("data/filter_types")
 
 
 def get_results(verbose=True):
@@ -50,6 +51,7 @@ def get_result(result, verbose=False):
     """Return info about a result
 
     result: id of the result (partition of ENA db), accessible with get_results
+    verbose: boolean to define the printing info
     """
     results = get_results(verbose=False)
     check_result(result)
@@ -63,6 +65,7 @@ def get_filter_fields(result, verbose=False):
     """Get the filter fields of a result to build a query
 
     result: id of the result (partition of ENA db), accessible with get_results
+    verbose: boolean to define the printing info
     """
     result_info = get_result(result)
     filter_fields = result_info["filter_fields"]
@@ -75,6 +78,7 @@ def get_returnable_fields(result, verbose=False):
     """Get the returnable fields of a result
 
     result: id of the result (partition of ENA db), accessible with get_results
+    verbose: boolean to define the printing info
     """
     result_info = get_result(result)
     returnable_fields = result_info["returnable_fields"]
@@ -83,13 +87,24 @@ def get_returnable_fields(result, verbose=False):
     return returnable_fields
 
 
+def get_filter_types(verbose=False):
+    """Get the types of filters usable to build a query
+
+    result: id of the result (partition of ENA db), accessible with get_results
+    verbose: boolean to define the printing info
+    """
+    if verbose:
+        pprint(filter_types)
+    return filter_types
+
+
 def check_display(display):
     """Check if display is in the list of display in ENA
 
     display: display to check
     """
-    expectedDisplay = ["html", "xml", "text", "fasta", "fastq", "dwc"]
-    if display not in expect_display:
+    expected_display = ["html", "xml", "text", "fasta", "fastq", "dwc"]
+    if display not in expected_display:
         err_str = "The display value does not correspond to a possible display"
         err_str += "value in ENA"
         raise ValueError(err_str)
@@ -100,8 +115,8 @@ def check_download(download):
 
     download: download format to check
     """
-    expectedDownload = ["gzip", "txt"]
-    if download not in expectedDownload:
+    expected_download = ["gzip", "txt"]
+    if download not in expected_download:
         err_str = "The download value does not correspond to a possible "
         err_str += "display value in ENA"
         raise ValueError(err_str)
@@ -119,30 +134,63 @@ def check_length(length):
 
 
 def get_graphical_image(ids, featureRange, sequenceRange):
-    url = baseUrl + "data/view/graphics/" 
+    """Get graphical image
+
+    ids:
+    featureRange:
+    sequenceRange:
+    """
+    url = baseUrl + "data/view/graphics/"
+    print(url)
 
 
 def retrieve_data(
-    ids, display, download = None, file = None, offset = 0, length = 100000, 
-    range = None, expanded = None, res_range = None, header = None):
+    ids, display, download=None, file=None, offset=0, length=100000,
+    range=None, expanded=None, res_range=None, header=None
+):
+    """Retrieve ENA data
+
+    ids:
+    display:
+    download:
+    file:
+    offset:
+    length:
+    range:
+    expanded:
+    res_range:
+    header:
+    """
     url = baseUrl + "data/view/"
     check_display(display)
-    
+    print(url)
+
 
 def retrieve_taxon(domain):
+    """Retrieve taxon
+
+    domain:
+    """
     url = baseUrl + "data/view/Taxon"
+    print(url)
 
 
 def retrieve_marker(domain):
+    """Retrieve marker
+
+    domain:
+    """
     url = baseUrl + "data/warehouse/search?"
+    print(url)
 
 
-def get_search_result_number(query, result, need_check_result = True):
+def get_search_result_number(query, result, need_check_result=True):
     """Get the number of results for a query on a result
 
-    query: query string, made up of filtering conditions (filter fields can be 
-    accessed with get_filter_fields), joined by logical 
-    ANDs, ORs and NOTs and bound by double quotes
+    query: query string, made up of filtering conditions, joined by logical
+    ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
+    query are accessible with get_filter_fields and the type of filters with
+    get_filter_types
     result: id of the result (partition of ENA db), accessible with get_results
     """
     url = baseUrl + "data/warehouse/search?"
@@ -161,14 +209,20 @@ def get_search_result_number(query, result, need_check_result = True):
 
 
 def search_data(
-    query, result, display, download = None, file = None, offset = 0, 
-    length = 100000):
+    query, result, display, download=None, file=None, offset=0, length=100000
+):
     """Search ENA data
 
-    query: domain id in EBI
-    result: 
-    display: 
-    download: 
+    query: query string, made up of filtering conditions, joined by logical
+    ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
+    query are accessible with get_filter_fields and the type of filters with
+    get_filter_types
+    result: id of the result (partition of ENA db), accessible with get_results
+    display:
+    download:
+    file:
+    offset:
+    length:
     """
     url = baseUrl + "data/warehouse/search?"
     url += "query=%s" + query
@@ -185,5 +239,7 @@ def search_data(
 
     check_length(length)
 
-def retrieve_filereport(accession, result, fields = None):
+
+def retrieve_filereport(accession, result, fields=None):
     url = baseUrl + "data/warehouse/filereport"
+    print(url)
