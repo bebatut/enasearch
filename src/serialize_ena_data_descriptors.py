@@ -2,12 +2,11 @@
 
 import csv
 import pickle
-from pprint import pprint
 
 
 def get_filters(filepath):
-    """Extract the filters from the file with description of filters in ENA as 
-    a dictionary with the key being the filter id and the value a dictionary 
+    """Extract the filters from the file with description of filters in ENA as
+    a dictionary with the key being the filter id and the value a dictionary
     with related results, type of filter, filter description
 
     filepath: path with csv with filter description
@@ -25,8 +24,8 @@ def get_filters(filepath):
 
 
 def get_return_fields(filepath):
-    """Extract the returnable fields for results from the file with 
-    description of filters in ENA as a dictionary with the key being the field 
+    """Extract the returnable fields for results from the file with
+    description of filters in ENA as a dictionary with the key being the field
     id and the value a list of returnable fields
 
     filepath: path with csv with filter description
@@ -35,7 +34,6 @@ def get_return_fields(filepath):
     with open(filepath, "r") as f:
         reader = csv.DictReader(f, delimiter=';')
         for row in reader:
-            field_id = row["Result"]
             returnable_fields.setdefault(
                 row["Result"],
                 row["Returnable fields"].split(", "))
@@ -43,8 +41,8 @@ def get_return_fields(filepath):
 
 
 def get_results(filepath, filters, return_fields):
-    """Format the file with description of results in ENA as a dictionary with 
-    the key being the result id and the value a dictionary with the result 
+    """Format the file with description of results in ENA as a dictionary with
+    the key being the result id and the value a dictionary with the result
     description, the filter fields, the returnable fields
 
     filepath: path with csv with result description
@@ -81,6 +79,23 @@ def get_results(filepath, filters, return_fields):
     return results
 
 
+def get_special_filters(filepath):
+    """Extract the special (taxonomy or geospatial) filter
+
+    filepath: path with csv with filter description
+    """
+    filters = {}
+    with open(filepath, "r") as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            function = row["Function"]
+            filters.setdefault(function, {})
+            filters[function]["description"] = row["Description"]
+            filters[function]["parameters"] = row["Parameters"].split(",")
+            filters[function]["example"] = row["Example"]
+    return filters
+
+
 def save_object(obj, filename):
     """Serialize a Python object into a file
 
@@ -102,7 +117,12 @@ def serialize_ena_data_descriptors():
         return_fields)
     save_object(results, "data/result_description")
 
+    get_special_filters("data/geospatial_filters.csv")
+    save_object(results, "data/geospatial_filters")
+
+    get_special_filters("data/taxonomy_filters.csv")
+    save_object(results, "data/taxonomy_filters")
+
 
 if __name__ == "__main__":
     serialize_ena_data_descriptors()
-    
