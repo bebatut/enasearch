@@ -288,11 +288,13 @@ def get_search_result_number(query, result, need_check_result=True):
         url,
         headers={"accept": "application/json"})
     r.raise_for_status()
-    return int(r.text.split("\n")[0].split(": ")[1])
+    nb = r.text.split("\n")[0].split(": ")[1].replace(",", "")
+    return int(nb)
 
 
 def search_data(
-    query, result, display, download=None, file=None, offset=0, length=100000
+    query, result, display, offset=0, length=100000, download=None, file=None,
+    fields=None, sortfields=None
 ):
     """Search ENA data
 

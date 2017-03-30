@@ -37,6 +37,12 @@ def test_get_search_result_number():
         need_check_result=True)
     assert nb == 19
 
+    nb = enasearch.get_search_result_number(
+        query="tax_tree(7147) AND dataclass=STD",
+        result="coding_update",
+        need_check_result=True)
+    assert nb == 17123
+
 
 def test_get_filter_types():
     """Test get_filter_types function"""
