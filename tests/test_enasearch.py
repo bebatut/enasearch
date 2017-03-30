@@ -102,3 +102,16 @@ def test_search_data():
         fields=None,
         sortfields=None)
     assert ">ENA|AAA03162|AAA03162.2" in search_data
+
+
+def test_search_all_data():
+    """Test search_all_data function"""
+    search_data = enasearch.search_all_data(
+        query="tax_tree(7147) AND dataclass=STD",
+        result="coding_update",
+        display="fasta",
+        download=None,
+        file=None,
+        fields=None,
+        sortfields=None)
+    assert ">ENA|AAA03162|AAA03162.2" in search_data

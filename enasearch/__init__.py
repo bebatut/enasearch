@@ -3,6 +3,7 @@
 import requests
 import pickle
 from pprint import pprint
+import gzip
 
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
@@ -360,6 +361,72 @@ def search_data(
         r = requests.get(url)
         r.raise_for_status()
         return r.text
+
+
+def search_all_data(
+    query, result, display, download=None, file=None, fields=None,
+    sortfields=None
+):
+    """Search ENA data and get all results (not size limited)
+
+    query: query string, made up of filtering conditions, joined by logical
+    ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
+    query are accessible with get_filter_fields and the type of filters with
+    get_filter_types
+    result: id of the result (partition of ENA db), accessible with get_results
+    display: display option to specify the display format (accessible with
+    get_display_options)
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the search (used with download
+    option)
+    fields: comma-separated list of fields to return (only if display=report,
+    list of returnable fields accessible with get_returnable_fields)
+    sortfields: comma-separated list of fields to sort the results (only if
+    display=report, list of sortable fields accessible with
+    get_sortable_fields)
+    """
+    if display not in ["fasta", "fastq"]:
+        err_str = "This function is not possible for this display option"
+        raise ValueError(err_str)
+
+    if download is not None or file is not None:
+        check_download_file_options(download, file)
+
+    result_nb = get_search_result_number(query, result)
+    quotient = int(result_nb / float(lengthLimit))
+    start = 0
+    all_results = ""
+    for i in range(quotient):
+        start = lengthLimit * i
+        all_results += search_data(
+            query=query,
+            result=result,
+            display=display,
+            offset=start,
+            length=lengthLimit,
+            fields=None,
+            sortfields=None)
+    if (result_nb % 100) > 0:
+        start = lengthLimit * quotient
+        remainder = result_nb - start
+        all_results += search_data(
+            query=query,
+            result=result,
+            display=display,
+            offset=start,
+            length=remainder,
+            fields=None,
+            sortfields=None)
+    if file:
+        if download == "gzip":
+            with gzip.open(file, 'wb') as fd:
+                fd.write(all_results)
+        else:
+            with open(file, "w") as fd:
+                fd.write(all_results)
+    else:
+        return all_results
 
 
 def retrieve_filereport(accession, result, fields=None):
