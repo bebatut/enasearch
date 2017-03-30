@@ -4,6 +4,7 @@ import requests
 import pickle
 from pprint import pprint
 import gzip
+import xmltodict
 
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
@@ -360,7 +361,10 @@ def search_data(
     else:
         r = requests.get(url)
         r.raise_for_status()
-        return r.text
+        if display == "xml":
+            return xmltodict.parse(r.text)
+        else:
+            return r.text
 
 
 def search_all_data(

@@ -36,5 +36,5 @@ setup(
     },
     setup_requires=['pytest-runner'],
     tests_require=['pytest'],
-    install_requires=['requests', 'Click', 'flake8', 'pprint']
+    install_requires=['requests', 'Click', 'flake8', 'pprint', 'xmltodict']
 )
