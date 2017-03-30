@@ -24,7 +24,8 @@ def test_get_results():
         'wgs_set', 'analysis_study', 'study', 'read_run', 'coding_release',
         'coding_update', 'analysis', 'environmental', 'tsa_set',
         'sequence_update', 'noncoding_update', 'noncoding_release', 'sample',
-        'read_experiment', 'read_study', 'assembly', 'taxon', 'sequence_release']
+        'read_experiment', 'read_study', 'assembly', 'taxon',
+        'sequence_release']
     assert len(results) == 18 and cmp(results.keys(), exp_results)
 
 
@@ -33,10 +34,13 @@ def test_get_search_result_number():
     nb = enasearch.get_search_result_number(
         query="tax_eq(10090)",
         result="assembly",
-        need_check_result = True)
-    print(nb)
+        need_check_result=True)
+    assert nb == 19
 
 
-if __name__ == "__main__":
-    test_get_results()
-    test_get_search_result_number()
+def test_get_filter_types():
+    """Test get_search_result_number function"""
+    filter_types = enasearch.get_filter_types(verbose=False)
+    assert "Boolean" in filter_types
+    assert "geo_box1" in filter_types["Geospatial"]
+
