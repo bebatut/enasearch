@@ -43,4 +43,3 @@ def test_get_filter_types():
     filter_types = enasearch.get_filter_types(verbose=False)
     assert "Boolean" in filter_types
     assert "geo_box1" in filter_types["Geospatial"]
-
