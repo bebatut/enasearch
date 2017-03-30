@@ -2,6 +2,10 @@
 
 import click
 import enasearch
+from pprint import pprint
+
+
+lengthLimit = 100000
 
 
 @click.group()
@@ -62,6 +66,103 @@ def get_download_options():
     enasearch.get_download_options(verbose=True)
 
 
+@click.command('search_data', short_help='Search data')
+@click.option(
+    '--query',
+    help='Query string, made up of filtering conditions, joined by logical ANDs\
+    , ORs and NOTs and bound by double quotes; the filter fields for a query \
+    are accessible with get_filter_fields and the type of filters with get_\
+    filter_types')
+@click.option(
+    '--result',
+    help='Id of a result (accessible with get_results)')
+@click.option(
+    '--display',
+    help='Display option to specify the display format (accessible with get_\
+    display_options)')
+@click.option(
+    '--download',
+    required=False,
+    help='(Optional) Download option to specify that records are to be saved \
+    in a file (used with file option, list accessible with get_download_\
+    options)')
+@click.option(
+    '--file',
+    required=False,
+    type=click.Path(dir_okay=True, writable=True),
+    help='(Optional) File to save the content of the search (used with download\
+    option)')
+@click.option(
+    '--fields',
+    multiple=True,
+    required=False,
+    help='(Optional, Multiple) Fields to return (accessible with get_returnable\
+    _fields, used only for report as display value)')
+@click.option(
+    '--sortfields',
+    multiple=True,
+    required=False,
+    help='(Optional, Multiple) Fields to sort the results (accessible with get_\
+    sortable_fields, used only for report as display value)')
+@click.option(
+    '--offset',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) First record to get (used only for display different of \
+    fasta and fastq')
+@click.option(
+    '--length',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) Number of records to retrieve (used only for display \
+    different of fasta and fastq')
+def search_data(
+    query, result, display, download, file, fields, sortfields, offset, length
+):
+    """Search data given a query
+    """
+    if not download:
+        download = None
+    if not file:
+        file = None
+    if not fields:
+        fields = None
+    else:
+        fields = ",".join(fields)
+    if not sortfields:
+        sortfields = None
+    else:
+        sortfields = ",".join(sortfields)
+    if not offset:
+        offset = 0
+    if not length:
+        length = lengthLimit
+
+    if display in ["fasta", "fastq"]:
+        results = enasearch.search_all_data(
+            query=query,
+            result=result,
+            display=display,
+            download=download,
+            file=file,
+            fields=fields,
+            sortfields=sortfields)
+    else:
+        results = enasearch.search_data(
+            query=query,
+            result=result,
+            display=display,
+            download=download,
+            file=file,
+            fields=fields,
+            sortfields=sortfields,
+            offset=offset,
+            length=length)
+
+    if file is None:
+        pprint(results)
+
+
 main.add_command(get_results)
 main.add_command(get_filter_fields)
 main.add_command(get_returnable_fields)
@@ -69,6 +170,7 @@ main.add_command(get_sortable_fields)
 main.add_command(get_filter_types)
 main.add_command(get_display_options)
 main.add_command(get_download_options)
+main.add_command(search_data)
 
 
 if __name__ == "__main__":
