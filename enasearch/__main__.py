@@ -25,8 +25,15 @@ def get_filter_fields(result):
     ebisearch.get_filter_fields(verbose=True)
 
 
+@click.command('get_filter_types', short_help='Get filter types')
+def get_filter_types():
+    """Get the types of filters usable to build a query"""
+    ebisearch.get_filter_types(verbose=True)
+
+
 main.add_command(get_results)
 main.add_command(get_filter_fields)
+main.add_command(get_filter_types)
 
 
 if __name__ == "__main__":
