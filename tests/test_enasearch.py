@@ -39,7 +39,21 @@ def test_get_search_result_number():
 
 
 def test_get_filter_types():
-    """Test get_search_result_number function"""
+    """Test get_filter_types function"""
     filter_types = enasearch.get_filter_types(verbose=False)
     assert "Boolean" in filter_types
     assert "geo_box1" in filter_types["Geospatial"]
+
+
+def test_get_display_options():
+    """Test get_display_options function"""
+    display_options = enasearch.get_display_options(verbose=False)
+    assert "html" in display_options
+    assert "fasta" in display_options
+
+
+def test_get_download_options():
+    """Test get_download_options function"""
+    download_options = enasearch.get_download_options(verbose=False)
+    assert "gzip" in download_options
+    assert "txt" in download_options

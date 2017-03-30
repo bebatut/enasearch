@@ -21,6 +21,8 @@ def load_object(filepath):
 
 results = load_object("data/result_description")
 filter_types = load_object("data/filter_types")
+download_options = load_object("data/download_options")
+display_options = load_object("data/display_options")
 
 
 def get_results(verbose=True):
@@ -98,25 +100,45 @@ def get_filter_types(verbose=False):
     return filter_types
 
 
-def check_display(display):
+def get_display_options(verbose=False):
+    """Get the display options
+
+    verbose: boolean to define the printing info
+    """
+    if verbose:
+        pprint(display_options)
+    return display_options
+
+
+def check_display_option(display):
     """Check if display is in the list of display in ENA
 
     display: display to check
     """
-    expected_display = ["html", "xml", "text", "fasta", "fastq", "dwc"]
-    if display not in expected_display:
+    display_options = get_display_options(verbose=False)
+    if display not in display_options:
         err_str = "The display value does not correspond to a possible display"
         err_str += "value in ENA"
         raise ValueError(err_str)
 
 
-def check_download(download):
+def get_download_options(verbose=False):
+    """Get the download options
+
+    verbose: boolean to define the printing info
+    """
+    if verbose:
+        pprint(download_options)
+    return download_options
+
+
+def check_download_option(download):
     """Check if download is in the list of download format in ENA
 
     download: download format to check
     """
-    expected_download = ["gzip", "txt"]
-    if download not in expected_download:
+    download_options = get_display_options(verbose=False)
+    if download not in download_options:
         err_str = "The download value does not correspond to a possible "
         err_str += "display value in ENA"
         raise ValueError(err_str)
