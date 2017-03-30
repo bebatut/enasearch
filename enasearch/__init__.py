@@ -191,7 +191,7 @@ def check_length(length):
 
     length: length value to test
     """
-    if length >= lengthLimit:
+    if length > lengthLimit:
         err_str = "The length value (%s) is higher than the " % (length)
         err_str += "limit length (%s)" % (lengthLimit)
         raise ValueError(err_str)
