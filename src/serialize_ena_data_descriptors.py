@@ -129,6 +129,21 @@ def get_filter_types():
     return filter_types
 
 
+def get_options(filepath):
+    """Extract the option description
+
+    filepath: path with csv with option description
+    """
+    options = {}
+    with open(filepath, "r") as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            function = row["Option"]
+            options.setdefault(function, {})
+            options[function]["description"] = row["Description"]
+    return options
+
+
 def save_object(obj, filename):
     """Serialize a Python object into a file
 
@@ -152,6 +167,12 @@ def serialize_ena_data_descriptors():
 
     filter_types = get_filter_types()
     save_object(filter_types, "data/filter_types")
+
+    display_options = get_options("data/display_options.csv")
+    save_object(display_options, "data/display_options")
+
+    download_options = get_options("data/download_options.csv")
+    save_object(download_options, "data/download_options")
 
 
 if __name__ == "__main__":
