@@ -163,6 +163,89 @@ def search_data(
         pprint(results)
 
 
+@click.command('retrieve_data', short_help='Retrieve ENA data')
+@click.option(
+    '--ids',
+    multiple=True,
+    help='(Multiple) Ids for records to return (other than Taxon and Project)')
+@click.option(
+    '--display',
+    help='Display option to specify the display format (accessible with get_\
+    display_options)')
+@click.option(
+    '--download',
+    required=False,
+    help='(Optional) Download option to specify that records are to be saved \
+    in a file (used with file option, list accessible with get_download_\
+    options)')
+@click.option(
+    '--file',
+    required=False,
+    type=click.Path(dir_okay=True, writable=True),
+    help='(Optional) File to save the content of the search (used with download\
+    option)')
+@click.option(
+    '--offset',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) First record to get (used only for display different of \
+    fasta and fastq')
+@click.option(
+    '--length',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) Number of records to retrieve (used only for display \
+    different of fasta and fastq')
+@click.option(
+    '--range',
+    required=False,
+    help='(Optional) Range for subsequences (integer start and stop separated \
+    by a -)')
+@click.option(
+    '--expanded',
+    type=click.Choice(['true', 'false']),
+    required=False,
+    help='(Optional) Boolean to determine if a CON record is expanded')
+@click.option(
+    '--header',
+    type=click.Choice(['true', 'false']),
+    required=False,
+    help='(Optional) Boolean to obtain only the header of a record')
+def retrieve_data(
+    ids, display, download, file, offset, length, subseq_range, expanded,
+    header
+):
+    """Retrieve ENA data (other than taxon and project)
+    """
+    if not download:
+        download = None
+    if not file:
+        file = None
+    if not offset:
+        offset = 0
+    if not length:
+        length = lengthLimit
+    if not subseq_range:
+        subseq_range = None
+    if not expanded:
+        expanded = None
+    if not header:
+        header = None
+
+    data = enasearch.retrieve_data(
+        ids=",".join(ids),
+        display=display,
+        download=download,
+        file=file,
+        offset=offset,
+        length=length,
+        subseq_range=subseq_range,
+        expanded=expanded,
+        header=header)
+    if file is None:
+        pprint(data)
+
+
 main.add_command(get_results)
 main.add_command(get_filter_fields)
 main.add_command(get_returnable_fields)
@@ -171,6 +254,7 @@ main.add_command(get_filter_types)
 main.add_command(get_display_options)
 main.add_command(get_download_options)
 main.add_command(search_data)
+main.add_command(retrieve_data)
 
 
 if __name__ == "__main__":

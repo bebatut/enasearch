@@ -2,6 +2,7 @@
 
 import os
 import sys
+from pprint import pprint
 
 sys.path.insert(
     0,
@@ -115,3 +116,66 @@ def test_search_all_data():
         fields=None,
         sortfields=None)
     assert ">ENA|AAA03162|AAA03162.2" in search_data
+
+
+def test_retrieve_data():
+    """Test retrieve_data function"""
+    data = enasearch.retrieve_data(
+        ids="ERA000010-ERA000020",
+        display="xml",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded=None,
+        header=None)
+    assert "ROOT" in data
+    data = enasearch.retrieve_data(
+        ids="A00145",
+        display="fasta",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range="3-63",
+        expanded=None,
+        header=None)
+    pprint(data)
+    assert "tt" in data
+    data = enasearch.retrieve_data(
+        ids="AL513382",
+        display="text",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded="true",
+        header=None)
+    pprint(data)
+    assert "tt" in data
+    data = enasearch.retrieve_data(
+        ids="AL513382",
+        display="text",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded=None,
+        header="true")
+    pprint(data)
+    assert "tt" in data
+    data = enasearch.retrieve_data(
+        ids="PRJEB2772",
+        display="xml",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded=None,
+        header=None)
+    pprint(data)
+    assert "tt" in data

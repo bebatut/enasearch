@@ -226,38 +226,128 @@ def check_download_file_options(download, file):
     check_download_option(download)
 
 
+def check_subseq_range(subseq_range):
+    """Check that subseq_range is well defined
+
+    download: range for subsequences (limit separated by a -)
+    """
+    subseq_range_content = subseq_range.split("-")
+    if len(subseq_range_content) != 2:
+        err_str = "A subseq_range must have two arguments (start and stop)"
+        err_str += " separated by a -"
+        raise ValueError(err_str)
+    if int(subseq_range_content[0]) > int(subseq_range_content[1]):
+        err_str = "Start for a subseq_range must be lower than the stop"
+        raise ValueError(err_str)
+
+
+def check_boolean(boolean):
+    """Check a boolean value
+
+    boolean: boolean to determine an option
+    """
+    if boolean not in ["true", "false"]:
+        err_str = "A boolean value must be only 'true' or 'false'"
+        raise ValueError(err_str)
+
+
+def request_url(url, display, file=None):
+    """Run the URL request
+
+    url: URL to request
+    display: display option
+    length: number of records to retrieve
+    file: filepath to save the content of the search
+    """
+    print(url)
+    if file is not None:
+        r = requests.get(url, stream=True)
+        r.raise_for_status()
+        with open(file, "ab") as fd:
+            for chunk in r.iter_content(chunk_size=128):
+                fd.write(chunk)
+    else:
+        r = requests.get(url)
+        r.raise_for_status()
+        if display == "xml":
+            return xmltodict.parse(r.text)
+        else:
+            return r.text
+
+
 def retrieve_data(
     ids, display, download=None, file=None, offset=0, length=100000,
-    range=None, expanded=None, res_range=None, header=None
+    subseq_range=None, expanded=None, header=None
 ):
-    """Retrieve ENA data
+    """Retrieve ENA data (other than taxon)
 
-    ids:
-    display:
-    download:
-    file:
-    offset:
-    length:
-    range:
-    expanded:
-    res_range:
-    header:
+    ids: comma-separated identifiers for records other than Taxon
+    display: display option to specify the display format (accessible with
+    get_display_options)
+    offset: first record to get
+    length: number of records to retrieve
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the search (used with download
+    option)
+    subseq_range: range for subsequences (limit separated by a -)
+    expanded: boolean to determine if a CON record is expanded
+    header: boolean to obtain only the header of a record
     """
     url = baseUrl + "data/view/"
+    url += ids
+
     check_display_option(display)
+    url += "&display=%s" % (display)
+
+    check_length(length)
+    url += "&length=%s" % (length)
+    url += "&offset=%s" % (offset)
+
+    if subseq_range is not None:
+        check_subseq_range(subseq_range)
+        url += "&range=%s" % (subseq_range)
+
+    if expanded is not None:
+        check_boolean(expanded)
+        url += "&expanded=%s" % (expanded)
+
+    if header is not None:
+        check_boolean(header)
+        url += "&header=%s" % (header)
 
     if download is not None or file is not None:
         check_download_file_options(download, file)
-        url += "download=%s" + download
+        url += "&download=%s" % (download)
+        request_url(url, display, file)
+    else:
+        return request_url(url, display, file)
 
 
-def retrieve_taxon(domain):
-    """Retrieve taxon
+def retrieve_taxons(
+    ids, display, result=None, download=None, file=None, offset=0,
+    length=100000, subseq_range=None, expanded=None, header=None
+):
+    """Retrieve taxons
 
-    domain:
+    ids: comma-separated taxon identifiers
+    display: display option to specify the display format (accessible with
+    get_display_options)
+    result: taxonomy result to display
+    offset: first record to get
+    length: number of records to retrieve
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the search (used with download
+    option)
+    subseq_range: range for subsequences (limit separated by a -)
+    expanded: boolean to determine if a CON record is expanded
+    header: boolean to obtain only the header of a record
     """
-    url = baseUrl + "data/view/Taxon"
-    print(url)
+    id_list = ids.split(",")
+    modified_ids = []
+    for one_id in id_list:
+        modified_ids.append("Taxon:%s" % (one_id))
 
 
 def retrieve_marker(domain):
@@ -351,20 +441,9 @@ def search_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
-
-        r = requests.get(url, stream=True)
-        r.raise_for_status()
-        with open(file, "ab") as fd:
-            for chunk in r.iter_content(chunk_size=128):
-                fd.write(chunk)
-
+        request_url(url, display, file)
     else:
-        r = requests.get(url)
-        r.raise_for_status()
-        if display == "xml":
-            return xmltodict.parse(r.text)
-        else:
-            return r.text
+        return request_url(url, display, file)
 
 
 def search_all_data(
