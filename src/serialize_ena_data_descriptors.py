@@ -144,6 +144,21 @@ def get_options(filepath):
     return options
 
 
+def get_taxonomy_results(filepath):
+    """Extract the taxonomy results
+
+    filepath: path with csv with option description
+    """
+    taxonomy_results = {}
+    with open(filepath, "r") as f:
+        reader = csv.DictReader(f, delimiter=';')
+        for row in reader:
+            result = row["Result"]
+            taxonomy_results.setdefault(result, {})
+            taxonomy_results[result]["description"] = row["Description"]
+    return taxonomy_results
+
+
 def save_object(obj, filename):
     """Serialize a Python object into a file
 
@@ -173,6 +188,9 @@ def serialize_ena_data_descriptors():
 
     download_options = get_options("data/download_options.csv")
     save_object(download_options, "data/download_options")
+
+    taxonomy_results = get_taxonomy_results("data/taxonomy_results.csv")
+    save_object(taxonomy_results, "data/taxonomy_results")
 
 
 if __name__ == "__main__":
