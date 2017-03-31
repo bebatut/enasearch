@@ -151,7 +151,7 @@ def save_object(obj, filename):
     filepath: path to a file
     """
     with open(filename, 'wb') as output:
-        pickle.dump(obj, output, -1)
+        pickle.dump(obj, output, protocol=2)
 
 
 def serialize_ena_data_descriptors():
