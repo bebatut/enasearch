@@ -15,8 +15,16 @@ def main():
 
 @click.command('get_results', short_help='Get list of results')
 def get_results():
-    """Return the list of domains in EBI"""
+    """Return the list of results in ENA"""
     enasearch.get_results(verbose=True)
+
+
+@click.command(
+    'get_taxonomy_results',
+    short_help='Get list of taxonomy results')
+def get_taxonomy_results():
+    """Return the list of taxonomy results in ENA"""
+    enasearch.get_taxonomy_results(verbose=True)
 
 
 @click.command('get_filter_fields', short_help='Get filter fields')
@@ -246,7 +254,99 @@ def retrieve_data(
         pprint(data)
 
 
+@click.command('retrieve_taxons', short_help='Retrieve ENA taxon data')
+@click.option(
+    '--ids',
+    multiple=True,
+    help='(Multiple) Ids for records to return (other than Taxon and Project)')
+@click.option(
+    '--display',
+    help='Display option to specify the display format (accessible with get_\
+    display_options)')
+@click.option(
+    '--result',
+    required=False,
+    help='(Optional) Id of a taxonomy result (accessible with get_taxonomy_\
+    results)')
+@click.option(
+    '--download',
+    required=False,
+    help='(Optional) Download option to specify that records are to be saved \
+    in a file (used with file option, list accessible with get_download_\
+    options)')
+@click.option(
+    '--file',
+    required=False,
+    type=click.Path(dir_okay=True, writable=True),
+    help='(Optional) File to save the content of the search (used with download\
+    option)')
+@click.option(
+    '--offset',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) First record to get (used only for display different of \
+    fasta and fastq')
+@click.option(
+    '--length',
+    type=click.IntRange(min=0, max=lengthLimit),
+    required=False,
+    help='(Optional) Number of records to retrieve (used only for display \
+    different of fasta and fastq')
+@click.option(
+    '--range',
+    required=False,
+    help='(Optional) Range for subsequences (integer start and stop separated \
+    by a -)')
+@click.option(
+    '--expanded',
+    type=click.Choice(['true', 'false']),
+    required=False,
+    help='(Optional) Boolean to determine if a CON record is expanded')
+@click.option(
+    '--header',
+    type=click.Choice(['true', 'false']),
+    required=False,
+    help='(Optional) Boolean to obtain only the header of a record')
+def retrieve_taxons(
+    ids, display, result, download, file, offset, length, subseq_range,
+    expanded, header
+):
+    """Retrieve ENA taxon data (other than taxon and project)
+    """
+    if not result:
+        result = None
+    if not download:
+        download = None
+    if not file:
+        file = None
+    if not offset:
+        offset = 0
+    if not length:
+        length = lengthLimit
+    if not subseq_range:
+        subseq_range = None
+    if not expanded:
+        expanded = None
+    if not header:
+        header = None
+
+    data = enasearch.retrieve_taxons(
+        ids=",".join(ids),
+        display=display,
+        result=result,
+        download=download,
+        file=file,
+        offset=offset,
+        length=length,
+        subseq_range=subseq_range,
+        expanded=expanded,
+        header=header)
+    if file is None:
+        pprint(data)
+
+
 main.add_command(get_results)
+main.add_command(get_taxonomy_results)
 main.add_command(get_filter_fields)
 main.add_command(get_returnable_fields)
 main.add_command(get_sortable_fields)
@@ -255,6 +355,7 @@ main.add_command(get_display_options)
 main.add_command(get_download_options)
 main.add_command(search_data)
 main.add_command(retrieve_data)
+main.add_command(retrieve_taxons)
 
 
 if __name__ == "__main__":

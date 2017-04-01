@@ -27,6 +27,7 @@ results = load_object("data/result_description")
 filter_types = load_object("data/filter_types")
 download_options = load_object("data/download_options")
 display_options = load_object("data/display_options")
+taxonomy_results = load_object("data/taxonomy_results")
 
 
 def get_results(verbose=True):
@@ -41,6 +42,16 @@ def get_results(verbose=True):
     return results
 
 
+def get_taxonomy_results(verbose=False):
+    """Return info about the taxonomy results
+
+    verbose: boolean to define the printing info
+    """
+    if verbose:
+        pprint(taxonomy_results)
+    return taxonomy_results
+
+
 def check_result(result):
     """Check if result is in the list of possible results in ENA
 
@@ -48,8 +59,20 @@ def check_result(result):
     """
     possible_results = get_results(verbose=False)
     if result not in possible_results:
-        err_str = "The result value (%s) does not correspond to a " % (result)
-        err_str += "possible result value in ENA"
+        err_str = "The result od (%s) does not correspond to a " % (result)
+        err_str += "possible result id in ENA"
+        raise ValueError(err_str)
+
+
+def check_taxonomy_result(result):
+    """Check if a result is in the list of possible taxonomz results in ENA
+
+    result: id of result to check
+    """
+    taxonomy_results = get_taxonomy_results(verbose=False)
+    if result not in taxonomy_results:
+        err_str = "The result id (%s) does not correspond to a " % (result)
+        err_str += "possible taxonomy result id in ENA"
         raise ValueError(err_str)
 
 
@@ -270,7 +293,7 @@ def format_seq_content(seq_str, format):
 
 
 def request_url(url, display, file=None):
-    """Run the URL request
+    """Run the URL request and return content or status
 
     url: URL to request
     display: display option
@@ -284,6 +307,7 @@ def request_url(url, display, file=None):
         with open(file, "ab") as fd:
             for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)
+        return r.raise_for_status()
     else:
         r = requests.get(url)
         r.raise_for_status()
@@ -293,6 +317,56 @@ def request_url(url, display, file=None):
             return format_seq_content(r.text, display)
         else:
             return r.text
+
+
+def build_retrieve_url(
+    ids, display, result=None, download=None, file=None, offset=0,
+    length=100000, subseq_range=None, expanded=None, header=None
+):
+    """Build the URL to retriva data or taxon
+
+    ids: comma-separated identifiers for records other than Taxon
+    display: display option to specify the display format (accessible with
+    get_display_options)
+    offset: first record to get
+    length: number of records to retrieve
+    download: download option to specify that records are to be saved in a file
+    (used with file option, accessible with get_download_options)
+    file: filepath to save the content of the search (used with download
+    option)
+    subseq_range: range for subsequences (limit separated by a -)
+    expanded: boolean to determine if a CON record is expanded
+    header: boolean to obtain only the header of a record
+    """
+    url = baseUrl + "data/view/"
+    url += ids
+
+    check_display_option(display)
+    url += "&display=%s" % (display)
+
+    if result is not None:
+        url += "&result=%s" % (result)
+
+    check_length(length)
+    url += "&length=%s" % (length)
+    url += "&offset=%s" % (offset)
+
+    if subseq_range is not None:
+        check_subseq_range(subseq_range)
+        url += "&range=%s" % (subseq_range)
+
+    if expanded is not None:
+        check_boolean(expanded)
+        url += "&expanded=%s" % (expanded)
+
+    if header is not None:
+        check_boolean(header)
+        url += "&header=%s" % (header)
+
+    if download is not None or file is not None:
+        check_download_file_options(download, file)
+        url += "&download=%s" % (download)
+    return url
 
 
 def retrieve_data(
@@ -314,34 +388,18 @@ def retrieve_data(
     expanded: boolean to determine if a CON record is expanded
     header: boolean to obtain only the header of a record
     """
-    url = baseUrl + "data/view/"
-    url += ids
-
-    check_display_option(display)
-    url += "&display=%s" % (display)
-
-    check_length(length)
-    url += "&length=%s" % (length)
-    url += "&offset=%s" % (offset)
-
-    if subseq_range is not None:
-        check_subseq_range(subseq_range)
-        url += "&range=%s" % (subseq_range)
-
-    if expanded is not None:
-        check_boolean(expanded)
-        url += "&expanded=%s" % (expanded)
-
-    if header is not None:
-        check_boolean(header)
-        url += "&header=%s" % (header)
-
-    if download is not None or file is not None:
-        check_download_file_options(download, file)
-        url += "&download=%s" % (download)
-        request_url(url, display, file)
-    else:
-        return request_url(url, display, file)
+    url = build_retrieve_url(
+        ids=ids,
+        display=display,
+        result=None,
+        download=download,
+        file=file,
+        offset=offset,
+        length=length,
+        subseq_range=subseq_range,
+        expanded=expanded,
+        header=header)
+    return request_url(url, display, file)
 
 
 def retrieve_taxons(
@@ -353,7 +411,7 @@ def retrieve_taxons(
     ids: comma-separated taxon identifiers
     display: display option to specify the display format (accessible with
     get_display_options)
-    result: taxonomy result to display
+    result: taxonomy result to display (accessible with result)
     offset: first record to get
     length: number of records to retrieve
     download: download option to specify that records are to be saved in a file
@@ -368,6 +426,20 @@ def retrieve_taxons(
     modified_ids = []
     for one_id in id_list:
         modified_ids.append("Taxon:%s" % (one_id))
+    if result is not None:
+        check_taxonomy_result(result)
+    url = build_retrieve_url(
+        ids=",".join(modified_ids),
+        display=display,
+        result=result,
+        download=download,
+        file=file,
+        offset=offset,
+        length=length,
+        subseq_range=subseq_range,
+        expanded=expanded,
+        header=header)
+    return request_url(url, display, file)
 
 
 def retrieve_marker(domain):

@@ -30,6 +30,17 @@ def test_get_results():
     assert len(results) == 18 and cmp(results.keys(), exp_results)
 
 
+def test_get_taxonomy_results():
+    """Test get_taxonomy_results function"""
+    results = enasearch.get_taxonomy_results(verbose=False)
+    exp_taxo_results = [
+        'sequence_release', 'sequence_update', 'coding_release',
+        'coding_update', 'noncoding_release', 'noncoding_update',
+        'sample', 'study', 'analysis', 'analysis_study', 'read_run',
+        'read_experiment', 'read_study', 'read_trace']
+    assert cmp(results.keys(), exp_taxo_results)
+
+
 def test_get_search_result_number():
     """Test get_search_result_number function"""
     nb = enasearch.get_search_result_number(
@@ -178,4 +189,32 @@ def test_retrieve_data():
         expanded=None,
         header=None)
     pprint(data)
+    assert "ROOT" in data
+
+
+def test_retrieve_taxons():
+    """Test retrieve_taxons function"""
+    data = enasearch.retrieve_taxons(
+        ids="6543",
+        display="fasta",
+        result="sequence_update",
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded=None,
+        header=None)
+    assert 'ENA|KT626607|KT626607.1' in [seq.id for seq in data]
+    data = enasearch.retrieve_taxons(
+        ids="Human,Cat,Mouse,Zebrafish",
+        display="xml",
+        result=None,
+        download=None,
+        file=None,
+        offset=0,
+        length=100000,
+        subseq_range=None,
+        expanded=None,
+        header=None)
     assert "ROOT" in data
