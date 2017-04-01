@@ -218,3 +218,28 @@ def test_retrieve_taxons():
         expanded=None,
         header=None)
     assert "ROOT" in data
+
+
+def test_retrieve_run_report():
+    """Test retrieve_run_report function"""
+    report = enasearch.retrieve_run_report(
+        accession="SRX017289",
+        fields=None,
+        file=None)
+    assert "small RNAs_wild type" in report
+    exp_fields = ["run_accession", "fastq_ftp", "fastq_md5", "fastq_bytes"]
+    report = enasearch.retrieve_run_report(
+        accession="SRX017289",
+        fields=",".join(exp_fields),
+        file=None)
+    assert cmp(report.split("\n")[0].split("\t"), exp_fields)
+
+
+def test_retrieve_analysis_report():
+    """Test retrieve_analysis_report function"""
+    exp_fields = ["analysis_accession", "sample_accession", "scientific_name"]
+    report = enasearch.retrieve_analysis_report(
+        accession="PRJNA123835",
+        fields=",".join(exp_fields),
+        file=None)
+    assert cmp(report.split("\n")[0].split("\t"), exp_fields)

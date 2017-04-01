@@ -442,15 +442,6 @@ def retrieve_taxons(
     return request_url(url, display, file)
 
 
-def retrieve_marker(domain):
-    """Retrieve marker
-
-    domain:
-    """
-    url = baseUrl + "data/warehouse/search?"
-    print(url)
-
-
 def get_search_result_number(query, result, need_check_result=True):
     """Get the number of results for a query on a result
 
@@ -533,9 +524,7 @@ def search_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
-        request_url(url, display, file)
-    else:
-        return request_url(url, display, file)
+    return request_url(url, display, file)
 
 
 def search_all_data(
@@ -604,6 +593,58 @@ def search_all_data(
         return all_results
 
 
-def retrieve_filereport(accession, result, fields=None):
-    url = baseUrl + "data/warehouse/filereport"
-    print(url)
+def retrieve_filereport(accession, result, fields=None, file=None):
+    """Retrieve a filereport
+
+    accession: accession id
+    result: read_run for a run report or analysis for an analysis report
+    fields: comma-separated list of fields to have in the report
+    file: filepath to save the content of the report
+    """
+    url = baseUrl + "data/warehouse/filereport?"
+    url += "accession=%s" % (accession)
+
+    if result not in ["read_run", "analysis"]:
+        err_str = "The result to retrieve a filereport must be either read_run"
+        err_str += " or analysis"
+        raise ValueError(err_str)
+    url += "&result=%s" % (result)
+
+    if fields is not None:
+        check_returnable_fields(fields.split(","), result)
+        url += "&fields=%s" % (fields)
+
+    return request_url(url, "text", file)
+
+
+def retrieve_run_report(accession, fields=None, file=None):
+    """Retrieve run report
+
+    accession: accession id (study accessions (ERP, SRP, DRP, PRJ prefixes),
+    experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS,
+    SRS, DRS, SAM prefixes) and run accessions)
+    fields: comma-separated list of fields to have in the report (accessible
+    with get_returnable_fields with result=read_run)
+    file: filepath to save the content of the report
+    """
+    return retrieve_filereport(
+        accession=accession,
+        result="read_run",
+        fields=fields,
+        file=file)
+
+
+def retrieve_analysis_report(accession, fields=None, file=None):
+    """Retrieve analysis report
+
+    accession: accession id (study accessions (ERP, SRP, DRP, PRJ prefixes),
+    sample accessions (ERS, SRS, DRS, SAM prefixes) and analysis accessions)
+    fields: comma-separated list of fields to have in the report (accessible
+    with get_returnable_fields with result=analysis)
+    file: filepath to save the content of the report
+    """
+    return retrieve_filereport(
+        accession=accession,
+        result="analysis",
+        fields=fields,
+        file=file)
