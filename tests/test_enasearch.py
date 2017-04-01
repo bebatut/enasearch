@@ -42,7 +42,7 @@ def test_get_search_result_number():
         query="tax_tree(7147) AND dataclass=STD",
         result="coding_update",
         need_check_result=True)
-    assert nb == 17123
+    assert nb >= 17123
 
 
 def test_get_filter_types():
