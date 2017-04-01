@@ -5,6 +5,8 @@ import pickle
 from pprint import pprint
 import gzip
 import xmltodict
+from Bio import SeqIO
+import tempfile
 
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
@@ -251,6 +253,22 @@ def check_boolean(boolean):
         raise ValueError(err_str)
 
 
+def format_seq_content(seq_str, format):
+    """Format a string with sequences into a BioPython sequence objects
+    (SeqRecord)
+
+    seq_str: string with sequences to format
+    format: fasta or fastq
+    """
+    sequences = []
+    with tempfile.TemporaryFile(mode='w+') as fp:
+        fp.write(seq_str)
+        fp.seek(0)
+        for record in SeqIO.parse(fp, format):
+            sequences.append(record)
+    return sequences
+
+
 def request_url(url, display, file=None):
     """Run the URL request
 
@@ -271,6 +289,8 @@ def request_url(url, display, file=None):
         r.raise_for_status()
         if display == "xml":
             return xmltodict.parse(r.text)
+        elif display == "fasta" or display == "fastq":
+            return format_seq_content(r.text, display)
         else:
             return r.text
 
@@ -479,7 +499,7 @@ def search_all_data(
     result_nb = get_search_result_number(query, result)
     quotient = int(result_nb / float(lengthLimit))
     start = 0
-    all_results = ""
+    all_results = []
     for i in range(quotient):
         start = lengthLimit * i
         all_results += search_data(

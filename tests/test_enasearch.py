@@ -102,7 +102,7 @@ def test_search_data():
         file=None,
         fields=None,
         sortfields=None)
-    assert ">ENA|AAA03162|AAA03162.2" in search_data
+    assert 'ENA|AAA18901|AAA18901.2' in [seq.id for seq in search_data]
 
 
 def test_search_all_data():
@@ -115,7 +115,7 @@ def test_search_all_data():
         file=None,
         fields=None,
         sortfields=None)
-    assert ">ENA|AAA03162|AAA03162.2" in search_data
+    assert 'ENA|AAA18901|AAA18901.2' in [seq.id for seq in search_data]
 
 
 def test_retrieve_data():
