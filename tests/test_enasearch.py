@@ -141,8 +141,8 @@ def test_retrieve_data():
         subseq_range="3-63",
         expanded=None,
         header=None)
-    pprint(data)
-    assert "tt" in data
+    pprint([seq.id for seq in data])
+    assert 'ENA|A00145|A00145.1' in [seq.id for seq in data]
     data = enasearch.retrieve_data(
         ids="AL513382",
         display="text",
@@ -154,7 +154,7 @@ def test_retrieve_data():
         expanded="true",
         header=None)
     pprint(data)
-    assert "tt" in data
+    assert "AL513382" in data and len(data.split("\n")) >= 200000
     data = enasearch.retrieve_data(
         ids="AL513382",
         display="text",
@@ -166,7 +166,7 @@ def test_retrieve_data():
         expanded=None,
         header="true")
     pprint(data)
-    assert "tt" in data
+    assert "AL513382" in data and len(data.split("\n")) == 745
     data = enasearch.retrieve_data(
         ids="PRJEB2772",
         display="xml",
@@ -178,4 +178,4 @@ def test_retrieve_data():
         expanded=None,
         header=None)
     pprint(data)
-    assert "tt" in data
+    assert "ROOT" in data
