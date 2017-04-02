@@ -7,10 +7,17 @@ import gzip
 import xmltodict
 from Bio import SeqIO
 import tempfile
+import os
 
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
 lengthLimit = 100000
+
+_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+
+def get_data(path):
+    return os.path.join(_ROOT, 'data', path)
 
 
 def load_object(filepath):
@@ -23,11 +30,11 @@ def load_object(filepath):
     return obj
 
 
-results = load_object("data/result_description")
-filter_types = load_object("data/filter_types")
-download_options = load_object("data/download_options")
-display_options = load_object("data/display_options")
-taxonomy_results = load_object("data/taxonomy_results")
+results = load_object(get_data("result_description.p"))
+filter_types = load_object(get_data("filter_types.p"))
+download_options = load_object(get_data("download_options.p"))
+display_options = load_object(get_data("display_options.p"))
+taxonomy_results = load_object(get_data("taxonomy_results.p"))
 
 
 def get_results(verbose=True):

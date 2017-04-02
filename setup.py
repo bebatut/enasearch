@@ -42,5 +42,7 @@ setup(
         'flake8',
         'pprint',
         'xmltodict',
-        'biopython']
+        'biopython'],
+    include_package_data=True,
+    package_data={'data': ['data/*.p']}
 )
