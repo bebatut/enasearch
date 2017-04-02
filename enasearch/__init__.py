@@ -307,7 +307,6 @@ def request_url(url, display, file=None):
     length: number of records to retrieve
     file: filepath to save the content of the search
     """
-    print(url)
     if file is not None:
         r = requests.get(url, stream=True)
         r.raise_for_status()
