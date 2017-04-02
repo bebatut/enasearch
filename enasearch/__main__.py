@@ -65,7 +65,7 @@ def get_analysis_fields():
         verbose=True)
 
 
-@click.command('get_sortable_fields', short_help='Get sortnable fields')
+@click.command('get_sortable_fields', short_help='Get sortable fields')
 @click.option(
     '--result',
     help='Id of a result (accessible with get_results)')

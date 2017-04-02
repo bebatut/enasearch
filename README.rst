@@ -34,7 +34,8 @@ ENASearch is easy to use
       get_results               Get list of results
       get_returnable_fields     Get returnable fields
       get_run_fields            Get run fields
-      get_sortable_fields       Get sortnable fields  get_taxonomy_results      Get list of taxonomy results
+      get_sortable_fields       Get sortable fields
+      get_taxonomy_results      Get list of taxonomy results
       retrieve_analysis_report  Retrieve analysis report
       retrieve_data             Retrieve ENA data
       retrieve_run_report       Retrieve run report
