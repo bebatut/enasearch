@@ -7,17 +7,15 @@ import gzip
 import xmltodict
 from Bio import SeqIO
 import tempfile
-import os
+import pkg_resources
 
 
 baseUrl = 'http://www.ebi.ac.uk/ena/'
 lengthLimit = 100000
 
-_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-
-def get_data(path):
-    return os.path.join(_ROOT, 'data', path)
+def get_data(filename):
+    return pkg_resources.resource_filename('enasearch_data', filename)
 
 
 def load_object(filepath):

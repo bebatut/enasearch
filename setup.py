@@ -44,5 +44,5 @@ setup(
         'xmltodict',
         'biopython'],
     include_package_data=True,
-    package_data={'data': ['data/*.p']}
+    package_data={'enasearch_data': ['enasearch_data/*.p']}
 )
