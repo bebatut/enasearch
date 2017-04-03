@@ -101,8 +101,7 @@ To install ENASearch, simply:
 
 .. code-block:: bash
 
-    $ git clone git@github.com:bebatut/enasearch.git
-    $ make install
+    $ pip install enasearch
 
 
 Tests
