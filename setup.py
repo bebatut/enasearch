@@ -7,7 +7,7 @@ setup(
     author_email="berenice.batut@gmail.com",
     description=("A Python library for interacting with ENA's API"),
     license="MIT",
-    keywords="api api-client ebi",
+    keywords="api api-client ena",
     url="https://github.com/bebatut/enasearch",
     packages=find_packages(),
     entry_points={
