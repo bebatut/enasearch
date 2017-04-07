@@ -389,6 +389,8 @@ def retrieve_run_report(accession, fields, file):
     """
     if not fields:
         fields = None
+    else:
+        fields = ",".join(fields)
     if not file:
         file = None
     report = enasearch.retrieve_run_report(
@@ -423,6 +425,8 @@ def retrieve_analysis_report(accession, fields, file):
     """
     if not fields:
         fields = None
+    else:
+        fields = ",".join(fields)
     if not file:
         file = None
     report = enasearch.retrieve_analysis_report(
