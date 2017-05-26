@@ -105,7 +105,7 @@ def test_search_data():
     """Test search_data function"""
     search_data = enasearch.search_data(
         query="tax_tree(7147) AND dataclass=STD",
-        result="coding_update",
+        result="coding_release",
         display="fasta",
         offset=0,
         length=20,
@@ -113,14 +113,14 @@ def test_search_data():
         file=None,
         fields=None,
         sortfields=None)
-    assert 'ENA|AAA18901|AAA18901.2' in [seq.id for seq in search_data]
+    assert 'ENA|AAA02481|AAA02481.1' in [seq.id for seq in search_data]
 
 
 def test_search_all_data():
     """Test search_all_data function"""
     search_data = enasearch.search_all_data(
         query="tax_tree(7147) AND dataclass=STD",
-        result="coding_update",
+        result="coding_release",
         display="fasta",
         download=None,
         file=None,
@@ -197,7 +197,7 @@ def test_retrieve_taxons():
     data = enasearch.retrieve_taxons(
         ids="6543",
         display="fasta",
-        result="sequence_update",
+        result="sequence_release",
         download=None,
         file=None,
         offset=0,
