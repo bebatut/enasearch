@@ -40,7 +40,6 @@ setup(
         'requests',
         'Click',
         'flake8',
-        'pprint',
         'xmltodict',
         'biopython'],
     include_package_data=True,
