@@ -3,6 +3,8 @@ ENASearch
 
 .. image:: https://travis-ci.org/bebatut/enasearch.svg?branch=master
     :target: https://travis-ci.org/bebatut/enasearch
+.. image:: https://badge.fury.io/py/enasearch.svg
+    :target: https://badge.fury.io/py/enasearch
 
 ENASearch is a Python library for interacting with `ENA <http://www.ebi.ac.uk/ena/browse/programmatic-access>`_'s API.
 
