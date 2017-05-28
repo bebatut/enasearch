@@ -347,9 +347,9 @@ def retrieve_taxons(
     if not file:
         file = None
     if not offset:
-        offset = 0
+        offset = None
     if not length:
-        length = lengthLimit
+        length = None
     if not subseq_range:
         subseq_range = None
     if not expanded:
