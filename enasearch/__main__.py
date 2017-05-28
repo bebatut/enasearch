@@ -239,12 +239,12 @@ def search_data(
     by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['true', 'false']),
+    type=click.Choice(['True', 'False']),
     required=False,
     help='(Optional) Boolean to determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['true', 'false']),
+    type=click.Choice(['True', 'False']),
     required=False,
     help='(Optional) Boolean to obtain only the header of a record')
 def retrieve_data(
@@ -326,12 +326,12 @@ def retrieve_data(
     by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['true', 'false']),
+    type=click.Choice(['True', 'False']),
     required=False,
     help='(Optional) Boolean to determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['true', 'false']),
+    type=click.Choice(['True', 'False']),
     required=False,
     help='(Optional) Boolean to obtain only the header of a record')
 def retrieve_taxons(
