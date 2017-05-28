@@ -164,10 +164,9 @@ def search_data(
     else:
         sortfields = ",".join(sortfields)
     if not offset:
-        offset = 0
+        offset = None
     if not length:
-        length = lengthLimit
-
+        length = None
     if display in ["fasta", "fastq"]:
         results = enasearch.search_all_data(
             query=query,
@@ -252,16 +251,15 @@ def retrieve_data(
     if not file:
         file = None
     if not offset:
-        offset = 0
+        offset = None
     if not length:
-        length = lengthLimit
+        length = None
     if not subseq_range:
         subseq_range = None
     if not expanded:
         expanded = None
     if not header:
         header = None
-
     data = enasearch.retrieve_data(
         ids=",".join(ids),
         display=display,

@@ -324,8 +324,8 @@ def request_url(url, display, file=None):
 
 
 def build_retrieve_url(
-    ids, display, result=None, download=None, file=None, offset=0,
-    length=100000, subseq_range=None, expanded=None, header=None
+    ids, display, result=None, download=None, file=None, offset=None,
+    length=None, subseq_range=None, expanded=None, header=None
 ):
     """Build the URL to retriva data or taxon
 
@@ -351,9 +351,11 @@ def build_retrieve_url(
     if result is not None:
         url += "&result=%s" % (result)
 
-    check_length(length)
-    url += "&length=%s" % (length)
-    url += "&offset=%s" % (offset)
+    if length is not None:
+        check_length(length)
+        url += "&length=%s" % (length)
+    if offset is not None:
+        url += "&offset=%s" % (offset)
 
     if subseq_range is not None:
         check_subseq_range(subseq_range)
@@ -374,7 +376,7 @@ def build_retrieve_url(
 
 
 def retrieve_data(
-    ids, display, download=None, file=None, offset=0, length=100000,
+    ids, display, download=None, file=None, offset=None, length=None,
     subseq_range=None, expanded=None, header=None
 ):
     """Retrieve ENA data (other than taxon)
@@ -407,8 +409,8 @@ def retrieve_data(
 
 
 def retrieve_taxons(
-    ids, display, result=None, download=None, file=None, offset=0,
-    length=100000, subseq_range=None, expanded=None, header=None
+    ids, display, result=None, download=None, file=None, offset=None,
+    length=None, subseq_range=None, expanded=None, header=None
 ):
     """Retrieve taxons
 
@@ -505,14 +507,17 @@ def search_data(
     check_display_option(display)
     url += "&display=%s" % (display)
 
-    check_length(length)
-    url += "&length=%s" % (length)
-    result_nb = get_search_result_number(query, result)
-    if offset > result_nb:
-        err_str = "The offset value must be lower than the possible number of "
-        err_str += "results for the query"
-        raise ValueError(err_str)
-    url += "&offset=%s" % (offset)
+    if length is not None:
+        check_length(length)
+        url += "&length=%s" % (length)
+    
+    if offset is not None:s
+        result_nb = get_search_result_number(free_text_search, query, result)
+        if offset > result_nb:
+            err_str = "The offset value must be lower than the possible number"
+            err_str += " of results for the query"
+            raise ValueError(err_str)
+        url += "&offset=%s" % (offset)
 
     if display == "report":
         if fields is None:
