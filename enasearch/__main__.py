@@ -98,6 +98,10 @@ def get_download_options():
 
 @click.command('search_data', short_help='Search data')
 @click.option(
+    '--free_text_search',
+    type=click.Choice(['True', 'False']),
+    help='Use free text search, otherwise the data warehouse is used')
+@click.option(
     '--query',
     help='Query string, made up of filtering conditions, joined by logical ANDs\
     , ORs and NOTs and bound by double quotes; the filter fields for a query \
@@ -147,7 +151,8 @@ def get_download_options():
     help='(Optional) Number of records to retrieve (used only for display \
     different of fasta and fastq')
 def search_data(
-    query, result, display, download, file, fields, sortfields, offset, length
+    free_text_search, query, result, display, download, file, fields,
+    sortfields, offset, length
 ):
     """Search data given a query
     """
@@ -169,6 +174,7 @@ def search_data(
         length = None
     if display in ["fasta", "fastq"]:
         results = enasearch.search_all_data(
+            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,
@@ -178,6 +184,7 @@ def search_data(
             sortfields=sortfields)
     else:
         results = enasearch.search_data(
+            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,

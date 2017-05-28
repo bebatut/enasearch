@@ -448,16 +448,32 @@ def retrieve_taxons(
     return request_url(url, display, file)
 
 
-def get_search_result_number(query, result, need_check_result=True):
+def get_search_url(free_text_search):
+    """Get the search URL
+
+    free_text_search: boolean to describe the type of query
+
+    """
+    url = baseUrl + "data/"
+    if not free_text_search:
+        url += "warehouse/"
+    url += "search?"
+    return url
+
+
+def get_search_result_number(
+    free_text_search, query, result, need_check_result=True
+):
     """Get the number of results for a query on a result
 
+    free_text_search: boolean to describe the type of query
     query: query string, made up of filtering conditions, joined by logical
     ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
     query are accessible with get_filter_fields and the type of filters with
     get_filter_types
     result: id of the result (partition of ENA db), accessible with get_results
     """
-    url = baseUrl + "data/warehouse/search?"
+    url = get_search_url(free_text_search)
     url += "query=%s" % (query)
 
     if need_check_result:
@@ -474,11 +490,12 @@ def get_search_result_number(query, result, need_check_result=True):
 
 
 def search_data(
-    query, result, display, offset=0, length=lengthLimit, download=None,
-    file=None, fields=None, sortfields=None
+    free_text_search, query, result, display, offset=None, length=None,
+    download=None, file=None, fields=None, sortfields=None
 ):
     """Search ENA data
 
+    free_text_search: boolean to describe the type of query
     query: query string, made up of filtering conditions, joined by logical
     ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
     query are accessible with get_filter_fields and the type of filters with
@@ -498,7 +515,7 @@ def search_data(
     display=report, list of sortable fields accessible with
     get_sortable_fields)
     """
-    url = baseUrl + "data/warehouse/search?"
+    url = get_search_url(free_text_search)
     url += "query=%s" % (query)
 
     check_result(result)
@@ -533,15 +550,17 @@ def search_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
+    print(url)
     return request_url(url, display, file)
 
 
 def search_all_data(
-    query, result, display, download=None, file=None, fields=None,
-    sortfields=None
+    free_text_search, query, result, display, download=None, file=None,
+    fields=None, sortfields=None
 ):
     """Search ENA data and get all results (not size limited)
 
+    free_text_search: boolean to describe the type of query
     query: query string, made up of filtering conditions, joined by logical
     ANDs, ORs and NOTs and bound by double quotes - the filter fields for a
     query are accessible with get_filter_fields and the type of filters with
@@ -566,13 +585,14 @@ def search_all_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
 
-    result_nb = get_search_result_number(query, result)
+    result_nb = get_search_result_number(free_text_search, query, result)
     quotient = int(result_nb / float(lengthLimit))
     start = 0
     all_results = []
     for i in range(quotient):
         start = lengthLimit * i
         all_results += search_data(
+            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,
@@ -580,10 +600,12 @@ def search_all_data(
             length=lengthLimit,
             fields=None,
             sortfields=None)
-    if (result_nb % 100) > 0:
+    if (result_nb % lengthLimit) > 0:
+        print("Icic")
         start = lengthLimit * quotient
         remainder = result_nb - start
         all_results += search_data(
+            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,
