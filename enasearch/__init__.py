@@ -527,8 +527,8 @@ def search_data(
     if length is not None:
         check_length(length)
         url += "&length=%s" % (length)
-    
-    if offset is not None:s
+
+    if offset is not None:
         result_nb = get_search_result_number(free_text_search, query, result)
         if offset > result_nb:
             err_str = "The offset value must be lower than the possible number"
@@ -550,7 +550,6 @@ def search_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
-    print(url)
     return request_url(url, display, file)
 
 
@@ -601,9 +600,12 @@ def search_all_data(
             fields=None,
             sortfields=None)
     if (result_nb % lengthLimit) > 0:
-        print("Icic")
-        start = lengthLimit * quotient
-        remainder = result_nb - start
+        if quotient > 0:
+            start = lengthLimit * quotient
+            remainder = result_nb - start
+        else:
+            start = None
+            remainder = None
         all_results += search_data(
             free_text_search=free_text_search,
             query=query,
