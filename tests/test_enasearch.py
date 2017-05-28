@@ -44,16 +44,25 @@ def test_get_taxonomy_results():
 def test_get_search_result_number():
     """Test get_search_result_number function"""
     nb = enasearch.get_search_result_number(
+        free_text_search=False,
         query="tax_eq(10090)",
         result="assembly",
         need_check_result=True)
     assert nb == 19
 
     nb = enasearch.get_search_result_number(
+        free_text_search=False,
         query="tax_tree(7147) AND dataclass=STD",
         result="coding_update",
         need_check_result=True)
     assert nb >= 17123
+
+    nb = enasearch.get_search_result_number(
+        free_text_search=True,
+        query="kinase+homo+sapiens",
+        result="sequence_update",
+        need_check_result=True)
+    assert nb == 15
 
 
 def test_get_filter_types():
@@ -104,6 +113,7 @@ def test_get_sortable_fields():
 def test_search_data():
     """Test search_data function"""
     search_data = enasearch.search_data(
+        free_text_search=False,
         query="tax_tree(7147) AND dataclass=STD",
         result="coding_release",
         display="fasta",
@@ -113,20 +123,26 @@ def test_search_data():
         file=None,
         fields=None,
         sortfields=None)
-    assert 'ENA|AAA02481|AAA02481.1' in [seq.id for seq in search_data]
+    assert len([seq.id for seq in search_data]) > 0
 
 
 def test_search_all_data():
     """Test search_all_data function"""
     search_data = enasearch.search_all_data(
-        query="tax_tree(7147) AND dataclass=STD",
-        result="coding_release",
+        free_text_search=True,
+        query="kinase+homo+sapiens",
+        result="sequence_update",
         display="fasta",
         download=None,
         file=None,
         fields=None,
         sortfields=None)
-    assert 'ENA|AAA18901|AAA18901.2' in [seq.id for seq in search_data]
+    nb = enasearch.get_search_result_number(
+        free_text_search=True,
+        query="kinase+homo+sapiens",
+        result="sequence_update",
+        need_check_result=True)
+    assert len([seq.id for seq in search_data]) == nb
 
 
 def test_retrieve_data():
@@ -136,8 +152,8 @@ def test_retrieve_data():
         display="xml",
         download=None,
         file=None,
-        offset=0,
-        length=100000,
+        offset=None,
+        length=None,
         subseq_range=None,
         expanded=None,
         header=None)
