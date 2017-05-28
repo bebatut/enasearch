@@ -1,3 +1,6 @@
+develop:
+	python setup.py develop
+
 init:
 	python setup.py install
 
