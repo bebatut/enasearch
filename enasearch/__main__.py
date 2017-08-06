@@ -233,7 +233,7 @@ def search_data(
     help='(Optional) Number of records to retrieve (used only for display \
     different of fasta and fastq')
 @click.option(
-    '--range',
+    '--subseq_range',
     required=False,
     help='(Optional) Range for subsequences (integer start and stop separated \
     by a -)')
@@ -320,7 +320,7 @@ def retrieve_data(
     help='(Optional) Number of records to retrieve (used only for display \
     different of fasta and fastq')
 @click.option(
-    '--range',
+    '--subseq_range',
     required=False,
     help='(Optional) Range for subsequences (integer start and stop separated \
     by a -)')
