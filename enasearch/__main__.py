@@ -99,7 +99,7 @@ def get_download_options():
 @click.command('search_data', short_help='Search data')
 @click.option(
     '--free_text_search',
-    type=click.Choice(['True', 'False']),
+    type=click.Choice(['true', 'false']),
     help='Use free text search, otherwise the data warehouse is used')
 @click.option(
     '--query',
@@ -239,12 +239,12 @@ def search_data(
     by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['True', 'False']),
+    type=click.Choice(['true', 'false']),
     required=False,
     help='(Optional) Boolean to determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['True', 'False']),
+    type=click.Choice(['true', 'false']),
     required=False,
     help='(Optional) Boolean to obtain only the header of a record')
 def retrieve_data(
@@ -326,12 +326,12 @@ def retrieve_data(
     by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['True', 'False']),
+    type=click.Choice(['true', 'false']),
     required=False,
     help='(Optional) Boolean to determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['True', 'False']),
+    type=click.Choice(['true', 'false']),
     required=False,
     help='(Optional) Boolean to obtain only the header of a record')
 def retrieve_taxons(
