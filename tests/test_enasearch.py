@@ -62,7 +62,7 @@ def test_get_search_result_number():
         query="kinase+homo+sapiens",
         result="sequence_update",
         need_check_result=True)
-    assert nb == 15
+    assert nb >= 15
 
 
 def test_get_filter_types():
@@ -193,7 +193,7 @@ def test_retrieve_data():
         expanded=None,
         header="true")
     pprint(data)
-    assert "AL513382" in data and len(data.split("\n")) == 745
+    assert "AL513382" in data and len(data.split("\n")) >= 745
     data = enasearch.retrieve_data(
         ids="PRJEB2772",
         display="xml",
