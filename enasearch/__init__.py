@@ -211,7 +211,7 @@ def check_download_option(download):
 
     download: download format to check
     """
-    download_options = get_display_options(verbose=False)
+    download_options = get_download_options(verbose=False)
     if download not in download_options:
         err_str = "The download value does not correspond to a possible "
         err_str += "display value in ENA"
