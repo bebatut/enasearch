@@ -308,7 +308,7 @@ def request_url(url, display, file=None):
     if file is not None:
         r = requests.get(url, stream=True)
         r.raise_for_status()
-        with open(file, "ab") as fd:
+        with open(file, "wb") as fd:
             for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)
         return r.raise_for_status()
