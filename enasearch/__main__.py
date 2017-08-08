@@ -103,53 +103,42 @@ def get_download_options():
     help='Use free text search, otherwise the data warehouse is used')
 @click.option(
     '--query',
-    help='Query string, made up of filtering conditions, joined by logical ANDs\
-    , ORs and NOTs and bound by double quotes; the filter fields for a query \
-    are accessible with get_filter_fields and the type of filters with get_\
-    filter_types')
+    help='Query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes; the filter fields for a query are accessible with get_filter_fields and the type of filters with get_filter_types')
 @click.option(
     '--result',
     help='Id of a result (accessible with get_results)')
 @click.option(
     '--display',
-    help='Display option to specify the display format (accessible with get_\
-    display_options)')
+    help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--download',
     required=False,
-    help='(Optional) Download option to specify that records are to be saved \
-    in a file (used with file option, list accessible with get_download_\
-    options)')
+    help='(Optional) Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)')
 @click.option(
     '--file',
     required=False,
     type=click.Path(dir_okay=True, writable=True),
-    help='(Optional) File to save the content of the search (used with download\
-    option)')
+    help='(Optional) File to save the content of the search (used with download option)')
 @click.option(
     '--fields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to return (accessible with get_returnable\
-    _fields, used only for report as display value)')
+    help='(Optional, Multiple) Fields to return (accessible with get_returnable_fields, used only for report as display value)')
 @click.option(
     '--sortfields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to sort the results (accessible with get_\
-    sortable_fields, used only for report as display value)')
+    help='(Optional, Multiple) Fields to sort the results (accessible with get_sortable_fields, used only for report as display value)')
 @click.option(
     '--offset',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) First record to get (used only for display different of \
-    fasta and fastq')
+    help='(Optional) First record to get (used only for display different of fasta and fastq')
 @click.option(
     '--length',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) Number of records to retrieve (used only for display \
-    different of fasta and fastq')
+    help='(Optional) Number of records to retrieve (used only for display different of fasta and fastq')
 def search_data(
     free_text_search, query, result, display, download, file, fields,
     sortfields, offset, length
@@ -206,37 +195,30 @@ def search_data(
     help='(Multiple) Ids for records to return (other than Taxon and Project)')
 @click.option(
     '--display',
-    help='Display option to specify the display format (accessible with get_\
-    display_options)')
+    help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--download',
     required=False,
-    help='(Optional) Download option to specify that records are to be saved \
-    in a file (used with file option, list accessible with get_download_\
-    options)')
+    help='(Optional) Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)')
 @click.option(
     '--file',
     required=False,
     type=click.Path(dir_okay=True, writable=True),
-    help='(Optional) File to save the content of the search (used with download\
-    option)')
+    help='(Optional) File to save the content of the search (used with download option)')
 @click.option(
     '--offset',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) First record to get (used only for display different of \
-    fasta and fastq')
+    help='(Optional) First record to get (used only for display different of  fasta and fastq')
 @click.option(
     '--length',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) Number of records to retrieve (used only for display \
-    different of fasta and fastq')
+    help='(Optional) Number of records to retrieve (used only for display  different of fasta and fastq')
 @click.option(
     '--subseq_range',
     required=False,
-    help='(Optional) Range for subsequences (integer start and stop separated \
-    by a -)')
+    help='(Optional) Range for subsequences (integer start and stop separated  by a -)')
 @click.option(
     '--expanded',
     type=click.Choice(['true', 'false']),
@@ -285,45 +267,37 @@ def retrieve_data(
 @click.option(
     '--ids',
     multiple=True,
-    help='(Multiple) Ids for records to return (other than Taxon and Project)')
+    help='(Multiple) Ids for taxon to return')
 @click.option(
     '--display',
-    help='Display option to specify the display format (accessible with get_\
-    display_options)')
+    help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--result',
     required=False,
-    help='(Optional) Id of a taxonomy result (accessible with get_taxonomy_\
-    results)')
+    help='(Optional) Id of a taxonomy result (accessible with get_taxonomy_results)')
 @click.option(
     '--download',
     required=False,
-    help='(Optional) Download option to specify that records are to be saved \
-    in a file (used with file option, list accessible with get_download_\
-    options)')
+    help='(Optional) Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)')
 @click.option(
     '--file',
     required=False,
     type=click.Path(dir_okay=True, writable=True),
-    help='(Optional) File to save the content of the search (used with download\
-    option)')
+    help='(Optional) File to save the content of the search (used with download option)')
 @click.option(
     '--offset',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) First record to get (used only for display different of \
-    fasta and fastq')
+    help='(Optional) First record to get (used only for display different of fasta and fastq')
 @click.option(
     '--length',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) Number of records to retrieve (used only for display \
-    different of fasta and fastq')
+    help='(Optional) Number of records to retrieve (used only for display different of fasta and fastq')
 @click.option(
     '--subseq_range',
     required=False,
-    help='(Optional) Range for subsequences (integer start and stop separated \
-    by a -)')
+    help='(Optional) Range for subsequences (integer start and stop separated by a -)')
 @click.option(
     '--expanded',
     type=click.Choice(['true', 'false']),
@@ -375,15 +349,12 @@ def retrieve_taxons(
 @click.command('retrieve_run_report', short_help='Retrieve run report')
 @click.option(
     '--accession',
-    help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), \
-    experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, \
-    SRS, DRS, SAM prefixes) and run accessions))')
+    help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))')
 @click.option(
     '--fields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to return (accessible with get_run_\
-    _fields)')
+    help='(Optional, Multiple) Fields to return (accessible with get_run_fields)')
 @click.option(
     '--file',
     required=False,
@@ -411,15 +382,12 @@ def retrieve_run_report(accession, fields, file):
     short_help='Retrieve analysis report')
 @click.option(
     '--accession',
-    help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), \
-    experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, \
-    SRS, DRS, SAM prefixes) and run accessions))')
+    help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))')
 @click.option(
     '--fields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to return (accessible with get_analysis_\
-    _fields)')
+    help='(Optional, Multiple) Fields to return (accessible with get_analysis_fields)')
 @click.option(
     '--file',
     required=False,
