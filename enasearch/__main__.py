@@ -102,7 +102,7 @@ def get_download_options():
 @click.command('search_data', short_help='Search data')
 @click.option(
     '--free_text_search',
-    type=click.Choice(['true', 'false']),
+    is_flag=True,
     help='Use free text search, otherwise the data warehouse is used')
 @click.option(
     '--query',
@@ -119,54 +119,45 @@ def get_download_options():
 @click.option(
     '--download',
     required=False,
-    help='(Optional) Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)')
+    help='Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)')
 @click.option(
     '--file',
     required=False,
     type=click.Path(dir_okay=True, writable=True),
-    help='(Optional) File to save the content of the search (used with download option)')
+    help='File to save the content of the search (used with download option)')
 @click.option(
     '--fields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to return (accessible with get_returnable_fields, used only for report as display value)')
+    help='Fields to return (accessible with get_returnable_fields, used only for report as display value) [multiple]')
 @click.option(
     '--sortfields',
     multiple=True,
     required=False,
-    help='(Optional, Multiple) Fields to sort the results (accessible with get_sortable_fields, used only for report as display value)')
+    help='Fields to sort the results (accessible with get_sortable_fields, used only for report as display value) [multiple]')
 @click.option(
     '--offset',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) First record to get (used only for display different of fasta and fastq')
+    help='First record to get (used only for display different of fasta and fastq')
 @click.option(
     '--length',
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
-    help='(Optional) Number of records to retrieve (used only for display different of fasta and fastq')
+    help='Number of records to retrieve (used only for display different of fasta and fastq')
 def search_data(
     free_text_search, query, result, display, download, file, fields,
     sortfields, offset, length
 ):
     """Search data given a query
     """
-    if not download:
-        download = None
-    if not file:
-        file = None
-    if not fields:
-        fields = None
-    else:
-        fields = ",".join(fields)
-    if not sortfields:
-        sortfields = None
-    else:
-        sortfields = ",".join(sortfields)
-    if not offset:
-        offset = None
-    if not length:
-        length = None
+    free_text_search = True if free_text_search else False
+    download = None if not download else download
+    file = None if not file else file
+    fields = None if not fields else ",".join(fields)
+    sortfields = None if not sortfields else ",".join(sortfields)
+    offset = None if not offset else offset
+    length = None if not length else length
     if display in ["fasta", "fastq"]:
         results = enasearch.search_all_data(
             free_text_search=free_text_search,
@@ -229,34 +220,25 @@ def search_data(
     help='Range for subsequences (integer start and stop separated  by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['true', 'false']),
-    required=False,
-    help='(Optional) Boolean to determine if a CON record is expanded')
+    is_flag=True,
+    help='Determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['true', 'false']),
-    required=False,
-    help='(Optional) Boolean to obtain only the header of a record')
+    is_flag=True,
+    help='To obtain only the header of a record')
 def retrieve_data(
     ids, display, download, file, offset, length, subseq_range, expanded,
     header
 ):
     """Retrieve ENA data (other than taxon and project)
     """
-    if not download:
-        download = None
-    if not file:
-        file = None
-    if not offset:
-        offset = None
-    if not length:
-        length = None
-    if not subseq_range:
-        subseq_range = None
-    if not expanded:
-        expanded = None
-    if not header:
-        header = None
+    download = None if not download else download
+    file = None if not file else file
+    offset = None if not offset else offset
+    length = None if not length else length
+    subseq_range = None if not subseq_range else subseq_range
+    expanded = True if expanded else False
+    header = True if header else False
     data = enasearch.retrieve_data(
         ids=",".join(ids),
         display=display,
@@ -310,37 +292,26 @@ def retrieve_data(
     help='Range for subsequences (integer start and stop separated by a -)')
 @click.option(
     '--expanded',
-    type=click.Choice(['true', 'false']),
-    required=False,
-    help='(Optional) Boolean to determine if a CON record is expanded')
+    is_flag=True,
+    help='Determine if a CON record is expanded')
 @click.option(
     '--header',
-    type=click.Choice(['true', 'false']),
-    required=False,
-    help='(Optional) Boolean to obtain only the header of a record')
+    is_flag=True,
+    help='To obtain only the header of a record')
 def retrieve_taxons(
     ids, display, result, download, file, offset, length, subseq_range,
     expanded, header
 ):
     """Retrieve ENA taxon data (other than taxon and project)
     """
-    if not result:
-        result = None
-    if not download:
-        download = None
-    if not file:
-        file = None
-    if not offset:
-        offset = None
-    if not length:
-        length = None
-    if not subseq_range:
-        subseq_range = None
-    if not expanded:
-        expanded = None
-    if not header:
-        header = None
-
+    result = None if not result else result
+    download = None if not download else download
+    file = None if not file else file
+    offset = None if not offset else offset
+    length = None if not length else length
+    subseq_range = None if not subseq_range else subseq_range
+    expanded = True if expanded else False
+    header = True if header else False
     data = enasearch.retrieve_taxons(
         ids=",".join(ids),
         display=display,
@@ -374,12 +345,8 @@ def retrieve_taxons(
 def retrieve_run_report(accession, fields, file):
     """Retrieve run report
     """
-    if not fields:
-        fields = None
-    else:
-        fields = ",".join(fields)
-    if not file:
-        file = None
+    fields = None if not fields else ",".join(fields)
+    file = None if not file else file
     report = enasearch.retrieve_run_report(
         accession=accession,
         fields=fields,
@@ -408,12 +375,8 @@ def retrieve_run_report(accession, fields, file):
 def retrieve_analysis_report(accession, fields, file):
     """Retrieve analysis report
     """
-    if not fields:
-        fields = None
-    else:
-        fields = ",".join(fields)
-    if not file:
-        file = None
+    fields = None if not fields else ",".join(fields)
+    file = None if not file else file
     report = enasearch.retrieve_analysis_report(
         accession=accession,
         fields=fields,
