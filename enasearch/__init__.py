@@ -616,7 +616,7 @@ def search_all_data(
             fields=None,
             sortfields=None)
     if file:
-        if display in ['fasta','fastq']:
+        if display in ['fasta', 'fastq']:
             SeqIO.write(all_results, file, display)
             if download == "gzip":
                 with open(file, "r") as fd:
