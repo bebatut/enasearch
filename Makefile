@@ -5,7 +5,7 @@ init:
 	python setup.py install
 
 test:
-	flake8 --exclude=.git,build .
+	flake8 --exclude=.git,build --ignore=E501 .
 	python setup.py test
 
 upload:
