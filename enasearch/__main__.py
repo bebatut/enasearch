@@ -30,6 +30,7 @@ def get_taxonomy_results():
 @click.command('get_filter_fields', short_help='Get filter fields')
 @click.option(
     '--result',
+    required=True,
     help='Id of a result (accessible with get_results)')
 def get_filter_fields(result):
     """Get the filter fields of a result to build a query"""
@@ -41,6 +42,7 @@ def get_filter_fields(result):
 @click.command('get_returnable_fields', short_help='Get returnable fields')
 @click.option(
     '--result',
+    required=True,
     help='Id of a result (accessible with get_results)')
 def get_returnable_fields(result):
     """Get the fields of a result that can returned in a report"""
@@ -68,6 +70,7 @@ def get_analysis_fields():
 @click.command('get_sortable_fields', short_help='Get sortable fields')
 @click.option(
     '--result',
+    required=True,
     help='Id of a result (accessible with get_results)')
 def get_sortable_fields(result):
     """Get the fields of a result that can sorted for a report"""
@@ -103,12 +106,15 @@ def get_download_options():
     help='Use free text search, otherwise the data warehouse is used')
 @click.option(
     '--query',
+    required=True,
     help='Query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes; the filter fields for a query are accessible with get_filter_fields and the type of filters with get_filter_types')
 @click.option(
     '--result',
+    required=True,
     help='Id of a result (accessible with get_results)')
 @click.option(
     '--display',
+    required=True,
     help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--download',
@@ -191,10 +197,12 @@ def search_data(
 @click.command('retrieve_data', short_help='Retrieve ENA data')
 @click.option(
     '--ids',
+    required=True,
     multiple=True,
     help='(Multiple) Ids for records to return (other than Taxon and Project)')
 @click.option(
     '--display',
+    required=True,
     help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--download',
@@ -266,10 +274,12 @@ def retrieve_data(
 @click.command('retrieve_taxons', short_help='Retrieve ENA taxon data')
 @click.option(
     '--ids',
+    required=True,
     multiple=True,
     help='(Multiple) Ids for taxon to return')
 @click.option(
     '--display',
+    required=True,
     help='Display option to specify the display format (accessible with get_display_options)')
 @click.option(
     '--result',
@@ -349,6 +359,7 @@ def retrieve_taxons(
 @click.command('retrieve_run_report', short_help='Retrieve run report')
 @click.option(
     '--accession',
+    required=True,
     help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))')
 @click.option(
     '--fields',
@@ -382,6 +393,7 @@ def retrieve_run_report(accession, fields, file):
     short_help='Retrieve analysis report')
 @click.option(
     '--accession',
+    required=True,
     help='Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))')
 @click.option(
     '--fields',
