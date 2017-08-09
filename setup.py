@@ -13,8 +13,7 @@ setup(
     entry_points={
         'console_scripts': [
             'enasearch = enasearch.__main__:main'
-        ]
-      },
+        ]},
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Environment :: Web Environment",
