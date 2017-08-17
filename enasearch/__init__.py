@@ -271,16 +271,6 @@ def check_subseq_range(subseq_range):
         raise ValueError(err_str)
 
 
-def check_boolean(boolean):
-    """Check a boolean value
-
-    boolean: boolean to determine an option
-    """
-    if boolean not in ["true", "false"]:
-        err_str = "A boolean value must be only 'true' or 'false'"
-        raise ValueError(err_str)
-
-
 def format_seq_content(seq_str, format):
     """Format a string with sequences into a BioPython sequence objects
     (SeqRecord)
@@ -325,7 +315,7 @@ def request_url(url, display, file=None):
 
 def build_retrieve_url(
     ids, display, result=None, download=None, file=None, offset=None,
-    length=None, subseq_range=None, expanded=None, header=None
+    length=None, subseq_range=None, expanded=False, header=False
 ):
     """Build the URL to retriva data or taxon
 
@@ -344,31 +334,20 @@ def build_retrieve_url(
     """
     url = baseUrl + "data/view/"
     url += ids
-
     check_display_option(display)
     url += "&display=%s" % (display)
-
     if result is not None:
         url += "&result=%s" % (result)
-
     if length is not None:
         check_length(length)
         url += "&length=%s" % (length)
     if offset is not None:
         url += "&offset=%s" % (offset)
-
     if subseq_range is not None:
         check_subseq_range(subseq_range)
         url += "&range=%s" % (subseq_range)
-
-    if expanded is not None:
-        check_boolean(expanded)
-        url += "&expanded=%s" % (expanded)
-
-    if header is not None:
-        check_boolean(header)
-        url += "&header=%s" % (header)
-
+    url += "&expanded=true" if expanded else "&expanded=false"
+    url += "&header=true" if header else "&header=false"
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
@@ -377,7 +356,7 @@ def build_retrieve_url(
 
 def retrieve_data(
     ids, display, download=None, file=None, offset=None, length=None,
-    subseq_range=None, expanded=None, header=None
+    subseq_range=None, expanded=False, header=False
 ):
     """Retrieve ENA data (other than taxon)
 
@@ -410,7 +389,7 @@ def retrieve_data(
 
 def retrieve_taxons(
     ids, display, result=None, download=None, file=None, offset=None,
-    length=None, subseq_range=None, expanded=None, header=None
+    length=None, subseq_range=None, expanded=False, header=False
 ):
     """Retrieve taxons
 
