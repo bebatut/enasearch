@@ -4,11 +4,12 @@ import click
 import enasearch
 from pprint import pprint
 
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 lengthLimit = 100000
 
 
-@click.group()
+@click.group(context_settings=CONTEXT_SETTINGS)
 def main():
     pass
 
@@ -19,9 +20,7 @@ def get_results():
     enasearch.get_results(verbose=True)
 
 
-@click.command(
-    'get_taxonomy_results',
-    short_help='Get list of taxonomy results')
+@click.command('get_taxonomy_results', short_help='Get list of taxonomy results')
 def get_taxonomy_results():
     """Return the list of taxonomy results in ENA"""
     enasearch.get_taxonomy_results(verbose=True)
