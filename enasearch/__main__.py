@@ -10,6 +10,7 @@ lengthLimit = 100000
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
+@click.version_option()
 def main():
     pass
 
