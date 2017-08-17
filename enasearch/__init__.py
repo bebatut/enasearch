@@ -315,7 +315,7 @@ def request_url(url, display, file=None):
 
 def build_retrieve_url(
     ids, display, result=None, download=None, file=None, offset=None,
-    length=None, subseq_range=None, expanded=None, header=None
+    length=None, subseq_range=None, expanded=False, header=False
 ):
     """Build the URL to retriva data or taxon
 
@@ -356,7 +356,7 @@ def build_retrieve_url(
 
 def retrieve_data(
     ids, display, download=None, file=None, offset=None, length=None,
-    subseq_range=None, expanded=None, header=None
+    subseq_range=None, expanded=False, header=False
 ):
     """Retrieve ENA data (other than taxon)
 
@@ -389,7 +389,7 @@ def retrieve_data(
 
 def retrieve_taxons(
     ids, display, result=None, download=None, file=None, offset=None,
-    length=None, subseq_range=None, expanded=None, header=None
+    length=None, subseq_range=None, expanded=False, header=False
 ):
     """Retrieve taxons
 
