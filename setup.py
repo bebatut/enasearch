@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="enasearch",
-    version="0.0.5",
+    version="0.0.6",
     author="Berenice Batut",
     author_email="berenice.batut@gmail.com",
     description=("A Python library for interacting with ENA's API"),
