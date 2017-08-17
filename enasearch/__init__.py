@@ -337,7 +337,7 @@ def build_retrieve_url(
     check_display_option(display)
     url += "&display=%s" % (display)
     if result is not None:
-        url += "&result=%s" % (result) 
+        url += "&result=%s" % (result)
     if length is not None:
         check_length(length)
         url += "&length=%s" % (length)
