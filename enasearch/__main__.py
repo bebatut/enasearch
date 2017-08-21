@@ -129,12 +129,12 @@ def get_download_options():
     '--fields',
     multiple=True,
     required=False,
-    help='Fields to return (accessible with get_returnable_fields, used only for report as display value) [multiple]')
+    help='Fields to return (accessible with get_returnable_fields, used only for report as display value) [multiple or comma-separated]')
 @click.option(
     '--sortfields',
     multiple=True,
     required=False,
-    help='Fields to sort the results (accessible with get_sortable_fields, used only for report as display value) [multiple]')
+    help='Fields to sort the results (accessible with get_sortable_fields, used only for report as display value) [multiple or comma-separated]')
 @click.option(
     '--offset',
     type=click.IntRange(min=0, max=lengthLimit),
@@ -336,7 +336,7 @@ def retrieve_taxons(
     '--fields',
     multiple=True,
     required=False,
-    help='Fields to return (accessible with get_run_fields) [multiple]')
+    help='Fields to return (accessible with get_run_fields) [multiple or comma-separated]')
 @click.option(
     '--file',
     required=False,
@@ -366,7 +366,7 @@ def retrieve_run_report(accession, fields, file):
     '--fields',
     multiple=True,
     required=False,
-    help='Fields to return (accessible with get_analysis_fields)  [multiple]')
+    help='Fields to return (accessible with get_analysis_fields) [multiple or comma-separated]')
 @click.option(
     '--file',
     required=False,
