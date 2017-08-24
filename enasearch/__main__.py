@@ -9,6 +9,16 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 lengthLimit = 100000
 
 
+def exception_handler(function):
+    """Handle the exceptions raised by the commands"""
+    def handle_exception(*args, **kwargs):
+        try:
+            return function(*args, **kwargs)
+        except Exception as e:
+            raise click.ClickException(e)
+    return handle_exception
+
+
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option()
 def main():
@@ -16,12 +26,14 @@ def main():
 
 
 @click.command('get_results', short_help='Get list of results')
+@exception_handler
 def get_results():
     """Return the list of results in ENA"""
     enasearch.get_results(verbose=True)
 
 
 @click.command('get_taxonomy_results', short_help='Get list of taxonomy results')
+@exception_handler
 def get_taxonomy_results():
     """Return the list of taxonomy results in ENA"""
     enasearch.get_taxonomy_results(verbose=True)
@@ -32,6 +44,7 @@ def get_taxonomy_results():
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
+@exception_handler
 def get_filter_fields(result):
     """Get the filter fields of a result to build a query"""
     enasearch.get_filter_fields(
@@ -44,6 +57,7 @@ def get_filter_fields(result):
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
+@exception_handler
 def get_returnable_fields(result):
     """Get the fields of a result that can returned in a report"""
     enasearch.get_returnable_fields(
@@ -52,6 +66,7 @@ def get_returnable_fields(result):
 
 
 @click.command('get_run_fields', short_help='Get run fields')
+@exception_handler
 def get_run_fields():
     """Get the fields for a run"""
     enasearch.get_returnable_fields(
@@ -60,6 +75,7 @@ def get_run_fields():
 
 
 @click.command('get_analysis_fields', short_help='Get analysis fields')
+@exception_handler
 def get_analysis_fields():
     """Get the fields for an analysis"""
     enasearch.get_returnable_fields(
@@ -72,6 +88,7 @@ def get_analysis_fields():
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
+@exception_handler
 def get_sortable_fields(result):
     """Get the fields of a result that can sorted for a report"""
     enasearch.get_sortable_fields(
@@ -80,18 +97,21 @@ def get_sortable_fields(result):
 
 
 @click.command('get_filter_types', short_help='Get filter types')
+@exception_handler
 def get_filter_types():
     """Get the types of filters usable to build a query"""
     enasearch.get_filter_types(verbose=True)
 
 
 @click.command('get_display_options', short_help='Get display options')
+@exception_handler
 def get_display_options():
     """Get the display options to specify the display format"""
     enasearch.get_display_options(verbose=True)
 
 
 @click.command('get_download_options', short_help='Get download options')
+@exception_handler
 def get_download_options():
     """Get the download options to specify that records are to be saved in a
     file
@@ -145,6 +165,7 @@ def get_download_options():
     type=click.IntRange(min=0, max=lengthLimit),
     required=False,
     help='Number of records to retrieve (used only for display different of fasta and fastq')
+@exception_handler
 def search_data(
     free_text_search, query, result, display, download, file, fields,
     sortfields, offset, length
@@ -226,6 +247,7 @@ def search_data(
     '--header',
     is_flag=True,
     help='To obtain only the header of a record')
+@exception_handler
 def retrieve_data(
     ids, display, download, file, offset, length, subseq_range, expanded,
     header
@@ -298,6 +320,7 @@ def retrieve_data(
     '--header',
     is_flag=True,
     help='To obtain only the header of a record')
+@exception_handler
 def retrieve_taxons(
     ids, display, result, download, file, offset, length, subseq_range,
     expanded, header
@@ -342,6 +365,7 @@ def retrieve_taxons(
     required=False,
     type=click.Path(dir_okay=True, writable=True),
     help='File to save the report')
+@exception_handler
 def retrieve_run_report(accession, fields, file):
     """Retrieve run report
     """
@@ -372,6 +396,7 @@ def retrieve_run_report(accession, fields, file):
     required=False,
     type=click.Path(dir_okay=True, writable=True),
     help='File to save the report')
+@exception_handler
 def retrieve_analysis_report(accession, fields, file):
     """Retrieve analysis report
     """
