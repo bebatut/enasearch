@@ -2,7 +2,7 @@
 
 import click
 import enasearch
-from pprint import pprint
+from dicttoxml import dicttoxml
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -17,6 +17,37 @@ def exception_handler(function):
         except Exception as e:
             raise click.ClickException(e)
     return handle_exception
+
+
+def print_list(l):
+    """Print list"""
+    for e in l:
+        click.echo(e)
+
+
+def print_simple_dict(d):
+    """Print a dictionary with fields as key and description as value"""
+    for res, des in d.items():
+        click.echo("%s\t%s" % (res, des['description']))
+
+
+def print_complex_field_dict(d):
+    """Print a dictionary with fields as key and dictionary with description,
+    results and type"""
+    click.echo("field\tdescription\ttype\tresults")
+    for f, des in d.items():
+        click.echo("%s\t%s\t%s\t%s" % (f, des['description'], des['type'], ', '.join(des['results'])))
+
+
+def print_display(results, display):
+    """Print the results given the choosen display"""
+    if display == 'xml':
+        print(dicttoxml(results))
+    elif display == 'fasta' or display == 'fastq':
+        for record in results:
+            print(record.format(display))
+    else:
+        print(results)
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -36,7 +67,8 @@ def get_results():
 @exception_handler
 def get_taxonomy_results():
     """Return the list of taxonomy results in ENA"""
-    enasearch.get_taxonomy_results(verbose=True)
+    taxo_results = enasearch.get_taxonomy_results(verbose=False)
+    print_simple_dict(taxo_results)
 
 
 @click.command('get_filter_fields', short_help='Get filter fields')
@@ -47,9 +79,8 @@ def get_taxonomy_results():
 @exception_handler
 def get_filter_fields(result):
     """Get the filter fields of a result to build a query"""
-    enasearch.get_filter_fields(
-        result=result,
-        verbose=True)
+    fields = enasearch.get_filter_fields(result=result, verbose=False)
+    print_complex_field_dict(fields)
 
 
 @click.command('get_returnable_fields', short_help='Get returnable fields')
@@ -60,27 +91,24 @@ def get_filter_fields(result):
 @exception_handler
 def get_returnable_fields(result):
     """Get the fields of a result that can returned in a report"""
-    enasearch.get_returnable_fields(
-        result=result,
-        verbose=True)
+    fields = enasearch.get_returnable_fields(result=result, verbose=False)
+    print_list(fields)
 
 
 @click.command('get_run_fields', short_help='Get run fields')
 @exception_handler
 def get_run_fields():
     """Get the fields for a run"""
-    enasearch.get_returnable_fields(
-        result="read_run",
-        verbose=True)
+    fields = enasearch.get_returnable_fields(result="read_run", verbose=False)
+    print_list(fields)
 
 
 @click.command('get_analysis_fields', short_help='Get analysis fields')
 @exception_handler
 def get_analysis_fields():
     """Get the fields for an analysis"""
-    enasearch.get_returnable_fields(
-        result="analysis",
-        verbose=True)
+    fields = enasearch.get_returnable_fields(result="analysis", verbose=True)
+    print_list(fields)
 
 
 @click.command('get_sortable_fields', short_help='Get sortable fields')
@@ -91,23 +119,32 @@ def get_analysis_fields():
 @exception_handler
 def get_sortable_fields(result):
     """Get the fields of a result that can sorted for a report"""
-    enasearch.get_sortable_fields(
-        result=result,
-        verbose=True)
+    fields = enasearch.get_sortable_fields(result=result, verbose=False)
+    print_complex_field_dict(fields)
 
 
 @click.command('get_filter_types', short_help='Get filter types')
 @exception_handler
 def get_filter_types():
     """Get the types of filters usable to build a query"""
-    enasearch.get_filter_types(verbose=True)
+    types = enasearch.get_filter_types(verbose=False)
+    click.echo("type\toperators/parameters\tvalues/description")
+    for f, d in types.items():
+        if f != 'Geospatial' and f != 'Taxonomy' and f != 'Boolean':
+            click.echo("%s\t%s\t%s" % (f, ', '.join(d['operators']), d['value'] if type(d['value']) == str else ', '.join(d['value'])))
+        elif f == 'Boolean':
+            click.echo("%s\t%s\t%s" % (f, ', '.join(d['operators']), ', '.join(d['values'])))
+        else:
+            for ff, dd in d.items():
+                click.echo("%s\t%s\t%s" % (ff, ', '.join(dd['parameters']), dd['description']))
 
 
 @click.command('get_display_options', short_help='Get display options')
 @exception_handler
 def get_display_options():
     """Get the display options to specify the display format"""
-    enasearch.get_display_options(verbose=True)
+    options = enasearch.get_display_options(verbose=False)
+    print_simple_dict(options)
 
 
 @click.command('get_download_options', short_help='Get download options')
@@ -116,7 +153,8 @@ def get_download_options():
     """Get the download options to specify that records are to be saved in a
     file
     """
-    enasearch.get_download_options(verbose=True)
+    options = enasearch.get_download_options(verbose=False)
+    print_simple_dict(options)
 
 
 @click.command('search_data', short_help='Search data')
@@ -203,7 +241,7 @@ def search_data(
             length=length)
 
     if file is None:
-        pprint(results)
+        print_display(results, display)
 
 
 @click.command('retrieve_data', short_help='Retrieve ENA data')
@@ -272,7 +310,7 @@ def retrieve_data(
         expanded=expanded,
         header=header)
     if file is None:
-        pprint(data)
+        print_display(data, display)
 
 
 @click.command('retrieve_taxons', short_help='Retrieve ENA taxon data')
@@ -347,7 +385,7 @@ def retrieve_taxons(
         expanded=expanded,
         header=header)
     if file is None:
-        pprint(data)
+        print_display(data, display)
 
 
 @click.command('retrieve_run_report', short_help='Retrieve run report')
@@ -376,7 +414,7 @@ def retrieve_run_report(accession, fields, file):
         fields=fields,
         file=file)
     if file is None:
-        pprint(report)
+        print_display(report, 'report')
 
 
 @click.command(
@@ -407,7 +445,7 @@ def retrieve_analysis_report(accession, fields, file):
         fields=fields,
         file=file)
     if file is None:
-        pprint(report)
+        print_display(report, 'report')
 
 
 cli.add_command(get_results)

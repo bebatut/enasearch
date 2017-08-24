@@ -39,7 +39,8 @@ setup(
         'Click',
         'flake8',
         'xmltodict',
-        'biopython'],
+        'biopython',
+        'dicttoxml'],
     include_package_data=True,
     package_data={'enasearch_data': ['enasearch_data/*.p']}
 )
