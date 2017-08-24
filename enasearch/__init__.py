@@ -43,7 +43,7 @@ def get_results(verbose=True):
     """
     if verbose:
         for result in results:
-            print("%s: %s" % (result, results[result]["description"]))
+            print("%s\t%s" % (result, results[result]["description"]))
     return results
 
 
