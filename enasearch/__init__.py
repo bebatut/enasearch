@@ -517,10 +517,9 @@ def search_data(
 
     if display == "report":
         if fields is None:
-            err_str = "A list of comma-separated fields to return must be "
-            err_str += "provided if display=report"
-            raise ValueError(err_str)
-        check_returnable_fields(fields.split(","), result)
+            fields = ",".join(get_returnable_fields(result))
+        else:
+            check_returnable_fields(fields.split(","), result)
         url += "&fields=%s" % (fields)
         if sortfields is not None:
             check_sortable_fields(fields)
@@ -629,9 +628,11 @@ def retrieve_filereport(accession, result, fields=None, file=None):
         raise ValueError(err_str)
     url += "&result=%s" % (result)
 
-    if fields is not None:
+    if fields is None:
+        fields = ",".join(get_returnable_fields(result))
+    else:
         check_returnable_fields(fields.split(","), result)
-        url += "&fields=%s" % (fields)
+    url += "&fields=%s" % (fields)
 
     return request_url(url, "text", file)
 
