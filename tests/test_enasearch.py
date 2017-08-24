@@ -1,16 +1,6 @@
 #!/usr/bin/env python
-
-import os
-import sys
 from pprint import pprint
-
-sys.path.insert(
-    0,
-    os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-try:
-    import enasearch
-except:
-    raise
+import enasearch
 
 
 def cmp(la, lb):
