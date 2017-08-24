@@ -11,3 +11,4 @@ install:
 script:
   - set -e
   - make test
+  - codecov

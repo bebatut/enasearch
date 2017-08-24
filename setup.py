@@ -40,7 +40,8 @@ setup(
         'flake8',
         'xmltodict',
         'biopython',
-        'dicttoxml'],
+        'dicttoxml',
+        'codecov'],
     include_package_data=True,
     package_data={'enasearch_data': ['enasearch_data/*.p']}
 )
