@@ -25,12 +25,11 @@ ENASearch is easy to use
 
     $ enasearch --help
     Usage: enasearch [OPTIONS] COMMAND [ARGS]...
-    
-    
+
     Options:
-    
-      --help  Show this message and exit.
-    
+      --version   Show the version and exit.
+      -h, --help  Show this message and exit.
+
     Commands:
       get_analysis_fields       Get analysis fields
       get_display_options       Get display options
@@ -51,36 +50,34 @@ ENASearch is easy to use
     $ enasearch search_data --help
     Usage: enasearch search_data [OPTIONS]
 
-      Search data given a query
-
     Options:
-        --free_text_search      Use free text search, otherwise the data warehouse
-                                is used
-        --query TEXT            Query string, made up of filtering conditions,
-                                joined by logical ANDs, ORs and NOTs and bound by
-                                double quotes; the filter fields for a query are
-                                accessible with get_filter_fields and the type of
-                                filters with get_filter_types  [required]
-        --result TEXT           Id of a result (accessible with get_results)
-                                [required]
-        --display TEXT          Display option to specify the display format
-                                (accessible with get_display_options)  [required]
-        --download TEXT         Download option to specify that records are to be
-                                saved in a file (used with file option, list
-                                accessible with get_download_options)
-        --file PATH             File to save the content of the search (used with
-                                download option)
-        --fields TEXT           Fields to return (accessible with
-                                get_returnable_fields, used only for report as
-                                display value) [multiple]
-        --sortfields TEXT       Fields to sort the results (accessible with
-                                get_sortable_fields, used only for report as display
-                                value) [multiple]
-        --offset INTEGER RANGE  First record to get (used only for display different
-                                of fasta and fastq
-        --length INTEGER RANGE  Number of records to retrieve (used only for display
-                                different of fasta and fastq
-        --help                  Show this message and exit.
+      --free_text_search      Use free text search, otherwise the data warehouse
+                              is used
+      --query TEXT            Query string, made up of filtering conditions,
+                              joined by logical ANDs, ORs and NOTs and bound by
+                              double quotes; the filter fields for a query are
+                              accessible with get_filter_fields and the type of
+                              filters with get_filter_types  [required]
+      --result TEXT           Id of a result (accessible with get_results)
+                              [required]
+      --display TEXT          Display option to specify the display format
+                              (accessible with get_display_options)  [required]
+      --download TEXT         Download option to specify that records are to be
+                              saved in a file (used with file option, list
+                              accessible with get_download_options)
+      --file PATH             File to save the content of the search (used with
+                              download option)
+      --fields TEXT           Fields to return (accessible with
+                              get_returnable_fields, used only for report as
+                              display value) [multiple or comma-separated]
+      --sortfields TEXT       Fields to sort the results (accessible with
+                              get_sortable_fields, used only for report as display
+                              value) [multiple or comma-separated]
+      --offset INTEGER RANGE  First record to get (used only for display different
+                              of fasta and fastq
+      --length INTEGER RANGE  Number of records to retrieve (used only for display
+                              different of fasta and fastq
+      -h, --help              Show this message and exit.
 
 It can also be used as a Python library:
 
