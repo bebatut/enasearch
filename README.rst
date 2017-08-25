@@ -108,6 +108,11 @@ To install ENASearch, simply:
 
     $ pip install enasearch
 
+or with conda
+
+.. code-block:: bash
+
+    $ conda install -c bioconda enasearch
 
 Tests
 -----
