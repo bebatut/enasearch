@@ -7,6 +7,8 @@ ENASearch
     :target: https://badge.fury.io/py/enasearch
 .. image:: https://anaconda.org/bioconda/enasearch/badges/installer/conda.svg
     :target: https://anaconda.org/bioconda/enasearch
+.. image:: https://codecov.io/gh/bebatut/enasearch/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/bebatut/enasearch
 .. image:: https://landscape.io/github/bebatut/enasearch/improve_code_health/landscape.svg?style=flat
     :target: https://landscape.io/github/bebatut/enasearch/improve_code_health
     :alt: Code Health
