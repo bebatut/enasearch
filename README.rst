@@ -7,6 +7,9 @@ ENASearch
     :target: https://badge.fury.io/py/enasearch
 .. image:: https://anaconda.org/bioconda/enasearch/badges/installer/conda.svg
     :target: https://anaconda.org/bioconda/enasearch
+.. image:: https://landscape.io/github/bebatut/enasearch/improve_code_health/landscape.svg?style=flat
+    :target: https://landscape.io/github/bebatut/enasearch/improve_code_health
+    :alt: Code Health
 
 ENASearch is a Python library for interacting with `ENA <http://www.ebi.ac.uk/ena/browse/programmatic-access>`_'s API.
 

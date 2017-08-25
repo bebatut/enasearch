@@ -124,9 +124,7 @@ def test_search_all_data():
         result="sequence_update",
         display="fasta",
         download=None,
-        file=None,
-        fields=None,
-        sortfields=None)
+        file=None)
     nb = enasearch.get_search_result_number(
         free_text_search=True,
         query="kinase+homo+sapiens",

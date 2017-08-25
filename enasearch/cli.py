@@ -224,9 +224,7 @@ def search_data(
             result=result,
             display=display,
             download=download,
-            file=file,
-            fields=fields,
-            sortfields=sortfields)
+            file=file)
     else:
         results = enasearch.search_data(
             free_text_search=free_text_search,
