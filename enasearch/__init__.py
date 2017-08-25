@@ -23,8 +23,8 @@ def load_object(filepath):
 
     filepath: path to pickle file with serialized data
     """
-    with open(filepath, 'rb') as input:
-        obj = pickle.load(input)
+    with open(filepath, 'rb') as f:
+        obj = pickle.load(f)
     return obj
 
 
@@ -229,17 +229,6 @@ def check_length(length):
         raise ValueError(err_str)
 
 
-def get_graphical_image(ids, featureRange, sequenceRange):
-    """Get graphical image
-
-    ids:
-    featureRange:
-    sequenceRange:
-    """
-    url = baseUrl + "data/view/graphics/"
-    print(url)
-
-
 def check_download_file_options(download, file):
     """Check that download and file options are correctly defined
 
@@ -271,18 +260,18 @@ def check_subseq_range(subseq_range):
         raise ValueError(err_str)
 
 
-def format_seq_content(seq_str, format):
+def format_seq_content(seq_str, out_format):
     """Format a string with sequences into a BioPython sequence objects
     (SeqRecord)
 
     seq_str: string with sequences to format
-    format: fasta or fastq
+    out_format: fasta or fastq
     """
     sequences = []
     with tempfile.TemporaryFile(mode='w+') as fp:
         fp.write(seq_str)
         fp.seek(0)
-        for record in SeqIO.parse(fp, format):
+        for record in SeqIO.parse(fp, out_format):
             sequences.append(record)
     return sequences
 
@@ -522,7 +511,7 @@ def search_data(
             check_returnable_fields(fields.split(","), result)
         url += "&fields=%s" % (fields)
         if sortfields is not None:
-            check_sortable_fields(fields)
+            check_sortable_fields(sortfields, result)
             url += "&sortfields=%s" % (sortfields)
 
     if download is not None or file is not None:
@@ -532,8 +521,7 @@ def search_data(
 
 
 def search_all_data(
-    free_text_search, query, result, display, download=None, file=None,
-    fields=None, sortfields=None
+    free_text_search, query, result, display, download=None, file=None
 ):
     """Search ENA data and get all results (not size limited)
 
@@ -549,11 +537,6 @@ def search_all_data(
     (used with file option, accessible with get_download_options)
     file: filepath to save the content of the search (used with download
     option)
-    fields: comma-separated list of fields to return (only if display=report,
-    list of returnable fields accessible with get_returnable_fields)
-    sortfields: comma-separated list of fields to sort the results (only if
-    display=report, list of sortable fields accessible with
-    get_sortable_fields)
     """
     if display not in ["fasta", "fastq"]:
         err_str = "This function is not possible for this display option"
