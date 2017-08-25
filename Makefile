@@ -6,7 +6,7 @@ init:
 
 test:
 	flake8 --exclude=.git,build --ignore=E501 .
-	pytest --cov=enasearch tests/
+	py.test --cov=enasearch tests/
 
 upload:
 	python setup.py register -r pypi
