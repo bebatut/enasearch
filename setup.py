@@ -41,7 +41,8 @@ setup(
         'xmltodict',
         'biopython',
         'dicttoxml',
-        'codecov'],
+        'codecov',
+        'pytest-cov'],
     include_package_data=True,
     package_data={'enasearch_data': ['enasearch_data/*.p']}
 )
