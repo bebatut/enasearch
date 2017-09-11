@@ -1,0 +1,645 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Usage with command-line &mdash; ENASearch 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ENASearch 0.1.1 documentation" href="index.html"/>
+        <link rel="next" title="Usage within Python" href="api_usage.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ENASearch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ENASearch documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage with command-line</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#enasearch">enasearch</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-analysis-fields">get_analysis_fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-display-options">get_display_options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-download-options">get_download_options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-filter-fields">get_filter_fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-filter-types">get_filter_types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-results">get_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-returnable-fields">get_returnable_fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-run-fields">get_run_fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-sortable-fields">get_sortable_fields</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-get-taxonomy-results">get_taxonomy_results</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-retrieve-analysis-report">retrieve_analysis_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-retrieve-data">retrieve_data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-retrieve-run-report">retrieve_run_report</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-retrieve-taxons">retrieve_taxons</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#enasearch-search-data">search_data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">Usage within Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ENASearch</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Usage with command-line</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/cli_usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="usage-with-command-line">
+<h1>Usage with command-line<a class="headerlink" href="#usage-with-command-line" title="Permalink to this headline">¶</a></h1>
+<p>ENASearch is easy to use</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ enasearch --help
+Usage: enasearch <span class="o">[</span>OPTIONS<span class="o">]</span> COMMAND <span class="o">[</span>ARGS<span class="o">]</span>...
+
+Options:
+  --version   Show the version and exit.
+  -h, --help  Show this message and exit.
+
+Commands:
+  get_analysis_fields       Get list of fields <span class="k">for</span> an analysis
+  get_display_options       Get list of options <span class="k">for</span> display
+  get_download_options      Get list of options <span class="k">for</span> download
+  get_filter_fields         Get filter fields
+  get_filter_types          Get the types of filters usable to build a query
+  get_results               Get list of possible results
+  get_returnable_fields     Get list of returnable fields
+  get_run_fields            Get list of fields <span class="k">for</span> a run
+  get_sortable_fields       Get the sortable fields <span class="k">for</span> a result
+  get_taxonomy_results      Get list of taxonomy results
+  retrieve_analysis_report  Retrieve analysis report
+  retrieve_data             Retrieve ENA data <span class="o">(</span>other than taxon and project<span class="o">)</span>
+  retrieve_run_report       Retrieve run report
+  retrieve_taxons           Retrieve ENA taxonomic data
+  search_data               Search data given a query
+</pre></div>
+</div>
+<div class="section" id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enasearch">
+<h3>enasearch<a class="headerlink" href="#enasearch" title="Permalink to this headline">¶</a></h3>
+<p>The Python library for interacting with ENA&#8217;s API</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch <span class="o">[</span>OPTIONS<span class="o">]</span> COMMAND <span class="o">[</span>ARGS<span class="o">]</span>...
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-version">
+<code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the version and exit.</p>
+</dd></dl>
+
+<div class="section" id="enasearch-get-analysis-fields">
+<h4>get_analysis_fields<a class="headerlink" href="#enasearch-get-analysis-fields" title="Permalink to this headline">¶</a></h4>
+<p>Get list of fields for an analysis</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_analysis_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-display-options">
+<h4>get_display_options<a class="headerlink" href="#enasearch-get-display-options" title="Permalink to this headline">¶</a></h4>
+<p>Get list of options for display</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_display_options <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-download-options">
+<h4>get_download_options<a class="headerlink" href="#enasearch-get-download-options" title="Permalink to this headline">¶</a></h4>
+<p>Get list of options for download</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_download_options <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-filter-fields">
+<h4>get_filter_fields<a class="headerlink" href="#enasearch-get-filter-fields" title="Permalink to this headline">¶</a></h4>
+<p>Get filter fields</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_filter_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-get-filter-fields-result">
+<code class="descname">--result</code><code class="descclassname"> &lt;result&gt;</code><a class="headerlink" href="#cmdoption-enasearch-get-filter-fields-result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a result (accessible with get_results)  [required]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-get-filter-types">
+<h4>get_filter_types<a class="headerlink" href="#enasearch-get-filter-types" title="Permalink to this headline">¶</a></h4>
+<p>Get the types of filters usable to build a query</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_filter_types <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-results">
+<h4>get_results<a class="headerlink" href="#enasearch-get-results" title="Permalink to this headline">¶</a></h4>
+<p>Get list of possible results</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_results <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-returnable-fields">
+<h4>get_returnable_fields<a class="headerlink" href="#enasearch-get-returnable-fields" title="Permalink to this headline">¶</a></h4>
+<p>Get list of returnable fields</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_returnable_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-get-returnable-fields-result">
+<code class="descname">--result</code><code class="descclassname"> &lt;result&gt;</code><a class="headerlink" href="#cmdoption-enasearch-get-returnable-fields-result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a result (accessible with get_results)  [required]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-get-run-fields">
+<h4>get_run_fields<a class="headerlink" href="#enasearch-get-run-fields" title="Permalink to this headline">¶</a></h4>
+<p>Get list of fields for a run</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_run_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-get-sortable-fields">
+<h4>get_sortable_fields<a class="headerlink" href="#enasearch-get-sortable-fields" title="Permalink to this headline">¶</a></h4>
+<p>Get the sortable fields for a result</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_sortable_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-get-sortable-fields-result">
+<code class="descname">--result</code><code class="descclassname"> &lt;result&gt;</code><a class="headerlink" href="#cmdoption-enasearch-get-sortable-fields-result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a result (accessible with get_results)  [required]</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-get-taxonomy-results">
+<h4>get_taxonomy_results<a class="headerlink" href="#enasearch-get-taxonomy-results" title="Permalink to this headline">¶</a></h4>
+<p>Get list of taxonomy results</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_taxonomy_results <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="enasearch-retrieve-analysis-report">
+<h4>retrieve_analysis_report<a class="headerlink" href="#enasearch-retrieve-analysis-report" title="Permalink to this headline">¶</a></h4>
+<p>Retrieve analysis report</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_analysis_report <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-analysis-report-accession">
+<code class="descname">--accession</code><code class="descclassname"> &lt;accession&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-analysis-report-accession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-analysis-report-fields">
+<code class="descname">--fields</code><code class="descclassname"> &lt;fields&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-analysis-report-fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fields to return (accessible with get_analysis_fields) [multiple or comma-separated]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-analysis-report-file">
+<code class="descname">--file</code><code class="descclassname"> &lt;file&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-analysis-report-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to save the report</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-retrieve-data">
+<h4>retrieve_data<a class="headerlink" href="#enasearch-retrieve-data" title="Permalink to this headline">¶</a></h4>
+<p>Retrieve ENA data (other than taxon and project)</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_data <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-ids">
+<code class="descname">--ids</code><code class="descclassname"> &lt;ids&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ids for records to return (other than Taxon and Project) [multiple]  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-display">
+<code class="descname">--display</code><code class="descclassname"> &lt;display&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-display" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display option to specify the display format (accessible with get_display_options)  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-download">
+<code class="descname">--download</code><code class="descclassname"> &lt;download&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-file">
+<code class="descname">--file</code><code class="descclassname"> &lt;file&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to save the content of the search (used with download option)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-offset">
+<code class="descname">--offset</code><code class="descclassname"> &lt;offset&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>First record to get (used only for display different of  fasta and fastq</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-length">
+<code class="descname">--length</code><code class="descclassname"> &lt;length&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of records to retrieve (used only for display  different of fasta and fastq</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-subseq-range">
+<code class="descname">--subseq_range</code><code class="descclassname"> &lt;subseq_range&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-subseq-range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Range for subsequences (integer start and stop separated  by a -)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-expanded">
+<code class="descname">--expanded</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-expanded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a CON record is expanded</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-data-header">
+<code class="descname">--header</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-retrieve-data-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>To obtain only the header of a record</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-retrieve-run-report">
+<h4>retrieve_run_report<a class="headerlink" href="#enasearch-retrieve-run-report" title="Permalink to this headline">¶</a></h4>
+<p>Retrieve run report</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_run_report <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-run-report-accession">
+<code class="descname">--accession</code><code class="descclassname"> &lt;accession&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-run-report-accession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accession id (study accessions (ERP, SRP, DRP, PRJ prefixes), experiment accessions (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) and run accessions))  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-run-report-fields">
+<code class="descname">--fields</code><code class="descclassname"> &lt;fields&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-run-report-fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fields to return (accessible with get_run_fields) [multiple or comma-separated]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-run-report-file">
+<code class="descname">--file</code><code class="descclassname"> &lt;file&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-run-report-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to save the report</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-retrieve-taxons">
+<h4>retrieve_taxons<a class="headerlink" href="#enasearch-retrieve-taxons" title="Permalink to this headline">¶</a></h4>
+<p>Retrieve ENA taxonomic data</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_taxons <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-ids">
+<code class="descname">--ids</code><code class="descclassname"> &lt;ids&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ids for taxon to return [multiple]  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-display">
+<code class="descname">--display</code><code class="descclassname"> &lt;display&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-display" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display option to specify the display format (accessible with get_display_options)  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-result">
+<code class="descname">--result</code><code class="descclassname"> &lt;result&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a taxonomy result (accessible with get_taxonomy_results)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-download">
+<code class="descname">--download</code><code class="descclassname"> &lt;download&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-file">
+<code class="descname">--file</code><code class="descclassname"> &lt;file&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to save the content of the search (used with download option)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-offset">
+<code class="descname">--offset</code><code class="descclassname"> &lt;offset&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>First record to get (used only for display different of fasta and fastq</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-length">
+<code class="descname">--length</code><code class="descclassname"> &lt;length&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of records to retrieve (used only for display different of fasta and fastq</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-subseq-range">
+<code class="descname">--subseq_range</code><code class="descclassname"> &lt;subseq_range&gt;</code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-subseq-range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Range for subsequences (integer start and stop separated by a -)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-expanded">
+<code class="descname">--expanded</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-expanded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a CON record is expanded</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-retrieve-taxons-header">
+<code class="descname">--header</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-retrieve-taxons-header" title="Permalink to this definition">¶</a></dt>
+<dd><p>To obtain only the header of a record</p>
+</dd></dl>
+
+</div>
+<div class="section" id="enasearch-search-data">
+<h4>search_data<a class="headerlink" href="#enasearch-search-data" title="Permalink to this headline">¶</a></h4>
+<p>Search data given a query</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch search_data <span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p class="rubric">Options</p>
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-free-text-search">
+<code class="descname">--free_text_search</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-enasearch-search-data-free-text-search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use free text search, otherwise the data warehouse is used</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-query">
+<code class="descname">--query</code><code class="descclassname"> &lt;query&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes; the filter fields for a query are accessible with get_filter_fields and the type of filters with get_filter_types  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-result">
+<code class="descname">--result</code><code class="descclassname"> &lt;result&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Id of a result (accessible with get_results)  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-display">
+<code class="descname">--display</code><code class="descclassname"> &lt;display&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-display" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display option to specify the display format (accessible with get_display_options)  [required]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-download">
+<code class="descname">--download</code><code class="descclassname"> &lt;download&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-download" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download option to specify that records are to be saved in a file (used with file option, list accessible with get_download_options)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-file">
+<code class="descname">--file</code><code class="descclassname"> &lt;file&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-file" title="Permalink to this definition">¶</a></dt>
+<dd><p>File to save the content of the search (used with download option)</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-fields">
+<code class="descname">--fields</code><code class="descclassname"> &lt;fields&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fields to return (accessible with get_returnable_fields, used only for report as display value) [multiple or comma-separated]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-sortfields">
+<code class="descname">--sortfields</code><code class="descclassname"> &lt;sortfields&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-sortfields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fields to sort the results (accessible with get_sortable_fields, used only for report as display value) [multiple or comma-separated]</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-offset">
+<code class="descname">--offset</code><code class="descclassname"> &lt;offset&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>First record to get (used only for display different of fasta and fastq</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-enasearch-search-data-length">
+<code class="descname">--length</code><code class="descclassname"> &lt;length&gt;</code><a class="headerlink" href="#cmdoption-enasearch-search-data-length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of records to retrieve (used only for display different of fasta and fastq</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_usage.html" class="btn btn-neutral float-right" title="Usage within Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Bérénice Batut.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,846 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>enasearch &mdash; ENASearch 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="ENASearch 0.1.1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ENASearch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ENASearch documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli_usage.html">Usage with command-line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_usage.html">Usage within Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ENASearch</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>enasearch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for enasearch</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">xmltodict</span>
+<span class="kn">from</span> <span class="nn">Bio</span> <span class="k">import</span> <span class="n">SeqIO</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+
+
+<span class="n">baseUrl</span> <span class="o">=</span> <span class="s1">&#39;http://www.ebi.ac.uk/ena/&#39;</span>
+<span class="n">lengthLimit</span> <span class="o">=</span> <span class="mi">100000</span>
+
+
+<span class="k">def</span> <span class="nf">get_data</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;enasearch_data&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_object"><a class="viewcode-back" href="../api_usage.html#enasearch.load_object">[docs]</a><span class="k">def</span> <span class="nf">load_object</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Load object from a pickle file</span>
+
+<span class="sd">    :param filepath: path to pickle file with serialized data</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">load_object</span><span class="p">(</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;result_description.p&quot;</span><span class="p">))</span>
+<span class="n">filter_types</span> <span class="o">=</span> <span class="n">load_object</span><span class="p">(</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;filter_types.p&quot;</span><span class="p">))</span>
+<span class="n">download_options</span> <span class="o">=</span> <span class="n">load_object</span><span class="p">(</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;download_options.p&quot;</span><span class="p">))</span>
+<span class="n">display_options</span> <span class="o">=</span> <span class="n">load_object</span><span class="p">(</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;display_options.p&quot;</span><span class="p">))</span>
+<span class="n">taxonomy_results</span> <span class="o">=</span> <span class="n">load_object</span><span class="p">(</span><span class="n">get_data</span><span class="p">(</span><span class="s2">&quot;taxonomy_results.p&quot;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="get_results"><a class="viewcode-back" href="../api_usage.html#enasearch.get_results">[docs]</a><span class="k">def</span> <span class="nf">get_results</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the list of results in ENA as a dictionary with the key being the</span>
+<span class="sd">    result id and the value the result description</span>
+
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">results</span><span class="p">[</span><span class="n">result</span><span class="p">][</span><span class="s2">&quot;description&quot;</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="get_taxonomy_results"><a class="viewcode-back" href="../api_usage.html#enasearch.get_taxonomy_results">[docs]</a><span class="k">def</span> <span class="nf">get_taxonomy_results</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return info about the taxonomy results</span>
+
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">taxonomy_results</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">taxonomy_results</span></div>
+
+
+<div class="viewcode-block" id="check_result"><a class="viewcode-back" href="../api_usage.html#enasearch.check_result">[docs]</a><span class="k">def</span> <span class="nf">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if result is in the list of possible results in ENA</span>
+
+<span class="sd">    :param result: id of result to check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">possible_results</span> <span class="o">=</span> <span class="n">get_results</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possible_results</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The result od (</span><span class="si">%s</span><span class="s2">) does not correspond to a &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;possible result id in ENA&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_taxonomy_result"><a class="viewcode-back" href="../api_usage.html#enasearch.check_taxonomy_result">[docs]</a><span class="k">def</span> <span class="nf">check_taxonomy_result</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if a result is in the list of possible taxonomz results in ENA</span>
+
+<span class="sd">    :param result: id of result to check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">taxonomy_results</span> <span class="o">=</span> <span class="n">get_taxonomy_results</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">taxonomy_results</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The result id (</span><span class="si">%s</span><span class="s2">) does not correspond to a &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;possible taxonomy result id in ENA&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_result"><a class="viewcode-back" href="../api_usage.html#enasearch.get_result">[docs]</a><span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return info about a result</span>
+
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">get_results</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">result_info</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">result</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">result_info</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result_info</span></div>
+
+
+<div class="viewcode-block" id="get_filter_fields"><a class="viewcode-back" href="../api_usage.html#enasearch.get_filter_fields">[docs]</a><span class="k">def</span> <span class="nf">get_filter_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the filter fields of a result to build a query</span>
+
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result_info</span> <span class="o">=</span> <span class="n">get_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">filter_fields</span> <span class="o">=</span> <span class="n">result_info</span><span class="p">[</span><span class="s2">&quot;filter_fields&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">filter_fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filter_fields</span></div>
+
+
+<div class="viewcode-block" id="get_returnable_fields"><a class="viewcode-back" href="../api_usage.html#enasearch.get_returnable_fields">[docs]</a><span class="k">def</span> <span class="nf">get_returnable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the returnable fields of a result</span>
+
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">result_info</span> <span class="o">=</span> <span class="n">get_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">returnable_fields</span> <span class="o">=</span> <span class="n">result_info</span><span class="p">[</span><span class="s2">&quot;returnable_fields&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">returnable_fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">returnable_fields</span></div>
+
+
+<div class="viewcode-block" id="check_returnable_fields"><a class="viewcode-back" href="../api_usage.html#enasearch.check_returnable_fields">[docs]</a><span class="k">def</span> <span class="nf">check_returnable_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check that some fields are returnable fields of a resut</span>
+
+<span class="sd">    :param fields: list of fields to check</span>
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">returnable_fields</span> <span class="o">=</span> <span class="n">get_returnable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">returnable_fields</span><span class="p">:</span>
+            <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The field </span><span class="si">%s</span><span class="s2"> is not a returnable field for &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;result </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_sortable_fields"><a class="viewcode-back" href="../api_usage.html#enasearch.get_sortable_fields">[docs]</a><span class="k">def</span> <span class="nf">get_sortable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the sortable fields of a result</span>
+
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">sortable_fields</span> <span class="o">=</span> <span class="n">get_filter_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">sortable_fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sortable_fields</span></div>
+
+
+<div class="viewcode-block" id="check_sortable_fields"><a class="viewcode-back" href="../api_usage.html#enasearch.check_sortable_fields">[docs]</a><span class="k">def</span> <span class="nf">check_sortable_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check that some fields are sortable fields of a resut</span>
+
+<span class="sd">    :param fields: list of fields to check</span>
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sortable_fields</span> <span class="o">=</span> <span class="n">get_sortable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sortable_fields</span><span class="p">:</span>
+            <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The field </span><span class="si">%s</span><span class="s2"> is not a sortable field for &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="p">)</span>
+            <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;result </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_filter_types"><a class="viewcode-back" href="../api_usage.html#enasearch.get_filter_types">[docs]</a><span class="k">def</span> <span class="nf">get_filter_types</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the types of filters usable to build a query</span>
+
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">filter_types</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filter_types</span></div>
+
+
+<div class="viewcode-block" id="get_display_options"><a class="viewcode-back" href="../api_usage.html#enasearch.get_display_options">[docs]</a><span class="k">def</span> <span class="nf">get_display_options</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the display options</span>
+
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">display_options</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">display_options</span></div>
+
+
+<div class="viewcode-block" id="check_display_option"><a class="viewcode-back" href="../api_usage.html#enasearch.check_display_option">[docs]</a><span class="k">def</span> <span class="nf">check_display_option</span><span class="p">(</span><span class="n">display</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if display is in the list of display in ENA</span>
+
+<span class="sd">    :param display: display to check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">display_options</span> <span class="o">=</span> <span class="n">get_display_options</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">display_options</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The display value (</span><span class="si">%s</span><span class="s2">) does not correspond to a possible </span><span class="se">\</span>
+<span class="s2">        display value in ENA&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">display</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_download_options"><a class="viewcode-back" href="../api_usage.html#enasearch.get_download_options">[docs]</a><span class="k">def</span> <span class="nf">get_download_options</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the download options</span>
+
+<span class="sd">    :param verbose: boolean to define the printing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">download_options</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">download_options</span></div>
+
+
+<div class="viewcode-block" id="check_download_option"><a class="viewcode-back" href="../api_usage.html#enasearch.check_download_option">[docs]</a><span class="k">def</span> <span class="nf">check_download_option</span><span class="p">(</span><span class="n">download</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if download is in the list of download format in ENA</span>
+
+<span class="sd">    :param download: download format to check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">download_options</span> <span class="o">=</span> <span class="n">get_download_options</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">download</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">download_options</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The download value does not correspond to a possible &quot;</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;display value in ENA&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_length"><a class="viewcode-back" href="../api_usage.html#enasearch.check_length">[docs]</a><span class="k">def</span> <span class="nf">check_length</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check if length is below the maximum length</span>
+
+<span class="sd">    :param length: length value to test</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="o">&gt;</span> <span class="n">lengthLimit</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The length value (</span><span class="si">%s</span><span class="s2">) is higher than the &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;limit length (</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lengthLimit</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_download_file_options"><a class="viewcode-back" href="../api_usage.html#enasearch.check_download_file_options">[docs]</a><span class="k">def</span> <span class="nf">check_download_file_options</span><span class="p">(</span><span class="n">download</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check that download and file options are correctly defined</span>
+
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option, accessible with get_download_options)</span>
+<span class="sd">    :param file: filepath to save the content of the data (used with download option)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;download option should come along with a filepath&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">download</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;file option should come along with a download option&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+    <span class="n">check_download_option</span><span class="p">(</span><span class="n">download</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_subseq_range"><a class="viewcode-back" href="../api_usage.html#enasearch.check_subseq_range">[docs]</a><span class="k">def</span> <span class="nf">check_subseq_range</span><span class="p">(</span><span class="n">subseq_range</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check that subseq_range is well defined</span>
+
+<span class="sd">    :param download: range for subsequences (limit separated by a -)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subseq_range_content</span> <span class="o">=</span> <span class="n">subseq_range</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subseq_range_content</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;A subseq_range must have two arguments (start and stop)&quot;</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot; separated by a -&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">subseq_range_content</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">subseq_range_content</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;Start for a subseq_range must be lower than the stop&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="format_seq_content"><a class="viewcode-back" href="../api_usage.html#enasearch.format_seq_content">[docs]</a><span class="k">def</span> <span class="nf">format_seq_content</span><span class="p">(</span><span class="n">seq_str</span><span class="p">,</span> <span class="n">out_format</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Format a string with sequences into a BioPython sequence objects</span>
+<span class="sd">    (SeqRecord)</span>
+
+<span class="sd">    :param seq_str: string with sequences to format</span>
+<span class="sd">    :param out_format: fasta or fastq</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sequences</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq_str</span><span class="p">)</span>
+        <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">SeqIO</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">out_format</span><span class="p">):</span>
+            <span class="n">sequences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sequences</span></div>
+
+
+<div class="viewcode-block" id="request_url"><a class="viewcode-back" href="../api_usage.html#enasearch.request_url">[docs]</a><span class="k">def</span> <span class="nf">request_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run the URL request and return content or status</span>
+
+<span class="sd">    :param url: URL to request</span>
+<span class="sd">    :param display: display option</span>
+<span class="sd">    :param length: number of records to retrieve</span>
+<span class="sd">    :param file: filepath to save the content of the search</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s2">&quot;xml&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">display</span> <span class="o">==</span> <span class="s2">&quot;fasta&quot;</span> <span class="ow">or</span> <span class="n">display</span> <span class="o">==</span> <span class="s2">&quot;fastq&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_seq_content</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span></div>
+
+
+<div class="viewcode-block" id="build_retrieve_url"><a class="viewcode-back" href="../api_usage.html#enasearch.build_retrieve_url">[docs]</a><span class="k">def</span> <span class="nf">build_retrieve_url</span><span class="p">(</span>
+    <span class="n">ids</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subseq_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Build the URL to retriva data or taxon</span>
+
+<span class="sd">    :param ids: comma-separated identifiers for records other than Taxon</span>
+<span class="sd">    :param display: display option to specify the display format (accessible with get_display_options)</span>
+<span class="sd">    :param offset: first record to get</span>
+<span class="sd">    :param length: number of records to retrieve</span>
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option, accessible with get_download_options)</span>
+<span class="sd">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="sd">    :param subseq_range: range for subsequences (limit separated by a -)</span>
+<span class="sd">    :param expanded: boolean to determine if a CON record is expanded</span>
+<span class="sd">    :param header: boolean to obtain only the header of a record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">baseUrl</span> <span class="o">+</span> <span class="s2">&quot;data/view/&quot;</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="n">ids</span>
+    <span class="n">check_display_option</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;display=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">display</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;result=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_length</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;length=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;offset=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">subseq_range</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_subseq_range</span><span class="p">(</span><span class="n">subseq_range</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;range=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">subseq_range</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;expanded=true&quot;</span> <span class="k">if</span> <span class="n">expanded</span> <span class="k">else</span> <span class="s2">&quot;&amp;expanded=false&quot;</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;header=true&quot;</span> <span class="k">if</span> <span class="n">header</span> <span class="k">else</span> <span class="s2">&quot;&amp;header=false&quot;</span>
+    <span class="k">if</span> <span class="n">download</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_download_file_options</span><span class="p">(</span><span class="n">download</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;download=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">download</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">url</span></div>
+
+
+<div class="viewcode-block" id="retrieve_data"><a class="viewcode-back" href="../api_usage.html#enasearch.retrieve_data">[docs]</a><span class="k">def</span> <span class="nf">retrieve_data</span><span class="p">(</span>
+    <span class="n">ids</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">subseq_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve ENA data (other than taxon)</span>
+
+<span class="sd">    :param ids: comma-separated identifiers for records other than Taxon</span>
+<span class="sd">    :param display: display option to specify the display format (accessible with get_display_options)</span>
+<span class="sd">    :param offset: first record to get</span>
+<span class="sd">    :param length: number of records to retrieve</span>
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option, accessible with get_download_options)</span>
+<span class="sd">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="sd">    :param subseq_range: range for subsequences (limit separated by a -)</span>
+<span class="sd">    :param expanded: boolean to determine if a CON record is expanded</span>
+<span class="sd">    :param header: boolean to obtain only the header of a record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">build_retrieve_url</span><span class="p">(</span>
+        <span class="n">ids</span><span class="o">=</span><span class="n">ids</span><span class="p">,</span>
+        <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+        <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">download</span><span class="o">=</span><span class="n">download</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">subseq_range</span><span class="o">=</span><span class="n">subseq_range</span><span class="p">,</span>
+        <span class="n">expanded</span><span class="o">=</span><span class="n">expanded</span><span class="p">,</span>
+        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">request_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="retrieve_taxons"><a class="viewcode-back" href="../api_usage.html#enasearch.retrieve_taxons">[docs]</a><span class="k">def</span> <span class="nf">retrieve_taxons</span><span class="p">(</span>
+    <span class="n">ids</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">subseq_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">expanded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve taxons</span>
+
+<span class="sd">    :param ids: comma-separated taxon identifiers</span>
+<span class="sd">    :param display: display option to specify the display format (accessible with get_display_options)</span>
+<span class="sd">    :param result: taxonomy result to display (accessible with result)</span>
+<span class="sd">    :param offset: first record to get</span>
+<span class="sd">    :param length: number of records to retrieve</span>
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option, accessible with get_download_options)</span>
+<span class="sd">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="sd">    :param subseq_range: range for subsequences (limit separated by a -)</span>
+<span class="sd">    :param expanded: boolean to determine if a CON record is expanded</span>
+<span class="sd">    :param header: boolean to obtain only the header of a record</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">id_list</span> <span class="o">=</span> <span class="n">ids</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+    <span class="n">modified_ids</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">one_id</span> <span class="ow">in</span> <span class="n">id_list</span><span class="p">:</span>
+        <span class="n">modified_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Taxon:</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">one_id</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_taxonomy_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">build_retrieve_url</span><span class="p">(</span>
+        <span class="n">ids</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">modified_ids</span><span class="p">),</span>
+        <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+        <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+        <span class="n">download</span><span class="o">=</span><span class="n">download</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+        <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+        <span class="n">subseq_range</span><span class="o">=</span><span class="n">subseq_range</span><span class="p">,</span>
+        <span class="n">expanded</span><span class="o">=</span><span class="n">expanded</span><span class="p">,</span>
+        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">request_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_search_url"><a class="viewcode-back" href="../api_usage.html#enasearch.get_search_url">[docs]</a><span class="k">def</span> <span class="nf">get_search_url</span><span class="p">(</span><span class="n">free_text_search</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the search URL</span>
+
+<span class="sd">    :param free_text_search: boolean to describe the type of query</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">baseUrl</span> <span class="o">+</span> <span class="s2">&quot;data/&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">free_text_search</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;warehouse/&quot;</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;search?&quot;</span>
+    <span class="k">return</span> <span class="n">url</span></div>
+
+
+<div class="viewcode-block" id="get_search_result_number"><a class="viewcode-back" href="../api_usage.html#enasearch.get_search_result_number">[docs]</a><span class="k">def</span> <span class="nf">get_search_result_number</span><span class="p">(</span>
+    <span class="n">free_text_search</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">need_check_result</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the number of results for a query on a result</span>
+
+<span class="sd">    :param free_text_search: boolean to describe the type of query</span>
+<span class="sd">    :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</span>
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">get_search_url</span><span class="p">(</span><span class="n">free_text_search</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;query=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">need_check_result</span><span class="p">:</span>
+        <span class="n">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;result=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;resultcount&quot;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="n">url</span><span class="p">,</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">})</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">nb</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;: &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="search_data"><a class="viewcode-back" href="../api_usage.html#enasearch.search_data">[docs]</a><span class="k">def</span> <span class="nf">search_data</span><span class="p">(</span>
+    <span class="n">free_text_search</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sortfields</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Search ENA data</span>
+
+<span class="sd">    :param free_text_search: boolean to describe the type of query</span>
+<span class="sd">    :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes </span>
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param display: display option to specify the display format (accessible with get_display_options)</span>
+<span class="sd">    :param offset: first record to get</span>
+<span class="sd">    :param length: number of records to retrieve</span>
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option)</span>
+<span class="sd">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="sd">    :param fields: comma-separated list of fields to return (only if display=report)</span>
+<span class="sd">    :param sortfields: comma-separated list of fields to sort the results (only if display=report)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">get_search_url</span><span class="p">(</span><span class="n">free_text_search</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;query=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+    <span class="n">check_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;result=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="n">check_display_option</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;display=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">display</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_length</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;length=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">length</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">result_nb</span> <span class="o">=</span> <span class="n">get_search_result_number</span><span class="p">(</span><span class="n">free_text_search</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">offset</span> <span class="o">&gt;</span> <span class="n">result_nb</span><span class="p">:</span>
+            <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The offset value must be lower than the possible number&quot;</span>
+            <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot; of results for the query&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;offset=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">display</span> <span class="o">==</span> <span class="s2">&quot;report&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_returnable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">check_returnable_fields</span><span class="p">(</span><span class="n">fields</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;fields=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sortfields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_sortable_fields</span><span class="p">(</span><span class="n">sortfields</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+            <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;sortfields=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sortfields</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">download</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_download_file_options</span><span class="p">(</span><span class="n">download</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;download=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">download</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">request_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="search_all_data"><a class="viewcode-back" href="../api_usage.html#enasearch.search_all_data">[docs]</a><span class="k">def</span> <span class="nf">search_all_data</span><span class="p">(</span>
+    <span class="n">free_text_search</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">display</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Search ENA data and get all results (not size limited)</span>
+
+<span class="sd">    :param free_text_search: boolean to describe the type of query</span>
+<span class="sd">    :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</span>
+<span class="sd">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="sd">    :param display: display option to specify the display format </span>
+<span class="sd">    :param download: download option to specify that records are to be saved in a file (used with file option)</span>
+<span class="sd">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">display</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;fasta&quot;</span><span class="p">,</span> <span class="s2">&quot;fastq&quot;</span><span class="p">]:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;This function is not possible for this display option&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">download</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">check_download_file_options</span><span class="p">(</span><span class="n">download</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+    <span class="n">result_nb</span> <span class="o">=</span> <span class="n">get_search_result_number</span><span class="p">(</span><span class="n">free_text_search</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+    <span class="n">quotient</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">result_nb</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">lengthLimit</span><span class="p">))</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">quotient</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">lengthLimit</span> <span class="o">*</span> <span class="n">i</span>
+        <span class="n">all_results</span> <span class="o">+=</span> <span class="n">search_data</span><span class="p">(</span>
+            <span class="n">free_text_search</span><span class="o">=</span><span class="n">free_text_search</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+            <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">lengthLimit</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sortfields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">result_nb</span> <span class="o">%</span> <span class="n">lengthLimit</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">quotient</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">lengthLimit</span> <span class="o">*</span> <span class="n">quotient</span>
+            <span class="n">remainder</span> <span class="o">=</span> <span class="n">result_nb</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">remainder</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">all_results</span> <span class="o">+=</span> <span class="n">search_data</span><span class="p">(</span>
+            <span class="n">free_text_search</span><span class="o">=</span><span class="n">free_text_search</span><span class="p">,</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span>
+            <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+            <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">remainder</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">sortfields</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">display</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fasta&#39;</span><span class="p">,</span> <span class="s1">&#39;fastq&#39;</span><span class="p">]:</span>
+            <span class="n">SeqIO</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_results</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">display</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">download</span> <span class="o">==</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                    <span class="n">all_results</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                    <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">download</span> <span class="o">==</span> <span class="s2">&quot;gzip&quot;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">all_results</span></div>
+
+
+<div class="viewcode-block" id="retrieve_filereport"><a class="viewcode-back" href="../api_usage.html#enasearch.retrieve_filereport">[docs]</a><span class="k">def</span> <span class="nf">retrieve_filereport</span><span class="p">(</span><span class="n">accession</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve a filereport</span>
+
+<span class="sd">    :param accession: accession id</span>
+<span class="sd">    :param result: read_run for a run report or analysis for an analysis report</span>
+<span class="sd">    :param fields: comma-separated list of fields to have in the report</span>
+<span class="sd">    :param file: filepath to save the content of the report</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">baseUrl</span> <span class="o">+</span> <span class="s2">&quot;data/warehouse/filereport?&quot;</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;accession=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">accession</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">result</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;read_run&quot;</span><span class="p">,</span> <span class="s2">&quot;analysis&quot;</span><span class="p">]:</span>
+        <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;The result to retrieve a filereport must be either read_run&quot;</span>
+        <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot; or analysis&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;result=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">get_returnable_fields</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">check_returnable_fields</span><span class="p">(</span><span class="n">fields</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">),</span> <span class="n">result</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">+=</span> <span class="s2">&quot;&amp;fields=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">request_url</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="retrieve_run_report"><a class="viewcode-back" href="../api_usage.html#enasearch.retrieve_run_report">[docs]</a><span class="k">def</span> <span class="nf">retrieve_run_report</span><span class="p">(</span><span class="n">accession</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve run report</span>
+
+<span class="sd">    :param accession: accession id </span>
+<span class="sd">    :param fields: comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=read_run)</span>
+<span class="sd">    :param file: filepath to save the content of the report</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">retrieve_filereport</span><span class="p">(</span>
+        <span class="n">accession</span><span class="o">=</span><span class="n">accession</span><span class="p">,</span>
+        <span class="n">result</span><span class="o">=</span><span class="s2">&quot;read_run&quot;</span><span class="p">,</span>
+        <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="retrieve_analysis_report"><a class="viewcode-back" href="../api_usage.html#enasearch.retrieve_analysis_report">[docs]</a><span class="k">def</span> <span class="nf">retrieve_analysis_report</span><span class="p">(</span><span class="n">accession</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Retrieve analysis report</span>
+
+<span class="sd">    :param accession: accession id</span>
+<span class="sd">    :param fields: comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=analysis)</span>
+<span class="sd">    :param file: filepath to save the content of the report</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">retrieve_filereport</span><span class="p">(</span>
+        <span class="n">accession</span><span class="o">=</span><span class="n">accession</span><span class="p">,</span>
+        <span class="n">result</span><span class="o">=</span><span class="s2">&quot;analysis&quot;</span><span class="p">,</span>
+        <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Bérénice Batut.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

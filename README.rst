@@ -26,26 +26,28 @@ ENASearch is easy to use
     $ enasearch --help
     Usage: enasearch [OPTIONS] COMMAND [ARGS]...
 
+      The Python library for interacting with ENA's API
+
     Options:
       --version   Show the version and exit.
       -h, --help  Show this message and exit.
 
     Commands:
-      get_analysis_fields       Get analysis fields
-      get_display_options       Get display options
-      get_download_options      Get download options
+      get_analysis_fields       Get list of fields for an analysis
+      get_display_options       Get list of options for display
+      get_download_options      Get list of options for download
       get_filter_fields         Get filter fields
-      get_filter_types          Get filter types
-      get_results               Get list of results
-      get_returnable_fields     Get returnable fields
-      get_run_fields            Get run fields
-      get_sortable_fields       Get sortable fields
+      get_filter_types          Get the types of filters usable to build a query
+      get_results               Get list of possible results
+      get_returnable_fields     Get list of returnable fields
+      get_run_fields            Get list of fields for a run
+      get_sortable_fields       Get the sortable fields for a result
       get_taxonomy_results      Get list of taxonomy results
       retrieve_analysis_report  Retrieve analysis report
-      retrieve_data             Retrieve ENA data
+      retrieve_data             Retrieve ENA data (other than taxon and project)
       retrieve_run_report       Retrieve run report
-      retrieve_taxons           Retrieve ENA taxon data
-      search_data               Search data
+      retrieve_taxons           Retrieve ENA taxonomic data
+      search_data               Search data given a query
 
     $ enasearch search_data --help
     Usage: enasearch search_data [OPTIONS]

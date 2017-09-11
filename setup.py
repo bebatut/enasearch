@@ -42,7 +42,9 @@ setup(
         'biopython',
         'dicttoxml',
         'codecov',
-        'pytest-cov'],
+        'pytest-cov',
+        'Sphinx',
+        'sphinx_rtd_theme'],
     include_package_data=True,
     package_data={'enasearch_data': ['enasearch_data/*.p']}
 )

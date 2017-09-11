@@ -53,80 +53,81 @@ def print_display(results, display):
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option()
 def cli():
+    """ The Python library for interacting with ENA's API """
     pass
 
 
-@click.command('get_results', short_help='Get list of results')
+@click.command('get_results', help="Get list of possible results")
 @exception_handler
 def get_results():
-    """Return the list of results in ENA"""
+    """ Get list of possible results """
     enasearch.get_results(verbose=True)
 
 
-@click.command('get_taxonomy_results', short_help='Get list of taxonomy results')
+@click.command('get_taxonomy_results', help='Get list of taxonomy results')
 @exception_handler
 def get_taxonomy_results():
-    """Return the list of taxonomy results in ENA"""
+    """ Return the list of taxonomy results in ENA """
     taxo_results = enasearch.get_taxonomy_results(verbose=False)
     print_simple_dict(taxo_results)
 
 
-@click.command('get_filter_fields', short_help='Get filter fields')
+@click.command('get_filter_fields', help='Get filter fields')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_filter_fields(result):
-    """Get the filter fields of a result to build a query"""
+    """ Get the filter fields of a result to build a query """
     fields = enasearch.get_filter_fields(result=result, verbose=False)
     print_complex_field_dict(fields)
 
 
-@click.command('get_returnable_fields', short_help='Get returnable fields')
+@click.command('get_returnable_fields', help='Get list of returnable fields')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_returnable_fields(result):
-    """Get the fields of a result that can returned in a report"""
+    """ Get the fields of a result that can returned in a report """
     fields = enasearch.get_returnable_fields(result=result, verbose=False)
     print_list(fields)
 
 
-@click.command('get_run_fields', short_help='Get run fields')
+@click.command('get_run_fields', help='Get list of fields for a run')
 @exception_handler
 def get_run_fields():
-    """Get the fields for a run"""
+    """ Get the fields for a run """
     fields = enasearch.get_returnable_fields(result="read_run", verbose=False)
     print_list(fields)
 
 
-@click.command('get_analysis_fields', short_help='Get analysis fields')
+@click.command('get_analysis_fields', help='Get list of fields for an analysis')
 @exception_handler
 def get_analysis_fields():
-    """Get the fields for an analysis"""
+    """ Get the fields for an analysis """
     fields = enasearch.get_returnable_fields(result="analysis", verbose=True)
     print_list(fields)
 
 
-@click.command('get_sortable_fields', short_help='Get sortable fields')
+@click.command('get_sortable_fields', help='Get the sortable fields for a result')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_sortable_fields(result):
-    """Get the fields of a result that can sorted for a report"""
+    """ Get the fields of a result that can sorted for a report """
     fields = enasearch.get_sortable_fields(result=result, verbose=False)
     print_complex_field_dict(fields)
 
 
-@click.command('get_filter_types', short_help='Get filter types')
+@click.command('get_filter_types', help='Get the types of filters usable to build a query')
 @exception_handler
 def get_filter_types():
-    """Get the types of filters usable to build a query"""
+    """ Get the types of filters usable to build a query """
     types = enasearch.get_filter_types(verbose=False)
     click.echo("type\toperators/parameters\tvalues/description")
     for f, d in types.items():
@@ -139,25 +140,23 @@ def get_filter_types():
                 click.echo("%s\t%s\t%s" % (ff, ', '.join(dd['parameters']), dd['description']))
 
 
-@click.command('get_display_options', short_help='Get display options')
+@click.command('get_display_options', help='Get list of options for display')
 @exception_handler
 def get_display_options():
-    """Get the display options to specify the display format"""
+    """ Get the display options to specify the display format """
     options = enasearch.get_display_options(verbose=False)
     print_simple_dict(options)
 
 
-@click.command('get_download_options', short_help='Get download options')
+@click.command('get_download_options', help='Get list of options for download')
 @exception_handler
 def get_download_options():
-    """Get the download options to specify that records are to be saved in a
-    file
-    """
+    """ Get the download options to specify that records are to be saved in a file """
     options = enasearch.get_download_options(verbose=False)
     print_simple_dict(options)
 
 
-@click.command('search_data', short_help='Search data')
+@click.command('search_data', help='Search data given a query')
 @click.option(
     '--free_text_search',
     is_flag=True,
@@ -208,8 +207,7 @@ def search_data(
     free_text_search, query, result, display, download, file, fields,
     sortfields, offset, length
 ):
-    """Search data given a query
-    """
+    """ Search data given a query """
     free_text_search = True if free_text_search else False
     download = None if not download else download
     file = None if not file else file
@@ -242,7 +240,7 @@ def search_data(
         print_display(results, display)
 
 
-@click.command('retrieve_data', short_help='Retrieve ENA data')
+@click.command('retrieve_data', help='Retrieve ENA data (other than taxon and project)')
 @click.option(
     '--ids',
     required=True,
@@ -288,8 +286,7 @@ def retrieve_data(
     ids, display, download, file, offset, length, subseq_range, expanded,
     header
 ):
-    """Retrieve ENA data (other than taxon and project)
-    """
+    """ Retrieve ENA data (other than taxon and project) """
     download = None if not download else download
     file = None if not file else file
     offset = None if not offset else offset
@@ -311,7 +308,7 @@ def retrieve_data(
         print_display(data, display)
 
 
-@click.command('retrieve_taxons', short_help='Retrieve ENA taxon data')
+@click.command('retrieve_taxons', help='Retrieve ENA taxonomic data')
 @click.option(
     '--ids',
     required=True,
@@ -361,8 +358,7 @@ def retrieve_taxons(
     ids, display, result, download, file, offset, length, subseq_range,
     expanded, header
 ):
-    """Retrieve ENA taxon data (other than taxon and project)
-    """
+    """ Retrieve ENA taxonomic data"""
     result = None if not result else result
     download = None if not download else download
     file = None if not file else file
@@ -386,7 +382,7 @@ def retrieve_taxons(
         print_display(data, display)
 
 
-@click.command('retrieve_run_report', short_help='Retrieve run report')
+@click.command('retrieve_run_report', help='Retrieve run report')
 @click.option(
     '--accession',
     required=True,
@@ -403,8 +399,7 @@ def retrieve_taxons(
     help='File to save the report')
 @exception_handler
 def retrieve_run_report(accession, fields, file):
-    """Retrieve run report
-    """
+    """ Retrieve run report """
     fields = None if not fields else ",".join(fields)
     file = None if not file else file
     report = enasearch.retrieve_run_report(
@@ -415,9 +410,7 @@ def retrieve_run_report(accession, fields, file):
         print_display(report, 'report')
 
 
-@click.command(
-    'retrieve_analysis_report',
-    short_help='Retrieve analysis report')
+@click.command('retrieve_analysis_report', help='Retrieve analysis report')
 @click.option(
     '--accession',
     required=True,
@@ -434,8 +427,7 @@ def retrieve_run_report(accession, fields, file):
     help='File to save the report')
 @exception_handler
 def retrieve_analysis_report(accession, fields, file):
-    """Retrieve analysis report
-    """
+    """ Retrieve analysis report """
     fields = None if not fields else ",".join(fields)
     file = None if not file else file
     report = enasearch.retrieve_analysis_report(
