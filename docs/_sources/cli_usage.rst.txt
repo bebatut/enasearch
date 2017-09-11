@@ -1,7 +1,7 @@
 Usage with command-line
 =======================
 
-ENASearch is easy to use
+ENASearch can be used via command-line with:
 
 .. code-block:: bash
 
