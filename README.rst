@@ -19,7 +19,7 @@ ENASearch is a Python library for interacting with `ENA <http://www.ebi.ac.uk/en
 Usage
 -----
 
-ENASearch is easy to use
+ENASearch can be used via command-line:
 
 .. code-block:: bash
 
@@ -104,13 +104,13 @@ The information extracted from ENA can be in several formats: HTML, Text, XML, F
 Installation
 ------------
 
-To install ENASearch, simply:
+ENASearch can be installed with pip:
 
 .. code-block:: bash
 
     $ pip install enasearch
 
-or with conda
+or with conda:
 
 .. code-block:: bash
 

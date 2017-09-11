@@ -1,16 +1,21 @@
 Installation
 ============
 
-To install ENASearch, simply:
+Via pip
+-------
 
 .. code-block:: bash
 
     $ pip install enasearch
 
-or via Conda
+Via Conda
+---------
 
 .. code-block:: bash
 
     $ conda install -c bioconda enasearch
 
-ENASearch is also available as tool for Galaxy. It is available on the `ToolShed <https://toolshed.g2.bx.psu.edu/view/iuc/suite_enasearch/>`_.
+On Galaxy
+---------
+
+ENASearch is also available as tool for `Galaxy <https://galaxyproject.org/>`_. It is available on the `ToolShed <https://toolshed.g2.bx.psu.edu/view/iuc/suite_enasearch/>`_.
