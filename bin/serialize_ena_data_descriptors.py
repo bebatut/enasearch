@@ -123,9 +123,9 @@ def get_filter_types():
         be used at the start and/or end of the text value."
     }
     filter_types["Geospatial"] = get_special_filters(
-        "data/geospatial_filters.csv")
+        "enasearch_data/geospatial_filters.csv")
     filter_types["Taxonomy"] = get_special_filters(
-        "data/taxonomy_filters.csv")
+        "enasearch_data/taxonomy_filters.csv")
     return filter_types
 
 
@@ -172,25 +172,25 @@ def save_object(obj, filename):
 def serialize_ena_data_descriptors():
     """Serialize the ENA data descriptors
     """
-    filter_fields = get_filters("data/ena_filter_columns.csv")
-    return_fields = get_return_fields("data/ena_result_returnable_fields.csv")
+    filter_fields = get_filters("enasearch_data/ena_filter_columns.csv")
+    return_fields = get_return_fields("enasearch_data/ena_result_returnable_fields.csv")
     results = get_results(
-        "data/ena_domain_results.csv",
+        "enasearch_data/ena_domain_results.csv",
         filter_fields,
         return_fields)
-    save_object(results, "data/result_description")
+    save_object(results, "enasearch_data/result_description")
 
     filter_types = get_filter_types()
-    save_object(filter_types, "data/filter_types")
+    save_object(filter_types, "enasearch_data/filter_types")
 
-    display_options = get_options("data/display_options.csv")
-    save_object(display_options, "data/display_options")
+    display_options = get_options("enasearch_data/display_options.csv")
+    save_object(display_options, "enasearch_data/display_options")
 
-    download_options = get_options("data/download_options.csv")
-    save_object(download_options, "data/download_options")
+    download_options = get_options("enasearch_data/download_options.csv")
+    save_object(download_options, "enasearch_data/download_options")
 
-    taxonomy_results = get_taxonomy_results("data/taxonomy_results.csv")
-    save_object(taxonomy_results, "data/taxonomy_results")
+    taxonomy_results = get_taxonomy_results("enasearch_data/taxonomy_results.csv")
+    save_object(taxonomy_results, "enasearch_data/taxonomy_results")
 
 
 if __name__ == "__main__":
