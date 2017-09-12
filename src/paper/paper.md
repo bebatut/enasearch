@@ -4,6 +4,8 @@ tags:
   - European Nucleotide Archive
   - Python
   - API
+  - REST
+  - Galaxy
 authors:
  - name: Bérénice Batut
    orcid: 0000-0001-9852-1987
@@ -22,6 +24,6 @@ bibliography: paper.bib
 
 The European Nucleotide Archive (ENA) [@leinonen2010european] is a database providing acces to a comprehensive record of nucleotide sequencing information (raw sequencing data, sequence assembly information and functional annotation). ENA provides a programmatic access to the database via REST URLs via 5 main portals (Data, Taxon, Marker, Search and File reports).
 
-ENASearch is a Python library to search and retrieve data from ENA database. It allows also to access the different fields or possible options to build a request on ENA, with many different functions. ENASearch can also be used through a command-line interface or inside Galaxy [@afgan2016galaxy].
+ENASearch is a Python library to search and retrieve data from ENA database. It also allows for rich querying support by accessing different fields, filters or functions offered by ENA. ENASearch can be used as a Python package, through a command-line interface or inside Galaxy [@afgan2016galaxy].
 
 # References
