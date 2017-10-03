@@ -1,0 +1,411 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Interacting with ENA Database &mdash; ENASearch 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ENASearch 0.1.1 documentation" href="index.html"/>
+        <link rel="next" title="Usage with command-line" href="cli_usage.html"/>
+        <link rel="prev" title="Some example of usage" href="use_case.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ENASearch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ENASearch documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case.html">Some example of usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Interacting with ENA Database</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#programmatic-access">Programmatic access</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli_usage.html">Usage with command-line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">Usage within Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ENASearch</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Interacting with ENA Database</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ena.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="interacting-with-ena-database">
+<h1>Interacting with ENA Database<a class="headerlink" href="#interacting-with-ena-database" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="data">
+<h2>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<p>Data in ENA are organzed into 11 domains (or type):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="94%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Domain</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Assembly</td>
+<td>Information describing the construction of reads and sequence contigs into higher order scaffolds and chromosomes</td>
+</tr>
+<tr class="row-odd"><td>Sequence</td>
+<td>Assembled and, optionally, annotated assembled reads</td>
+</tr>
+<tr class="row-even"><td>Coding</td>
+<td>A virtual domain comprising sequence regions reported by data providers as being protein-coding regions</td>
+</tr>
+<tr class="row-odd"><td>Non-coding</td>
+<td>A virtual domain comprising sequence regions reported by data providers as representing non-protein-coding (RNA)  genes</td>
+</tr>
+<tr class="row-even"><td>Marker</td>
+<td>A virtual domain comprising information relating to phylogenetic, identification and molecular ecology marker  data</td>
+</tr>
+<tr class="row-odd"><td>Analysis</td>
+<td>Derived data forms, such as recalibrated aligned reads and metabarcoding identifications</td>
+</tr>
+<tr class="row-even"><td>Read</td>
+<td>Raw sequencing reads from next generation platforms</td>
+</tr>
+<tr class="row-odd"><td>Trace</td>
+<td>Raw sequencing data from capillary platforms</td>
+</tr>
+<tr class="row-even"><td>Taxon</td>
+<td>Information relating to the organism that was the source of the sequenced biological sample</td>
+</tr>
+<tr class="row-odd"><td>Sample</td>
+<td>Information relating to the biological sample studied in the sequencing experiment</td>
+</tr>
+<tr class="row-even"><td>Study</td>
+<td>Information relating to the scope of the sequencing effort; also known as &#8216;Project&#8217;, the primary use of study is to unite content otherwise dispersed across the ENA domains</td>
+</tr>
+</tbody>
+</table>
+<p>Each domains are further subdivided in some cases into data classes. It is the results that can be accessed:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="21%" />
+<col width="63%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Domain</th>
+<th class="head">Result</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Assembly</td>
+<td>assembly</td>
+<td>Genome assemblies</td>
+</tr>
+<tr class="row-odd"><td rowspan="4">Sequence</td>
+<td>sequence_release</td>
+<td>Nucleotide sequences (Release)</td>
+</tr>
+<tr class="row-even"><td>sequence_update</td>
+<td>Nucleotide sequences (Update)</td>
+</tr>
+<tr class="row-odd"><td>wgs_set</td>
+<td>Genome assembly contig sets (WGS)</td>
+</tr>
+<tr class="row-even"><td>tsa_set</td>
+<td>Transcriptome assembly contig sets (TSA)</td>
+</tr>
+<tr class="row-odd"><td rowspan="2">Coding</td>
+<td>coding_release</td>
+<td>Protein coding sequences (Release)</td>
+</tr>
+<tr class="row-even"><td>coding_update</td>
+<td>Protein coding sequences (Update)</td>
+</tr>
+<tr class="row-odd"><td rowspan="2">Non-coding</td>
+<td>noncoding_release</td>
+<td>Non-coding sequences (Release)</td>
+</tr>
+<tr class="row-even"><td>noncoding_update</td>
+<td>Non-coding sequences (Update)</td>
+</tr>
+<tr class="row-odd"><td rowspan="2">Analysis</td>
+<td>analysis_study</td>
+<td>Studies used for nucleotide sequence analyses from reads</td>
+</tr>
+<tr class="row-even"><td>analysis</td>
+<td>Nucleotide sequence analyses from reads</td>
+</tr>
+<tr class="row-odd"><td rowspan="3">Read</td>
+<td>read_experiment</td>
+<td>Experiments used for raw reads</td>
+</tr>
+<tr class="row-even"><td>read_run</td>
+<td>Raw reads</td>
+</tr>
+<tr class="row-odd"><td>read_study</td>
+<td>Studies used for raw reads</td>
+</tr>
+<tr class="row-even"><td>Sample</td>
+<td>sample</td>
+<td>Samples</td>
+</tr>
+<tr class="row-odd"><td>Taxon</td>
+<td>taxon</td>
+<td>Taxonomic classfication</td>
+</tr>
+<tr class="row-even"><td>Environmental</td>
+<td>environmental</td>
+<td>Environmental samples</td>
+</tr>
+<tr class="row-odd"><td>Study</td>
+<td>Study</td>
+<td>Studies</td>
+</tr>
+</tbody>
+</table>
+<p>This list can be accessed with <cite>get_results</cite>.</p>
+<p>Each &#8220;result&#8221; can be searched, the outputs can be formatted and sorted given different fields. These fields are accessible via the commands:</p>
+<ul class="simple">
+<li><cite>get_filter_fields</cite> to obtain the fields to build a query or filter (more information about the type of these filters with <cite>get_filter_types</cite>)</li>
+<li><cite>get_returnable_fields</cite> to obtain the fields extractable for a result</li>
+<li><cite>get_sortable_fields</cite> to obtain the fields usable to sort the outputs</li>
+</ul>
+</div>
+<div class="section" id="programmatic-access">
+<h2>Programmatic access<a class="headerlink" href="#programmatic-access" title="Permalink to this headline">¶</a></h2>
+<p>The data on ENA can be accessed programmatically, in ENASearch:</p>
+<ul>
+<li><p class="first">ENA database can be queried via <cite>search_data</cite></p>
+</li>
+<li><p class="first">Data with an accession id can be retrieved via <cite>retrieve_data</cite></p>
+<blockquote>
+<div><p>This function can not be used to</p>
+<ul>
+<li><p class="first">Retrieve taxonomic data</p>
+<blockquote>
+<div><p>It must be done via the taxon portal with <cite>retrieve_taxons</cite>. The taxonomy results can be accessed via <cite>get_taxonomy_results</cite></p>
+</div></blockquote>
+</li>
+<li><p class="first">Retrieve a run file report via a study accession (ERP, SRP, DRP, PRJ prefixes), experiment accession (ERX, SRX, DRX prefixes), sample accessions (ERS, SRS, DRS, SAM prefixes) or a run accessions (ERR, SRR, DRR prefixes)</p>
+<blockquote>
+<div><p><cite>retrieve_run_report</cite> is used then. The fields accessible for the run report can be obtained with <cite>get_run_fields</cite></p>
+</div></blockquote>
+</li>
+<li><p class="first">Retrieve an analysis report via a study accession (ERP, SRP, DRP, PRJ prefixes), sample accession (ERS, SRS, DRS, SAM prefixes) or analysis accession (ERZ, SRZ, DRZ prefixes)</p>
+<blockquote>
+<div><p><cite>retrieve_analysis_report</cite> is used then. The fields accessible for the run report can be obtained with <cite>get_analysis_fields</cite></p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cli_usage.html" class="btn btn-neutral float-right" title="Usage with command-line" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="use_case.html" class="btn btn-neutral" title="Some example of usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Bérénice Batut.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
