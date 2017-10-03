@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Some example of usage &mdash; ENASearch 0.1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="ENASearch 0.1.1 documentation" href="index.html"/>
+        <link rel="next" title="Usage with command-line" href="cli_usage.html"/>
+        <link rel="prev" title="Installation" href="installation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ENASearch
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">ENASearch documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Some example of usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#original-use-case">Original use case</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-and-retrieve-data">Search and retrieve data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cli_usage.html">Usage with command-line</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_usage.html">Usage within Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ENASearch</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Some example of usage</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/use_case.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="some-example-of-usage">
+<h1>Some example of usage<a class="headerlink" href="#some-example-of-usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="original-use-case">
+<h2>Original use case<a class="headerlink" href="#original-use-case" title="Permalink to this headline">¶</a></h2>
+<p>This project started with a simple problem. We had a list of thousands of ENA&#8217;s run ids with possibly interesting metagenomic datasets. We needed to select some of these datasets based on several criteria (platform used for the sequencing, library preparation strategy, number of reads and bases sequenced, etc) and download them afterwards.</p>
+<p>The metadata are accessible via ENA. For example for the run &#8220;ERR1558694&#8221;, the information can be accessed at <a class="reference external" href="https://www.ebi.ac.uk/ena/data/view/ERR1558694">https://www.ebi.ac.uk/ena/data/view/ERR1558694</a> or programmatically via:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ curl <span class="s2">&quot;https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERR1558694&amp;result=read_run&quot;</span>
+</pre></div>
+</div>
+<p>We can also choose the fields to extract</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ curl <span class="s2">&quot;https://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=ERR1558694&amp;result=read_run&amp;fields=run_accession,instrument_platform,library_strategy,read_count,fastq_ftp&quot;</span>
+
+run_accession   instrument_platform library_strategy    read_count  fastq_ftp
+ERR1558694  ILLUMINA    WGS <span class="m">1259641</span> ftp.sra.ebi.ac.uk/vol1/fastq/ERR155/004/ERR1558694/ERR1558694_1.fastq.gz<span class="p">;</span>ftp.sra.ebi.ac.uk/vol1/fastq/ERR155/004/ERR1558694/ERR1558694_2.fastq.gz
+</pre></div>
+</div>
+<p>We started to write these URLs with Python, but they are often difficult to build (without error, specially for the names of the fields). And the extracted information has to be integrated into downstream Python scripts. We thought that a Python library to interact with ENA&#8217;s API could be useful. It could help to query ENA&#8217;s database, give the list of possible fields for a type of data, download data from ENA, etc. This library could be used inside Python scripts but also through command-lines inside BASH scripts.</p>
+<p>If we come back to our initial problem, we can now use ENASearch start inside Python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">enasearch</span>
+</pre></div>
+</div>
+<p>First, we would like to know the accessible metadata for a run (&#8220;read_run&#8221; type in ENA):</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enasearch</span><span class="o">.</span><span class="n">get_returnable_fields</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="s2">&quot;read_run&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+<span class="go">[&#39;study_accession&#39;, &#39;secondary_study_accession&#39;, &#39;sample_accession&#39;, &#39;secondary_sample_accession&#39;, &#39;experiment_accession&#39;, &#39;run_accession&#39;, &#39;submission_accession&#39;, &#39;tax_id&#39;, &#39;scientific_name&#39;, &#39;instrument_platform&#39;, &#39;instrument_model&#39;, &#39;library_name&#39;, &#39;nominal_length&#39;, &#39;library_layout&#39;, &#39;library_strategy&#39;, &#39;library_source&#39;, &#39;library_selection&#39;, &#39;read_count&#39;, &#39;base_count&#39;, &#39;center_name&#39;, &#39;first_public&#39;, &#39;last_updated&#39;, &#39;experiment_title&#39;, &#39;study_title&#39;, &#39;study_alias&#39;, &#39;experiment_alias&#39;, &#39;run_alias&#39;, &#39;fastq_bytes&#39;, &#39;fastq_md5&#39;, &#39;fastq_ftp&#39;, &#39;fastq_aspera&#39;, &#39;fastq_galaxy&#39;, &#39;submitted_bytes&#39;, &#39;submitted_md5&#39;, &#39;submitted_ftp&#39;, &#39;submitted_aspera&#39;, &#39;submitted_galaxy&#39;, &#39;submitted_format&#39;, &#39;sra_bytes&#39;, &#39;sra_md5&#39;, &#39;sra_ftp&#39;, &#39;sra_aspera&#39;, &#39;sra_galaxy&#39;, &#39;cram_index_ftp&#39;, &#39;cram_index_aspera&#39;, &#39;cram_index_galaxy&#39;, &#39;sample_alias&#39;, &#39;broker_name&#39;]</span>
+</pre></div>
+</div>
+<p>We now would like to access the instrument platform, the library strategy and the read_count for the run &#8220;ERR1558694&#8221;</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enasearch</span><span class="o">.</span><span class="n">retrieve_run_report</span><span class="p">(</span><span class="n">accession</span><span class="o">=</span><span class="s2">&quot;ERR1558694&quot;</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s2">&quot;run_accession,instrument_platform,library_strategy,read_count,fastq_ftp&quot;</span><span class="p">)</span>
+
+<span class="go">&#39;run_accession\tinstrument_platform\tlibrary_strategy\tread_count\tfastq_ftp\nERR1558694\tILLUMINA\tWGS\t1259641\tftp.sra.ebi.ac.uk/vol1/fastq/ERR155/004/ERR1558694/ERR1558694_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/ERR155/004/ERR1558694/ERR1558694_2.fastq.gz\n&#39;</span>
+</pre></div>
+</div>
+<p>We could have put this information directly into a file (with <cite>file=&lt;filepath&gt;</cite> in the previous command). We can now parse this string to extract useful information and choose (or not) to conserve this run for downstream analyses, and for example download the files using the FTP link extracted.</p>
+</div>
+<div class="section" id="search-and-retrieve-data">
+<h2>Search and retrieve data<a class="headerlink" href="#search-and-retrieve-data" title="Permalink to this headline">¶</a></h2>
+<p>We now would like to find the sequences related to the SMP1 gene in human. We will use the <cite>search_all_data</cite> function</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">help</span><span class="p">(</span><span class="n">enasearch</span><span class="o">.</span><span class="n">search_data</span><span class="p">)</span>
+
+<span class="go">Help on function search_data in module enasearch:</span>
+
+<span class="go">search_data(free_text_search, query, result, display, offset=None, length=None, download=None, file=None, fields=None, sortfields=None)</span>
+<span class="go">    Search ENA data</span>
+
+<span class="go">    :param free_text_search: boolean to describe the type of query</span>
+<span class="go">    :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</span>
+<span class="go">    :param result: id of the result (partition of ENA db), accessible with get_results</span>
+<span class="go">    :param display: display option to specify the display format (accessible with get_display_options)</span>
+<span class="go">    :param offset: first record to get</span>
+<span class="go">    :param length: number of records to retrieve</span>
+<span class="go">    :param download: download option to specify that records are to be saved in a file (used with file option)</span>
+<span class="go">    :param file: filepath to save the content of the search (used with download option)</span>
+<span class="go">    :param fields: comma-separated list of fields to return (only if display=report)</span>
+<span class="go">    :param sortfields: comma-separated list of fields to sort the results (only if display=report)</span>
+</pre></div>
+</div>
+<p>We would like to find ENA data related to human kinase, so</p>
+<ul>
+<li><p class="first"><cite>free_text_search</cite> is &#8220;True&#8221; and <cite>query</cite> is &#8220;SMP1+homo&#8221; (terms joined with &#8220;+&#8221;)</p>
+<blockquote>
+<div><p>In case of search without free text, requests are queried on the ENA data warehouse. The query can be made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes. The use of parentheses is also supported. You can check the <a class="reference external" href="https://www.ebi.ac.uk/ena/browse/search-rest">documentation on ENA</a>, and use functions as <cite>get_filter_types</cite> or <cite>get_results</cite> to help you building such query.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><cite>results</cite></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">enasearch</span><span class="o">.</span><span class="n">get_results</span><span class="p">()</span>
+
+<span class="go">noncoding_update    Non-coding sequences (Update)</span>
+<span class="go">wgs_set Genome assembly contig set</span>
+<span class="go">taxon   Taxonomic classification</span>
+<span class="go">read_study  Raw reads (grouped by study)</span>
+<span class="go">analysis_study  Nucleotide sequence analyses from reads (grouped by study)</span>
+<span class="go">tsa_set Transcriptome assembly contig set</span>
+<span class="go">sequence_update Nucleotide sequences (Update)</span>
+<span class="go">coding_release  Protein-coding sequences (Release)</span>
+<span class="go">noncoding_release   Non-coding sequences (Release)</span>
+<span class="go">assembly    Genome assemblies</span>
+<span class="go">environmental   Environmental samples</span>
+<span class="go">sample  Samples</span>
+<span class="go">analysis    Nucleotide sequence analyses from reads</span>
+<span class="go">study   Studies</span>
+<span class="go">read_run    Raw reads</span>
+<span class="go">read_experiment Raw reads (grouped by experiment)</span>
+<span class="go">sequence_release    Nucleotide sequences (Release)</span>
+<span class="go">coding_update   Protein-coding sequences (Update)</span>
+</pre></div>
+</div>
+<p>We are interested in the sequence, we choose then &#8220;sequence_release&#8221;</p>
+</div></blockquote>
+</li>
+<li><p class="first"><cite>offset</cite> and <cite>length</cite></p>
+<blockquote>
+<div><p>By default the first 100,000 records are returned (<cite>offset</cite> = 0 and <cite>length</cite> = 10000). We would like to first know how many records are available for this query:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enasearch</span><span class="o">.</span><span class="n">get_search_result_number</span><span class="p">(</span>
+<span class="go">    free_text_search=True,</span>
+<span class="go">    query=&quot;SMP1+homo&quot;,</span>
+<span class="go">    result=&quot;sequence_release&quot;)</span>
+
+<span class="go">12</span>
+</pre></div>
+</div>
+<p>With the default values, all sequences will be extracted. To be sure to obtain all records, you can also use the <cite>search_all_data</cite> function.</p>
+</div></blockquote>
+</li>
+<li><p class="first"><cite>display</cite> to &#8220;fasta&#8221;:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">enasearch</span><span class="o">.</span><span class="n">get_display_options</span><span class="p">()</span>
+
+<span class="go">{&#39;xml&#39;: {&#39;description&#39;: &#39;Results are displayed in XML format. Supported by all ENA data classes.&#39;}, &#39;fasta&#39;: {&#39;description&#39;: &#39;Results are displayed in fasta format. Supported by assembled and annotated sequence and Trace data classes.&#39;}, &#39;fastq&#39;: {&#39;description&#39;: &#39;Results are displayed in fastq format. Supported only by Trace data class.&#39;}, &#39;text&#39;: {&#39;description&#39;: &#39;Results are displayed in text format. Supported only by assembled and annotated sequence data classes.&#39;}, &#39;report&#39;: {&#39;description&#39;: &#39;Results are displayed as a tab separated report&#39;}, &#39;html&#39;: {&#39;description&#39;: &#39;Results are displayed in HTML format. Supported by all ENA data classes. HTML is the default display format if no other display option has been specified.&#39;}}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first"><cite>download</cite> will not be set here (we do not want to save the result in a file)</p>
+</li>
+<li><p class="first"><cite>fields</cite> and <cite>sortfields</cite> do not have to be set because <cite>display</cite> is not a &#8220;report&#8221;</p>
+</li>
+</ul>
+<p>The query is then</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">enasearch</span><span class="o">.</span><span class="n">search_data</span><span class="p">(</span>
+<span class="go">    free_text_search=True,</span>
+<span class="go">    query=&quot;SMP1+homo&quot;,</span>
+<span class="go">    result=&quot;sequence_release&quot;,</span>
+<span class="go">    display=&quot;fasta&quot;)</span>
+
+<span class="go">[SeqRecord(seq=Seq(&#39;TTGTTTTCTTGGCTAAAATCGGGGGAGTGAGGCGGGCCGGCGCGCGCACAACCG...AAA&#39;, SingleLetterAlphabet()), id=&#39;ENA|AF081282|AF081282.1&#39;, name=&#39;ENA|AF081282|AF081282.1&#39;, description=&#39;ENA|AF081282|AF081282.1 Homo sapiens small membrane protein 1 (SMP1) mRNA, complete cds.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;ATTAGCCGGCCCAAAACCTCAGTAGTGCCCAGGCTGAGAAACCCTGCCTTAAAC...CCC&#39;, SingleLetterAlphabet()), id=&#39;ENA|AF458851|AF458851.1&#39;, name=&#39;ENA|AF458851|AF458851.1&#39;, description=&#39;ENA|AF458851|AF458851.1 Homo sapiens small membrane protein 1 (SMP1) gene, complete cds.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;AAACGCTCATGACAGCAAAGTCTCCAATGTTCGCGCAGGCACTGGAGTCAGAGA...GGC&#39;, SingleLetterAlphabet()), id=&#39;ENA|AJ252312|AJ252312.1&#39;, name=&#39;ENA|AJ252312|AJ252312.1&#39;, description=&#39;ENA|AJ252312|AJ252312.1 Homo sapiens genomic downstream Rhesus box&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CTAGAAAACACTTTGTCATTTTAGAGGTGTTATCCAATGTTCGCGCAGGCACTG...GGC&#39;, SingleLetterAlphabet()), id=&#39;ENA|AJ252313|AJ252313.1&#39;, name=&#39;ENA|AJ252313|AJ252313.1&#39;, description=&#39;ENA|AJ252313|AJ252313.1 Homo sapiens genomic hybrid Rhesus box&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;TTGTTGGCCTACTGGAAAATAAAAAAAAAAAGGGAAACTGCGCGACTGAGCCGG...TTA&#39;, SingleLetterAlphabet()), id=&#39;ENA|AU100113|AU100113.2&#39;, name=&#39;ENA|AU100113|AU100113.2&#39;, description=&#39;ENA|AU100113|AU100113.2 Homo sapiens cDNA clone:LNG08923, similar to Homo sapiens small membrane protein 1 (SMP1) mRNA, 5&amp;apos;-EST.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CTGCTGCATCCGGGTGTCTGGAGGCTGTGGCCGTTTTGTTTTCTTGGCTAAAAT...CTG&#39;, SingleLetterAlphabet()), id=&#39;ENA|AY358650|AY358650.1&#39;, name=&#39;ENA|AY358650|AY358650.1&#39;, description=&#39;ENA|AY358650|AY358650.1 Homo sapiens clone DNA49647 SMP1 (UNQ386) mRNA, complete cds.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;GATCAACGCAAAGGACTAAGCACTGCTGCCAAAAGCCACCAGCCCCAGAGACAA...ATC&#39;, SingleLetterAlphabet()), id=&#39;ENA|BN000065|BN000065.1&#39;, name=&#39;ENA|BN000065|BN000065.1&#39;, description=&#39;ENA|BN000065|BN000065.1 TPA: Homo sapiens SMP1 gene, RHD gene and RHCE gene&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CCACGCGTCCGCGGACGCGTGGGCCGGCGGCCTGTGGCTGTTTTGCTTTCTTGG...TGC&#39;, SingleLetterAlphabet()), id=&#39;ENA|CX060942|CX060942.1&#39;, name=&#39;ENA|CX060942|CX060942.1&#39;, description=&#39;ENA|CX060942|CX060942.1 PDUts2051F04 Porcine testis cDNA library II Sus scrofa cDNA clone PDUts2051F04 5&amp;apos; similar to homologue to ref|NM_014313.2| Homo sapiens small membrane protein 1 (SMP1), mRNA, mRNA sequence.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CCACGCGTCCGCCCACGCGTCCGATCCGGCGGCCTGTGGCTGTTTTGCTTTCTT...ACC&#39;, SingleLetterAlphabet()), id=&#39;ENA|CX062415|CX062415.1&#39;, name=&#39;ENA|CX062415|CX062415.1&#39;, description=&#39;ENA|CX062415|CX062415.1 PDUts2067F11 Porcine testis cDNA library II Sus scrofa cDNA clone PDUts2067F11 5&amp;apos; similar to homologue to ref|NM_014313.2| Homo sapiens small membrane protein 1 (SMP1), mRNA, mRNA sequence.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;GCACGAGGCGGAACCACTGCACGACGGGGCTGGACTGACCTGAAAAAAAGTCTG...AAA&#39;, SingleLetterAlphabet()), id=&#39;ENA|DN994344|DN994344.1&#39;, name=&#39;ENA|DN994344|DN994344.1&#39;, description=&#39;ENA|DN994344|DN994344.1 TC115076 Human adult whole brain, large insert, pCMV expression library Homo sapiens cDNA clone TC115076 5&amp;apos; similar to Homo sapiens small membrane protein 1 (SMP1), mRNA sequence.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CCGTGTCCGCATGCGCGACTGAGCCGGGTGGATGGTACTGCTGCATCCGGGTGT...TAA&#39;, SingleLetterAlphabet()), id=&#39;ENA|JX644905|JX644905.1&#39;, name=&#39;ENA|JX644905|JX644905.1&#39;, description=&#39;ENA|JX644905|JX644905.1 Homo sapiens small membrane protein 1 (SMP1) mRNA, SMP1-RHC allele, complete cds.&#39;, dbxrefs=[]), SeqRecord(seq=Seq(&#39;CCGTGTCCGCATGCGCGACTGAGCCGGGTGGATGGTACTGCTGCATCCGGGTGT...TAA&#39;, SingleLetterAlphabet()), id=&#39;ENA|JX644906|JX644906.1&#39;, name=&#39;ENA|JX644906|JX644906.1&#39;, description=&#39;ENA|JX644906|JX644906.1 Homo sapiens small membrane protein 1 (SMP1) mRNA, SMP1-RHc allele, complete cds.&#39;, dbxrefs=[])]</span>
+</pre></div>
+</div>
+<p>The result (<cite>data</cite>) is a list of sequences, represented as SeqRecord object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="go">ID: ENA|AF081282|AF081282.1</span>
+<span class="go">Name: ENA|AF081282|AF081282.1</span>
+<span class="go">Description: ENA|AF081282|AF081282.1 Homo sapiens small membrane protein 1 (SMP1) mRNA, complete cds.</span>
+<span class="go">Number of features: 0</span>
+<span class="go">Seq(&#39;TTGTTTTCTTGGCTAAAATCGGGGGAGTGAGGCGGGCCGGCGCGCGCACAACCG...AAA&#39;, SingleLetterAlphabet())</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">seq</span><span class="p">[:</span><span class="mi">100</span><span class="p">])</span>
+
+<span class="go">TTGTTTTCTTGGCTAAAATCGGGGGAGTGAGGCGGGCCGGCGCGCGCACAACCGGGCTCCGGAACCACTGCACGACGGGGCTGGACTGACCTGAAAAAAA</span>
+</pre></div>
+</div>
+<p>To learn more about these object, you can have a look at <a class="reference external" href="http://biopython.org/wiki/SeqRecord">BioPython documentation</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cli_usage.html" class="btn btn-neutral float-right" title="Usage with command-line" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Bérénice Batut.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
