@@ -32,6 +32,7 @@ doc: ## generate HTML documentation
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	rm -rf docs
 	mv "$(BUILDDIR)/html" docs
+	rm -rf docs/_sources
 .PHONY: doc
 
 data: ## generate the data
