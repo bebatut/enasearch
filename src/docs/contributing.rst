@@ -46,6 +46,23 @@ We also recommend to run them locally before pushing to GitHub with:
 
     $ make test
 
+Documentation
+-------------
+
+Documentation about ENASearch is available online at `http://bebatut.fr/enasearch <http://bebatut.fr/enasearch>`_
+
+To update it:
+
+1. Make the changes in `src/docs`
+2. Generate the doc with 
+
+  .. code-block:: bash
+
+    $ make doc
+
+3. Check it by opening the `docs/index.html` file in a web browser
+4. Propose the changes via a Pull Request
+
 Update the data
 ---------------
 

@@ -132,6 +132,24 @@ ENASearch comes with tests:
 
     $ make test
 
+These tests are automatically run on `TravisCI <https://travis-ci.org/bebatut/enasearch>`_ for each Pull Request.
+
+Documentation
+-------------
+
+Documentation about ENASearch is available online at `http://bebatut.fr/enasearch <http://bebatut.fr/enasearch>`_
+
+To update it:
+
+1. Make the changes in `src/docs`
+2. Generate the doc with 
+
+  .. code-block:: bash
+
+    $ make doc
+
+3. Check it by opening the `docs/index.html <docs/index.html>`_ file in a web browser
+4. Propose the changes via a Pull Request
 
 Generate the data descriptions
 ------------------------------
