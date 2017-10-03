@@ -102,13 +102,13 @@ def test_search_data():
         'search_data',
         '--free_text_search',
         '--query',
-        'kinase+homo+sapiens',
+        'SMP1+homo',
         '--result',
-        'sequence_update',
+        'sequence_release',
         '--display',
         'fasta'])
     assert result.exit_code == 0
-    assert result.output.find('ENA|MS943646|MS943646.1') != -1
+    assert result.output.find('ENA|AF081282|AF081282.1') != -1
     # 3rd test
     result = runner.invoke(cli, [
         'search_data',

@@ -49,10 +49,10 @@ def test_get_search_result_number():
 
     nb = enasearch.get_search_result_number(
         free_text_search=True,
-        query="kinase+homo+sapiens",
-        result="sequence_update",
+        query="SMP1+homo",
+        result="sequence_release",
         need_check_result=True)
-    assert nb >= 15
+    assert nb >= 12
 
 
 def test_get_filter_types():
