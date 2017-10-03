@@ -12,6 +12,7 @@ We developed ENASearch, a Python library to search and retrieve data from ENA da
 
   installation
   use_case
+  ena
   cli_usage
   api_usage
   contributing
