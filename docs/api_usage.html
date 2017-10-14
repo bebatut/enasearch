@@ -176,12 +176,15 @@
 <dl class="function">
 <dt id="enasearch.build_retrieve_url">
 <code class="descclassname">enasearch.</code><code class="descname">build_retrieve_url</code><span class="sig-paren">(</span><em>ids</em>, <em>display</em>, <em>result=None</em>, <em>download=None</em>, <em>file=None</em>, <em>offset=None</em>, <em>length=None</em>, <em>subseq_range=None</em>, <em>expanded=False</em>, <em>header=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#build_retrieve_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.build_retrieve_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Build the URL to retriva data or taxon</p>
+<dd><p>Build the URL to retrieve data or taxon</p>
+<p>This function builds the URL to retrieve data or taxon on ENA. It takes 
+several arguments, check their validity before combining them to build the
+URL.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>ids</strong> &#8211; comma-separated identifiers for records other than Taxon</li>
 <li><strong>display</strong> &#8211; display option to specify the display format (accessible with get_display_options)</li>
 <li><strong>offset</strong> &#8211; first record to get</li>
@@ -194,6 +197,9 @@
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a string with the build URL</p>
+</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -201,7 +207,9 @@
 <dl class="function">
 <dt id="enasearch.check_display_option">
 <code class="descclassname">enasearch.</code><code class="descname">check_display_option</code><span class="sig-paren">(</span><em>display</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_display_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_display_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if display is in the list of display in ENA</p>
+<dd><p>Check if a display id is in the list of output formats for a query on ENA</p>
+<p>This function raises an error if the id is not in the list of possible
+displayable format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -216,6 +224,12 @@
 <dt id="enasearch.check_download_file_options">
 <code class="descclassname">enasearch.</code><code class="descname">check_download_file_options</code><span class="sig-paren">(</span><em>download</em>, <em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_download_file_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_download_file_options" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check that download and file options are correctly defined</p>
+<p>This function check:</p>
+<ul class="simple">
+<li>A filepath is given</li>
+<li>A download option is given</li>
+<li>The download option is in the list of options for download of data from ENA</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -233,7 +247,9 @@
 <dl class="function">
 <dt id="enasearch.check_download_option">
 <code class="descclassname">enasearch.</code><code class="descname">check_download_option</code><span class="sig-paren">(</span><em>download</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_download_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_download_option" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if download is in the list of download format in ENA</p>
+<dd><p>Check if an options is in the list of options for download of data from ENA</p>
+<p>This function raises an error if the id is not in the list of possible
+download options</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -247,7 +263,9 @@
 <dl class="function">
 <dt id="enasearch.check_length">
 <code class="descclassname">enasearch.</code><code class="descname">check_length</code><span class="sig-paren">(</span><em>length</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if length is below the maximum length</p>
+<dd><p>Check if length (number of results for a query) is below the maximum</p>
+<p>This function raises an error if the given length (or number of results for
+a query) is below the maximum value &lt;lengthLimit&gt;</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -261,7 +279,9 @@
 <dl class="function">
 <dt id="enasearch.check_result">
 <code class="descclassname">enasearch.</code><code class="descname">check_result</code><span class="sig-paren">(</span><em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if result is in the list of possible results in ENA</p>
+<dd><p>Check if a result id is in the list of possible results accessible on ENA</p>
+<p>This function raises an error if the result is not in the list of possible
+results</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -275,7 +295,9 @@
 <dl class="function">
 <dt id="enasearch.check_returnable_fields">
 <code class="descclassname">enasearch.</code><code class="descname">check_returnable_fields</code><span class="sig-paren">(</span><em>fields</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_returnable_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_returnable_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that some fields are returnable fields of a resut</p>
+<dd><p>Check that some field id correspond to returnable fields for a resut</p>
+<p>This function raises an error if one of the ids is not in the list of possible
+returnable fields for the given result</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -293,7 +315,9 @@
 <dl class="function">
 <dt id="enasearch.check_sortable_fields">
 <code class="descclassname">enasearch.</code><code class="descname">check_sortable_fields</code><span class="sig-paren">(</span><em>fields</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_sortable_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_sortable_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that some fields are sortable fields of a resut</p>
+<dd><p>Check that some field id correspond to sortable fields for a resut</p>
+<p>This function raises an error if one of the ids is not in the list of possible
+sortable fields for the given result</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -311,7 +335,12 @@
 <dl class="function">
 <dt id="enasearch.check_subseq_range">
 <code class="descclassname">enasearch.</code><code class="descname">check_subseq_range</code><span class="sig-paren">(</span><em>subseq_range</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_subseq_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_subseq_range" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that subseq_range is well defined</p>
+<dd><p>Check that a range of sequences to extract is well defined</p>
+<p>This function check:</p>
+<ul class="simple">
+<li>The range is correctly built: 2 integer values separated by a -</li>
+<li>The second value is higher than the first one</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -325,7 +354,9 @@
 <dl class="function">
 <dt id="enasearch.check_taxonomy_result">
 <code class="descclassname">enasearch.</code><code class="descname">check_taxonomy_result</code><span class="sig-paren">(</span><em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#check_taxonomy_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.check_taxonomy_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check if a result is in the list of possible taxonomz results in ENA</p>
+<dd><p>Check if a result id is in the list of possible results in ENA Taxon Portal</p>
+<p>This function raises an error if the result is not in the list of  possible
+taxonomy results</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -339,16 +370,18 @@
 <dl class="function">
 <dt id="enasearch.format_seq_content">
 <code class="descclassname">enasearch.</code><code class="descname">format_seq_content</code><span class="sig-paren">(</span><em>seq_str</em>, <em>out_format</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#format_seq_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.format_seq_content" title="Permalink to this definition">¶</a></dt>
-<dd><p>Format a string with sequences into a BioPython sequence objects
-(SeqRecord)</p>
+<dd><p>Format a string with sequences into a list of BioPython sequence objects (SeqRecord)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>seq_str</strong> &#8211; string with sequences to format</li>
 <li><strong>out_format</strong> &#8211; fasta or fastq</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of SeqRecord objects with the sequences in the input string</p>
 </td>
 </tr>
 </tbody>
@@ -358,12 +391,14 @@
 <dl class="function">
 <dt id="enasearch.get_display_options">
 <code class="descclassname">enasearch.</code><code class="descname">get_display_options</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_display_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_display_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the display options</p>
+<dd><p>Return the possible formats to display the result of a query on ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> &#8211; boolean to define the printing info</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary with the keys being the formats and the values a description of the formats</td>
 </tr>
 </tbody>
 </table>
@@ -372,12 +407,14 @@
 <dl class="function">
 <dt id="enasearch.get_download_options">
 <code class="descclassname">enasearch.</code><code class="descname">get_download_options</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_download_options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_download_options" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the download options</p>
+<dd><p>Return the options for download of data from ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> &#8211; boolean to define the printing info</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary with the options and the values a description of the options</td>
 </tr>
 </tbody>
 </table>
@@ -386,15 +423,21 @@
 <dl class="function">
 <dt id="enasearch.get_filter_fields">
 <code class="descclassname">enasearch.</code><code class="descname">get_filter_fields</code><span class="sig-paren">(</span><em>result</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_filter_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_filter_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the filter fields of a result to build a query</p>
+<dd><p>Return the filter fields of a result</p>
+<p>This function returns the fields that can be used to build a query on a 
+result on ENA. Each field is described in a dictionary with a short 
+description and its type (text, number, etc).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 <li><strong>verbose</strong> &#8211; boolean to define the printing info</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with the keys being the fields ids and the values dictionary to describe the fields</p>
 </td>
 </tr>
 </tbody>
@@ -404,15 +447,22 @@
 <dl class="function">
 <dt id="enasearch.get_filter_types">
 <code class="descclassname">enasearch.</code><code class="descname">get_filter_types</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_filter_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_filter_types" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the types of filters usable to build a query</p>
+<dd><p>Return the filters that can be used for the different type of data in a query on ENA</p>
+<p>This function returns the filters that can be used for the different type of 
+data (information available with the information on the filter fileds). For
+each type of data is given the operations applicable and a description of the
+type of expected values</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 <li><strong>verbose</strong> &#8211; boolean to define the printing info</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with the keys being the type of data and the values dictionary to describe the filters for this type of data</p>
 </td>
 </tr>
 </tbody>
@@ -422,15 +472,18 @@
 <dl class="function">
 <dt id="enasearch.get_result">
 <code class="descclassname">enasearch.</code><code class="descname">get_result</code><span class="sig-paren">(</span><em>result</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_result" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return info about a result</p>
+<dd><p>Return the description of a result (description, returnable and filter fields)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 <li><strong>verbose</strong> &#8211; boolean to define the printing info</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with a description of the result, the list of returnable fields and a dictionnary with the filter fields</p>
 </td>
 </tr>
 </tbody>
@@ -440,13 +493,17 @@
 <dl class="function">
 <dt id="enasearch.get_results">
 <code class="descclassname">enasearch.</code><code class="descname">get_results</code><span class="sig-paren">(</span><em>verbose=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_results" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the list of results in ENA as a dictionary with the key being the
-result id and the value the result description</p>
+<dd><p>Return the possible results (type of data) in ENA (other than taxonomy)</p>
+<p>Each result is described in a dictionary with a description of the result, 
+the list of returnable fields associated with the result and a dictionnary 
+with the filter fields associated with the result</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> &#8211; boolean to define the printing info</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary with the keys being the result ids and the values dictionary to describe the results</td>
 </tr>
 </tbody>
 </table>
@@ -455,15 +512,20 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.get_returnable_fields">
 <code class="descclassname">enasearch.</code><code class="descname">get_returnable_fields</code><span class="sig-paren">(</span><em>result</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_returnable_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_returnable_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the returnable fields of a result</p>
+<dd><p>Return the returnable fields of a result</p>
+<p>This function returns the list of fields that can be extracted for a result
+in a query on ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 <li><strong>verbose</strong> &#8211; boolean to define the printing info</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of fields that can be extracted for a result</p>
 </td>
 </tr>
 </tbody>
@@ -474,15 +536,20 @@ result id and the value the result description</p>
 <dt id="enasearch.get_search_result_number">
 <code class="descclassname">enasearch.</code><code class="descname">get_search_result_number</code><span class="sig-paren">(</span><em>free_text_search</em>, <em>query</em>, <em>result</em>, <em>need_check_result=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_search_result_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_search_result_number" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of results for a query on a result</p>
+<p>This function builds a query on ENA to extract the number of results 
+matching the query on ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>free_text_search</strong> &#8211; boolean to describe the type of query</li>
 <li><strong>query</strong> &#8211; query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</li>
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an integer corresponding to the number of results of a query on ENA</p>
 </td>
 </tr>
 </tbody>
@@ -492,12 +559,14 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.get_search_url">
 <code class="descclassname">enasearch.</code><code class="descname">get_search_url</code><span class="sig-paren">(</span><em>free_text_search</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_search_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_search_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the search URL</p>
+<dd><p>Get the prefix for the URL to search ENA database</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>free_text_search</strong> &#8211; boolean to describe the type of query</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a string with the prefix of an URL to search ENA database</td>
 </tr>
 </tbody>
 </table>
@@ -506,15 +575,21 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.get_sortable_fields">
 <code class="descclassname">enasearch.</code><code class="descname">get_sortable_fields</code><span class="sig-paren">(</span><em>result</em>, <em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_sortable_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_sortable_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the sortable fields of a result</p>
+<dd><p>Return the sortable fields of a result</p>
+<p>This function returns the fields that can be used to sort the output of a
+query for a result on ENA. Each field is described in a dictionary with a 
+short description and its type (text, number, etc).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
 <li><strong>verbose</strong> &#8211; boolean to define the printing info</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary with the keys being the fields ids and the values dictionary to describe the fields</p>
 </td>
 </tr>
 </tbody>
@@ -524,12 +599,15 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.get_taxonomy_results">
 <code class="descclassname">enasearch.</code><code class="descname">get_taxonomy_results</code><span class="sig-paren">(</span><em>verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#get_taxonomy_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.get_taxonomy_results" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return info about the taxonomy results</p>
+<dd><p>Return description about the possible results accessible via the taxon portal</p>
+<p>Each taxonomy result is described with a short description</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbose</strong> &#8211; boolean to define the printing info</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary with the keys being the result ids and the values dictionary to describe the results</td>
 </tr>
 </tbody>
 </table>
@@ -553,16 +631,24 @@ result id and the value the result description</p>
 <dt id="enasearch.request_url">
 <code class="descclassname">enasearch.</code><code class="descname">request_url</code><span class="sig-paren">(</span><em>url</em>, <em>display</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#request_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.request_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the URL request and return content or status</p>
+<p>This function tooks an URL built to query or extract data from ENA and apply
+this URL. If a filepath is given, the function puts the result into the
+file and returns the status of the request. Otherwise, the results of the 
+request is returned by the function in different format depending of the 
+display format</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>url</strong> &#8211; URL to request</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> &#8211; URL to request on ENA</li>
 <li><strong>display</strong> &#8211; display option</li>
 <li><strong>length</strong> &#8211; number of records to retrieve</li>
 <li><strong>file</strong> &#8211; filepath to save the content of the search</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">status of the request or the result of the request (in different format)</p>
 </td>
 </tr>
 </tbody>
@@ -572,16 +658,19 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.retrieve_analysis_report">
 <code class="descclassname">enasearch.</code><code class="descname">retrieve_analysis_report</code><span class="sig-paren">(</span><em>accession</em>, <em>fields=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#retrieve_analysis_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.retrieve_analysis_report" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve analysis report</p>
+<dd><p>Retrieve analysis report from ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>accession</strong> &#8211; accession id</li>
 <li><strong>fields</strong> &#8211; comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=analysis)</li>
 <li><strong>file</strong> &#8211; filepath to save the content of the report</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">requested run repor</p>
 </td>
 </tr>
 </tbody>
@@ -592,11 +681,17 @@ result id and the value the result description</p>
 <dt id="enasearch.retrieve_data">
 <code class="descclassname">enasearch.</code><code class="descname">retrieve_data</code><span class="sig-paren">(</span><em>ids</em>, <em>display</em>, <em>download=None</em>, <em>file=None</em>, <em>offset=None</em>, <em>length=None</em>, <em>subseq_range=None</em>, <em>expanded=False</em>, <em>header=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#retrieve_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.retrieve_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve ENA data (other than taxon)</p>
+<p>This function retrieves data (other than taxon) from ENA by:</p>
+<ul class="simple">
+<li>Building the URL based on the ids to retrieve and some parameters to 
+format the results</li>
+<li>Requesting the URL to extract the data</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>ids</strong> &#8211; comma-separated identifiers for records other than Taxon</li>
 <li><strong>display</strong> &#8211; display option to specify the display format (accessible with get_display_options)</li>
 <li><strong>offset</strong> &#8211; first record to get</li>
@@ -609,6 +704,9 @@ result id and the value the result description</p>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">data corresponding to the requested ids and formatted given the parameters</p>
+</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -616,17 +714,22 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.retrieve_filereport">
 <code class="descclassname">enasearch.</code><code class="descname">retrieve_filereport</code><span class="sig-paren">(</span><em>accession</em>, <em>result</em>, <em>fields=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#retrieve_filereport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.retrieve_filereport" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve a filereport</p>
+<dd><p>Retrieve a file (run or analysis) report</p>
+<p>This function builds an URL to retrieve file (run or analysis) report from 
+ENA and return the result of the request.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>accession</strong> &#8211; accession id</li>
 <li><strong>result</strong> &#8211; read_run for a run report or analysis for an analysis report</li>
 <li><strong>fields</strong> &#8211; comma-separated list of fields to have in the report</li>
 <li><strong>file</strong> &#8211; filepath to save the content of the report</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">requested file report</p>
 </td>
 </tr>
 </tbody>
@@ -636,16 +739,19 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.retrieve_run_report">
 <code class="descclassname">enasearch.</code><code class="descname">retrieve_run_report</code><span class="sig-paren">(</span><em>accession</em>, <em>fields=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#retrieve_run_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.retrieve_run_report" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve run report</p>
+<dd><p>Retrieve run report from ENA</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>accession</strong> &#8211; accession id</li>
 <li><strong>fields</strong> &#8211; comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=read_run)</li>
 <li><strong>file</strong> &#8211; filepath to save the content of the report</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">requested run report</p>
 </td>
 </tr>
 </tbody>
@@ -655,12 +761,19 @@ result id and the value the result description</p>
 <dl class="function">
 <dt id="enasearch.retrieve_taxons">
 <code class="descclassname">enasearch.</code><code class="descname">retrieve_taxons</code><span class="sig-paren">(</span><em>ids</em>, <em>display</em>, <em>result=None</em>, <em>download=None</em>, <em>file=None</em>, <em>offset=None</em>, <em>length=None</em>, <em>subseq_range=None</em>, <em>expanded=False</em>, <em>header=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#retrieve_taxons"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.retrieve_taxons" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve taxons</p>
+<dd><p>Retrieve data from the ENA Taxon Portal</p>
+<p>This function retrieves data (other than taxon) from ENA by:</p>
+<ul class="simple">
+<li>Formatting the ids to query then on the Taxon Portal</li>
+<li>Building the URL based on the ids to retrieve and some parameters to 
+format the results</li>
+<li>Requesting the URL to extract the data</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>ids</strong> &#8211; comma-separated taxon identifiers</li>
 <li><strong>display</strong> &#8211; display option to specify the display format (accessible with get_display_options)</li>
 <li><strong>result</strong> &#8211; taxonomy result to display (accessible with result)</li>
@@ -674,6 +787,9 @@ result id and the value the result description</p>
 </ul>
 </td>
 </tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">data corresponding to the requested ids and formatted given the parameters</p>
+</td>
+</tr>
 </tbody>
 </table>
 </dd></dl>
@@ -682,11 +798,17 @@ result id and the value the result description</p>
 <dt id="enasearch.search_all_data">
 <code class="descclassname">enasearch.</code><code class="descname">search_all_data</code><span class="sig-paren">(</span><em>free_text_search</em>, <em>query</em>, <em>result</em>, <em>display</em>, <em>download=None</em>, <em>file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#search_all_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.search_all_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search ENA data and get all results (not size limited)</p>
+<p>This function</p>
+<ul class="simple">
+<li>Extracts the number of possible results for the query</li>
+<li>Extracts the all the results of the query (by potentially running several
+times the search function)</li>
+</ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>free_text_search</strong> &#8211; boolean to describe the type of query</li>
 <li><strong>query</strong> &#8211; query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</li>
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
@@ -694,6 +816,9 @@ result id and the value the result description</p>
 <li><strong>download</strong> &#8211; download option to specify that records are to be saved in a file (used with file option)</li>
 <li><strong>file</strong> &#8211; filepath to save the content of the search (used with download option)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">all results of the request in a format defined in the parameters</p>
 </td>
 </tr>
 </tbody>
@@ -704,11 +829,17 @@ result id and the value the result description</p>
 <dt id="enasearch.search_data">
 <code class="descclassname">enasearch.</code><code class="descname">search_data</code><span class="sig-paren">(</span><em>free_text_search</em>, <em>query</em>, <em>result</em>, <em>display</em>, <em>offset=None</em>, <em>length=None</em>, <em>download=None</em>, <em>file=None</em>, <em>fields=None</em>, <em>sortfields=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enasearch.html#search_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#enasearch.search_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search ENA data</p>
+<p>This function</p>
+<ul class="simple">
+<li>Builds the URL for a given query to search/extract data on ENA database</li>
+<li>Formats the results given the option defined</li>
+</ul>
+<p>The number of results for the query is limited at &lt;lengthLimit&gt;</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>free_text_search</strong> &#8211; boolean to describe the type of query</li>
 <li><strong>query</strong> &#8211; query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes</li>
 <li><strong>result</strong> &#8211; id of the result (partition of ENA db), accessible with get_results</li>
@@ -720,6 +851,9 @@ result id and the value the result description</p>
 <li><strong>fields</strong> &#8211; comma-separated list of fields to return (only if display=report)</li>
 <li><strong>sortfields</strong> &#8211; comma-separated list of fields to sort the results (only if display=report)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">results of the request in a format defined in the parameters</p>
 </td>
 </tr>
 </tbody>
