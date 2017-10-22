@@ -53,7 +53,7 @@ def print_display(results, display):
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
-@click.version_option()
+@click.version_option(version="0.2.0")
 def cli():
     """The Python library for interacting with ENA's API"""
     pass

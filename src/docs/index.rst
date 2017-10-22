@@ -16,3 +16,4 @@ We developed ENASearch, a Python library to search and retrieve data from ENA da
   cli_usage
   api_usage
   contributing
+  Source code on GitHub <https://github.com/bebatut/enasearch>
