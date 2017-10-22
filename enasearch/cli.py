@@ -106,7 +106,7 @@ def get_filter_fields(result):
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_returnable_fields(result):
-    """Get the fields that can be extracted for a result.
+    """Get the fields extractable for a result.
 
     This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result=result, verbose=False)
@@ -116,7 +116,7 @@ def get_returnable_fields(result):
 @click.command('get_run_fields')
 @exception_handler
 def get_run_fields():
-    """Get the fields that can be extracted for a run.
+    """Get the fields extractable for a run.
 
     This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result="read_run", verbose=False)
@@ -126,7 +126,7 @@ def get_run_fields():
 @click.command('get_analysis_fields')
 @exception_handler
 def get_analysis_fields():
-    """Get the fields that can be extracted for an analysis.
+    """Get the fields extractable for an analysis.
 
     This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result="analysis", verbose=True)
@@ -414,7 +414,7 @@ def retrieve_taxons(
     ids, display, result, download, file, offset, length, subseq_range,
     expanded, header
 ):
-    """Retrieve data from the ENA Taxon Portal
+    """Retrieve data from the ENA Taxon Portal.
 
     This function retrieves data (other than taxon) from ENA by:
 
