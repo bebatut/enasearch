@@ -36,10 +36,15 @@ taxonomy_results = load_object(get_data("taxonomy_results.p"))
 
 
 def get_results(verbose=True):
-    """Return the list of results in ENA as a dictionary with the key being the
-    result id and the value the result description
+    """Return the possible results (type of data) in ENA (other than taxonomy)
+
+    Each result is described in a dictionary with a description of the result,
+    the list of returnable fields associated with the result and a dictionnary
+    with the filter fields associated with the result
 
     :param verbose: boolean to define the printing info
+
+    :return: a dictionary with the keys being the result ids and the values dictionary to describe the results
     """
     if verbose:
         for result in results:
@@ -48,9 +53,13 @@ def get_results(verbose=True):
 
 
 def get_taxonomy_results(verbose=False):
-    """Return info about the taxonomy results
+    """Return description about the possible results accessible via the taxon portal.
+
+    Each taxonomy result is described with a short description.
 
     :param verbose: boolean to define the printing info
+
+    :return: a dictionary with the keys being the result ids and the values dictionary to describe the results
     """
     if verbose:
         pprint(taxonomy_results)
@@ -58,7 +67,10 @@ def get_taxonomy_results(verbose=False):
 
 
 def check_result(result):
-    """Check if result is in the list of possible results in ENA
+    """Check if a result id is in the list of possible results accessible on ENA
+
+    This function raises an error if the result is not in the list of possible
+    results
 
     :param result: id of result to check
     """
@@ -70,7 +82,10 @@ def check_result(result):
 
 
 def check_taxonomy_result(result):
-    """Check if a result is in the list of possible taxonomz results in ENA
+    """Check if a result id is in the list of possible results in ENA Taxon Portal
+
+    This function raises an error if the result is not in the list of  possible
+    taxonomy results
 
     :param result: id of result to check
     """
@@ -82,10 +97,12 @@ def check_taxonomy_result(result):
 
 
 def get_result(result, verbose=False):
-    """Return info about a result
+    """Return the description of a result (description, returnable and filter fields)
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with a description of the result, the list of returnable fields and a dictionnary with the filter fields
     """
     results = get_results(verbose=False)
     check_result(result)
@@ -96,10 +113,16 @@ def get_result(result, verbose=False):
 
 
 def get_filter_fields(result, verbose=False):
-    """Get the filter fields of a result to build a query
+    """Return the filter fields of a result
+
+    This function returns the fields that can be used to build a query on a
+    result on ENA. Each field is described in a dictionary with a short
+    description and its type (text, number, etc).
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with the keys being the fields ids and the values dictionary to describe the fields
     """
     result_info = get_result(result)
     filter_fields = result_info["filter_fields"]
@@ -109,10 +132,15 @@ def get_filter_fields(result, verbose=False):
 
 
 def get_returnable_fields(result, verbose=False):
-    """Get the returnable fields of a result
+    """Return the returnable fields of a result
+
+    This function returns the list of fields that can be extracted for a result
+    in a query on ENA
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
+
+    :return: list of fields that can be extracted for a result
     """
     check_result(result)
     result_info = get_result(result)
@@ -123,7 +151,10 @@ def get_returnable_fields(result, verbose=False):
 
 
 def check_returnable_fields(fields, result):
-    """Check that some fields are returnable fields of a resut
+    """Check that some field id correspond to returnable fields for a resut
+
+    This function raises an error if one of the ids is not in the list of possible
+    returnable fields for the given result
 
     :param fields: list of fields to check
     :param result: id of the result (partition of ENA db), accessible with get_results
@@ -137,10 +168,16 @@ def check_returnable_fields(fields, result):
 
 
 def get_sortable_fields(result, verbose=False):
-    """Get the sortable fields of a result
+    """Return the sortable fields of a result
+
+    This function returns the fields that can be used to sort the output of a
+    query for a result on ENA. Each field is described in a dictionary with a
+    short description and its type (text, number, etc).
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with the keys being the fields ids and the values dictionary to describe the fields
     """
     check_result(result)
     sortable_fields = get_filter_fields(result, verbose=False)
@@ -150,7 +187,10 @@ def get_sortable_fields(result, verbose=False):
 
 
 def check_sortable_fields(fields, result):
-    """Check that some fields are sortable fields of a resut
+    """Check that some field id correspond to sortable fields for a resut
+
+    This function raises an error if one of the ids is not in the list of possible
+    sortable fields for the given result
 
     :param fields: list of fields to check
     :param result: id of the result (partition of ENA db), accessible with get_results
@@ -164,10 +204,17 @@ def check_sortable_fields(fields, result):
 
 
 def get_filter_types(verbose=False):
-    """Get the types of filters usable to build a query
+    """Return the filters that can be used for the different type of data in a query on ENA
+
+    This function returns the filters that can be used for the different type of
+    data (information available with the information on the filter fileds). For
+    each type of data is given the operations applicable and a description of the
+    type of expected values
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with the keys being the type of data and the values dictionary to describe the filters for this type of data
     """
     if verbose:
         pprint(filter_types)
@@ -175,9 +222,11 @@ def get_filter_types(verbose=False):
 
 
 def get_display_options(verbose=False):
-    """Get the display options
+    """Return the possible formats to display the result of a query on ENA
 
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with the keys being the formats and the values a description of the formats
     """
     if verbose:
         pprint(display_options)
@@ -185,7 +234,10 @@ def get_display_options(verbose=False):
 
 
 def check_display_option(display):
-    """Check if display is in the list of display in ENA
+    """Check if a display id is in the list of output formats for a query on ENA
+
+    This function raises an error if the id is not in the list of possible
+    displayable format
 
     :param display: display to check
     """
@@ -197,9 +249,11 @@ def check_display_option(display):
 
 
 def get_download_options(verbose=False):
-    """Get the download options
+    """Return the options for download of data from ENA
 
     :param verbose: boolean to define the printing info
+
+    :return: dictionary with the options and the values a description of the options
     """
     if verbose:
         pprint(download_options)
@@ -207,7 +261,10 @@ def get_download_options(verbose=False):
 
 
 def check_download_option(download):
-    """Check if download is in the list of download format in ENA
+    """Check if an options is in the list of options for download of data from ENA
+
+    This function raises an error if the id is not in the list of possible
+    download options
 
     :param download: download format to check
     """
@@ -219,7 +276,10 @@ def check_download_option(download):
 
 
 def check_length(length):
-    """Check if length is below the maximum length
+    """Check if length (number of results for a query) is below the maximum
+
+    This function raises an error if the given length (or number of results for
+    a query) is below the maximum value <lengthLimit>
 
     :param length: length value to test
     """
@@ -231,6 +291,12 @@ def check_length(length):
 
 def check_download_file_options(download, file):
     """Check that download and file options are correctly defined
+
+    This function check:
+
+    - A filepath is given
+    - A download option is given
+    - The download option is in the list of options for download of data from ENA
 
     :param download: download option to specify that records are to be saved in a file (used with file option, accessible with get_download_options)
     :param file: filepath to save the content of the data (used with download option)
@@ -245,7 +311,12 @@ def check_download_file_options(download, file):
 
 
 def check_subseq_range(subseq_range):
-    """Check that subseq_range is well defined
+    """Check that a range of sequences to extract is well defined
+
+    This function check:
+
+    - The range is correctly built: 2 integer values separated by a -
+    - The second value is higher than the first one
 
     :param download: range for subsequences (limit separated by a -)
     """
@@ -260,11 +331,12 @@ def check_subseq_range(subseq_range):
 
 
 def format_seq_content(seq_str, out_format):
-    """Format a string with sequences into a BioPython sequence objects
-    (SeqRecord)
+    """Format a string with sequences into a list of BioPython sequence objects (SeqRecord)
 
     :param seq_str: string with sequences to format
     :param out_format: fasta or fastq
+
+    :return: a list of SeqRecord objects with the sequences in the input string
     """
     sequences = []
     with tempfile.TemporaryFile(mode='w+') as fp:
@@ -278,10 +350,18 @@ def format_seq_content(seq_str, out_format):
 def request_url(url, display, file=None):
     """Run the URL request and return content or status
 
-    :param url: URL to request
+    This function tooks an URL built to query or extract data from ENA and apply
+    this URL. If a filepath is given, the function puts the result into the
+    file and returns the status of the request. Otherwise, the results of the
+    request is returned by the function in different format depending of the
+    display format
+
+    :param url: URL to request on ENA
     :param display: display option
     :param length: number of records to retrieve
     :param file: filepath to save the content of the search
+
+    :return: status of the request or the result of the request (in different format)
     """
     if file is not None:
         r = requests.get(url, stream=True)
@@ -305,7 +385,11 @@ def build_retrieve_url(
     ids, display, result=None, download=None, file=None, offset=None,
     length=None, subseq_range=None, expanded=False, header=False
 ):
-    """Build the URL to retriva data or taxon
+    """Build the URL to retrieve data or taxon
+
+    This function builds the URL to retrieve data or taxon on ENA. It takes
+    several arguments, check their validity before combining them to build the
+    URL.
 
     :param ids: comma-separated identifiers for records other than Taxon
     :param display: display option to specify the display format (accessible with get_display_options)
@@ -316,6 +400,8 @@ def build_retrieve_url(
     :param subseq_range: range for subsequences (limit separated by a -)
     :param expanded: boolean to determine if a CON record is expanded
     :param header: boolean to obtain only the header of a record
+
+    :return: a string with the build URL
     """
     url = baseUrl + "data/view/"
     url += ids
@@ -345,6 +431,11 @@ def retrieve_data(
 ):
     """Retrieve ENA data (other than taxon)
 
+    This function retrieves data (other than taxon) from ENA by:
+
+    - Building the URL based on the ids to retrieve and some parameters to format the results
+    - Requesting the URL to extract the data
+
     :param ids: comma-separated identifiers for records other than Taxon
     :param display: display option to specify the display format (accessible with get_display_options)
     :param offset: first record to get
@@ -354,6 +445,8 @@ def retrieve_data(
     :param subseq_range: range for subsequences (limit separated by a -)
     :param expanded: boolean to determine if a CON record is expanded
     :param header: boolean to obtain only the header of a record
+
+    :return: data corresponding to the requested ids and formatted given the parameters
     """
     url = build_retrieve_url(
         ids=ids,
@@ -373,7 +466,13 @@ def retrieve_taxons(
     ids, display, result=None, download=None, file=None, offset=None,
     length=None, subseq_range=None, expanded=False, header=False
 ):
-    """Retrieve taxons
+    """Retrieve data from the ENA Taxon Portal
+
+    This function retrieves data (other than taxon) from ENA by:
+
+    - Formatting the ids to query then on the Taxon Portal
+    - Building the URL based on the ids to retrieve and some parameters to format the results
+    - Requesting the URL to extract the data
 
     :param ids: comma-separated taxon identifiers
     :param display: display option to specify the display format (accessible with get_display_options)
@@ -385,6 +484,8 @@ def retrieve_taxons(
     :param subseq_range: range for subsequences (limit separated by a -)
     :param expanded: boolean to determine if a CON record is expanded
     :param header: boolean to obtain only the header of a record
+
+    :return: data corresponding to the requested ids and formatted given the parameters
     """
     id_list = ids.split(",")
     modified_ids = []
@@ -407,10 +508,11 @@ def retrieve_taxons(
 
 
 def get_search_url(free_text_search):
-    """Get the search URL
+    """Get the prefix for the URL to search ENA database
 
     :param free_text_search: boolean to describe the type of query
 
+    :return: a string with the prefix of an URL to search ENA database
     """
     url = baseUrl + "data/"
     if not free_text_search:
@@ -424,9 +526,14 @@ def get_search_result_number(
 ):
     """Get the number of results for a query on a result
 
+    This function builds a query on ENA to extract the number of results
+    matching the query on ENA
+
     :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
+
+    :return: an integer corresponding to the number of results of a query on ENA
     """
     url = get_search_url(free_text_search)
     url += "query=%s" % (query)
@@ -450,6 +557,13 @@ def search_data(
 ):
     """Search ENA data
 
+    This function
+
+    - Builds the URL for a given query to search/extract data on ENA database
+    - Formats the results given the option defined
+
+    The number of results for the query is limited at <lengthLimit>
+
     :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
@@ -460,6 +574,8 @@ def search_data(
     :param file: filepath to save the content of the search (used with download option)
     :param fields: comma-separated list of fields to return (only if display=report)
     :param sortfields: comma-separated list of fields to sort the results (only if display=report)
+
+    :return: results of the request in a format defined in the parameters
     """
     url = get_search_url(free_text_search)
     url += "query=%s" % (query)
@@ -503,12 +619,20 @@ def search_all_data(
 ):
     """Search ENA data and get all results (not size limited)
 
+    This function
+
+    - Extracts the number of possible results for the query
+    - Extracts the all the results of the query (by potentially running several
+      times the search function)
+
     :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param display: display option to specify the display format
     :param download: download option to specify that records are to be saved in a file (used with file option)
     :param file: filepath to save the content of the search (used with download option)
+
+    :return: all results of the request in a format defined in the parameters
     """
     if display not in ["fasta", "fastq"]:
         err_str = "This function is not possible for this display option"
@@ -567,12 +691,17 @@ def search_all_data(
 
 
 def retrieve_filereport(accession, result, fields=None, file=None):
-    """Retrieve a filereport
+    """Retrieve a file (run or analysis) report
+
+    This function builds an URL to retrieve file (run or analysis) report from
+    ENA and return the result of the request.
 
     :param accession: accession id
     :param result: read_run for a run report or analysis for an analysis report
     :param fields: comma-separated list of fields to have in the report
     :param file: filepath to save the content of the report
+
+    :return: requested file report
     """
     url = baseUrl + "data/warehouse/filereport?"
     url += "accession=%s" % (accession)
@@ -593,11 +722,13 @@ def retrieve_filereport(accession, result, fields=None, file=None):
 
 
 def retrieve_run_report(accession, fields=None, file=None):
-    """Retrieve run report
+    """Retrieve run report from ENA
 
     :param accession: accession id
     :param fields: comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=read_run)
     :param file: filepath to save the content of the report
+
+    :return: requested run report
     """
     return retrieve_filereport(
         accession=accession,
@@ -607,11 +738,13 @@ def retrieve_run_report(accession, fields=None, file=None):
 
 
 def retrieve_analysis_report(accession, fields=None, file=None):
-    """Retrieve analysis report
+    """Retrieve analysis report from ENA
 
     :param accession: accession id
     :param fields: comma-separated list of fields to have in the report (accessible with get_returnable_fields with result=analysis)
     :param file: filepath to save the content of the report
+
+    :return: requested run repor
     """
     return retrieve_filereport(
         accession=accession,

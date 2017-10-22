@@ -55,81 +55,111 @@ def print_display(results, display):
 @click.group(context_settings=CONTEXT_SETTINGS)
 @click.version_option()
 def cli():
-    """ The Python library for interacting with ENA's API """
+    """The Python library for interacting with ENA's API"""
     pass
 
 
-@click.command('get_results', help="Get list of possible results")
+@click.command('get_results')
 @exception_handler
 def get_results():
-    """ Get list of possible results """
+    """Get the possible results (type of data).
+
+    This function return the possible results (or type of data) accessible with
+    ENA with their ids and a short description
+    """
     enasearch.get_results(verbose=True)
 
 
-@click.command('get_taxonomy_results', help='Get list of taxonomy results')
+@click.command('get_taxonomy_results')
 @exception_handler
 def get_taxonomy_results():
-    """ Return the list of taxonomy results in ENA """
+    """Get list of taxonomy results.
+
+    This function returns the  description about the possible results
+    accessible via the taxon portal. Each taxonomy result is described with a
+    short description"""
     taxo_results = enasearch.get_taxonomy_results(verbose=False)
     print_simple_dict(taxo_results)
 
 
-@click.command('get_filter_fields', help='Get filter fields')
+@click.command('get_filter_fields')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_filter_fields(result):
-    """ Get the filter fields of a result to build a query """
+    """Get the filter fields of a result to build a query.
+
+    This function returns the fields that can be used to build a query on
+    a result on ENA. Each field is described on a line with field id, its
+    description, its type and to which results it is related
+    """
     fields = enasearch.get_filter_fields(result=result, verbose=False)
     print_complex_field_dict(fields)
 
 
-@click.command('get_returnable_fields', help='Get list of returnable fields')
+@click.command('get_returnable_fields')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_returnable_fields(result):
-    """ Get the fields of a result that can returned in a report """
+    """Get the fields extractable for a result.
+
+    This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result=result, verbose=False)
     print_list(fields)
 
 
-@click.command('get_run_fields', help='Get list of fields for a run')
+@click.command('get_run_fields')
 @exception_handler
 def get_run_fields():
-    """ Get the fields for a run """
+    """Get the fields extractable for a run.
+
+    This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result="read_run", verbose=False)
     print_list(fields)
 
 
-@click.command('get_analysis_fields', help='Get list of fields for an analysis')
+@click.command('get_analysis_fields')
 @exception_handler
 def get_analysis_fields():
-    """ Get the fields for an analysis """
+    """Get the fields extractable for an analysis.
+
+    This function returns the fields as a list."""
     fields = enasearch.get_returnable_fields(result="analysis", verbose=True)
     print_list(fields)
 
 
-@click.command('get_sortable_fields', help='Get the sortable fields for a result')
+@click.command('get_sortable_fields')
 @click.option(
     '--result',
     required=True,
     help='Id of a result (accessible with get_results)')
 @exception_handler
 def get_sortable_fields(result):
-    """ Get the fields of a result that can sorted for a report """
+    """Get the fields of a result that can sorted.
+
+    This function returns the fields that can be used to sort the output of a
+    query for a result on ENA. Each field is described on a line with field id,
+    its description, its type and to which results it is related
+    """
     fields = enasearch.get_sortable_fields(result=result, verbose=False)
     print_complex_field_dict(fields)
 
 
-@click.command('get_filter_types', help='Get the types of filters usable to build a query')
+@click.command('get_filter_types')
 @exception_handler
 def get_filter_types():
-    """ Get the types of filters usable to build a query """
+    """Return the filters usable for the different type of data.
+
+    This function returns the filters that can be used for the different type of
+    data (information available with the information on the filter fileds). Each
+    filter is described with its name, the possible operators or paramters, a
+    description of the expected values
+    """
     types = enasearch.get_filter_types(verbose=False)
     click.echo("type\toperators/parameters\tvalues/description")
     for f, d in types.items():
@@ -142,23 +172,29 @@ def get_filter_types():
                 click.echo("%s\t%s\t%s" % (ff, ', '.join(dd['parameters']), dd['description']))
 
 
-@click.command('get_display_options', help='Get list of options for display')
+@click.command('get_display_options')
 @exception_handler
 def get_display_options():
-    """ Get the display options to specify the display format """
+    """Get the list of possible formats to display the result.
+
+    This function returns the possible formats to display the result of a query on ENA. Each format is described.
+    """
     options = enasearch.get_display_options(verbose=False)
     print_simple_dict(options)
 
 
-@click.command('get_download_options', help='Get list of options for download')
+@click.command('get_download_options')
 @exception_handler
 def get_download_options():
-    """ Get the download options to specify that records are to be saved in a file """
+    """Get the options for download of data from ENA.
+
+    Each option is described.
+    """
     options = enasearch.get_download_options(verbose=False)
     print_simple_dict(options)
 
 
-@click.command('search_data', help='Search data given a query')
+@click.command('search_data')
 @click.option(
     '--free_text_search',
     is_flag=True,
@@ -209,7 +245,16 @@ def search_data(
     free_text_search, query, result, display, download, file, fields,
     sortfields, offset, length
 ):
-    """ Search data given a query """
+    """Search data given a query.
+
+    This function
+
+    - Extracts the number of possible results for the query
+    - Extracts the all the results of the query (by potentially running several times the search function)
+
+    The output can be redirected to a file and directly display to the standard
+    output given the display chosen.
+    """
     free_text_search = True if free_text_search else False
     download = None if not download else download
     file = None if not file else file
@@ -242,7 +287,7 @@ def search_data(
         print_display(results, display)
 
 
-@click.command('retrieve_data', help='Retrieve ENA data (other than taxon and project)')
+@click.command('retrieve_data')
 @click.option(
     '--ids',
     required=True,
@@ -288,7 +333,16 @@ def retrieve_data(
     ids, display, download, file, offset, length, subseq_range, expanded,
     header
 ):
-    """ Retrieve ENA data (other than taxon and project) """
+    """Retrieve ENA data (other than taxon).
+
+    This function retrieves data (other than taxon) from ENA by:
+
+    - Building the URL based on the ids to retrieve and some parameters to format the results
+    - Requesting the URL to extract the data
+
+    The output can be redirected to a file and directly display to the standard
+    output given the display chosen.
+    """
     download = None if not download else download
     file = None if not file else file
     offset = None if not offset else offset
@@ -310,7 +364,7 @@ def retrieve_data(
         print_display(data, display)
 
 
-@click.command('retrieve_taxons', help='Retrieve ENA taxonomic data')
+@click.command('retrieve_taxons')
 @click.option(
     '--ids',
     required=True,
@@ -360,7 +414,17 @@ def retrieve_taxons(
     ids, display, result, download, file, offset, length, subseq_range,
     expanded, header
 ):
-    """ Retrieve ENA taxonomic data"""
+    """Retrieve data from the ENA Taxon Portal.
+
+    This function retrieves data (other than taxon) from ENA by:
+
+    - Formatting the ids to query then on the Taxon Portal
+    - Building the URL based on the ids to retrieve and some parameters to format the results
+    - Requesting the URL to extract the data
+
+    The output can be redirected to a file and directly display to the standard
+    output given the display chosen.
+    """
     result = None if not result else result
     download = None if not download else download
     file = None if not file else file
@@ -384,7 +448,7 @@ def retrieve_taxons(
         print_display(data, display)
 
 
-@click.command('retrieve_run_report', help='Retrieve run report')
+@click.command('retrieve_run_report')
 @click.option(
     '--accession',
     required=True,
@@ -401,7 +465,11 @@ def retrieve_taxons(
     help='File to save the report')
 @exception_handler
 def retrieve_run_report(accession, fields, file):
-    """ Retrieve run report """
+    """Retrieve run report from ENA.
+
+    The output can be redirected to a file and directly display to the standard
+    output given the display chosen.
+    """
     fields = None if not fields else ",".join(fields)
     file = None if not file else file
     report = enasearch.retrieve_run_report(
@@ -412,7 +480,7 @@ def retrieve_run_report(accession, fields, file):
         print_display(report, 'report')
 
 
-@click.command('retrieve_analysis_report', help='Retrieve analysis report')
+@click.command('retrieve_analysis_report')
 @click.option(
     '--accession',
     required=True,
@@ -429,7 +497,11 @@ def retrieve_run_report(accession, fields, file):
     help='File to save the report')
 @exception_handler
 def retrieve_analysis_report(accession, fields, file):
-    """ Retrieve analysis report """
+    """Retrieve analysis report from ENA.
+
+    The output can be redirected to a file and directly display to the standard
+    output given the display chosen.
+    """
     fields = None if not fields else ",".join(fields)
     file = None if not file else file
     report = enasearch.retrieve_analysis_report(
