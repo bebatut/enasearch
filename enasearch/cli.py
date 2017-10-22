@@ -3,6 +3,7 @@
 import click
 import enasearch
 from dicttoxml import dicttoxml
+from functools import wraps
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -11,6 +12,7 @@ lengthLimit = 100000
 
 def exception_handler(function):
     """Handle the exceptions raised by the commands"""
+    @wraps(function)
     def handle_exception(*args, **kwargs):
         try:
             return function(*args, **kwargs)
