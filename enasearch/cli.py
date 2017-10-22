@@ -75,8 +75,8 @@ def get_results():
 def get_taxonomy_results():
     """Get list of taxonomy results.
 
-    This function returns the  description about the possible results 
-    accessible via the taxon portal. Each taxonomy result is described with a 
+    This function returns the  description about the possible results
+    accessible via the taxon portal. Each taxonomy result is described with a
     short description"""
     taxo_results = enasearch.get_taxonomy_results(verbose=False)
     print_simple_dict(taxo_results)
@@ -91,9 +91,9 @@ def get_taxonomy_results():
 def get_filter_fields(result):
     """Get the filter fields of a result to build a query.
 
-    This function returns the fields that can be used to build a query on 
+    This function returns the fields that can be used to build a query on
     a result on ENA. Each field is described on a line with field id, its
-     description, its type and to which results it is related
+    description, its type and to which results it is related
     """
     fields = enasearch.get_filter_fields(result=result, verbose=False)
     print_complex_field_dict(fields)
@@ -143,7 +143,7 @@ def get_sortable_fields(result):
     """Get the fields of a result that can sorted.
 
     This function returns the fields that can be used to sort the output of a
-    query for a result on ENA. Each field is described on a line with field id, 
+    query for a result on ENA. Each field is described on a line with field id,
     its description, its type and to which results it is related
     """
     fields = enasearch.get_sortable_fields(result=result, verbose=False)
@@ -155,9 +155,9 @@ def get_sortable_fields(result):
 def get_filter_types():
     """Return the filters usable for the different type of data.
 
-    This function returns the filters that can be used for the different type of 
+    This function returns the filters that can be used for the different type of
     data (information available with the information on the filter fileds). Each
-    filter is described with its name, the possible operators or paramters, a 
+    filter is described with its name, the possible operators or paramters, a
     description of the expected values
     """
     types = enasearch.get_filter_types(verbose=False)
@@ -177,8 +177,7 @@ def get_filter_types():
 def get_display_options():
     """Get the list of possible formats to display the result.
 
-    This function returns the possible formats to display the result of a 
-    query on ENA. Each format is described.
+    This function returns the possible formats to display the result of a query on ENA. Each format is described.
     """
     options = enasearch.get_display_options(verbose=False)
     print_simple_dict(options)
@@ -249,10 +248,9 @@ def search_data(
     """Search data given a query.
 
     This function
-    
+
     - Extracts the number of possible results for the query
-    - Extracts the all the results of the query (by potentially running several
-      times the search function)
+    - Extracts the all the results of the query (by potentially running several times the search function)
 
     The output can be redirected to a file and directly display to the standard
     output given the display chosen.
@@ -339,8 +337,7 @@ def retrieve_data(
 
     This function retrieves data (other than taxon) from ENA by:
 
-    - Building the URL based on the ids to retrieve and some parameters to 
-      format the results
+    - Building the URL based on the ids to retrieve and some parameters to format the results
     - Requesting the URL to extract the data
 
     The output can be redirected to a file and directly display to the standard
@@ -422,10 +419,9 @@ def retrieve_taxons(
     This function retrieves data (other than taxon) from ENA by:
 
     - Formatting the ids to query then on the Taxon Portal
-    - Building the URL based on the ids to retrieve and some parameters to 
-      format the results
+    - Building the URL based on the ids to retrieve and some parameters to format the results
     - Requesting the URL to extract the data
-    
+
     The output can be redirected to a file and directly display to the standard
     output given the display chosen.
     """

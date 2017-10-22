@@ -38,8 +38,8 @@ taxonomy_results = load_object(get_data("taxonomy_results.p"))
 def get_results(verbose=True):
     """Return the possible results (type of data) in ENA (other than taxonomy)
 
-    Each result is described in a dictionary with a description of the result, 
-    the list of returnable fields associated with the result and a dictionnary 
+    Each result is described in a dictionary with a description of the result,
+    the list of returnable fields associated with the result and a dictionnary
     with the filter fields associated with the result
 
     :param verbose: boolean to define the printing info
@@ -53,9 +53,9 @@ def get_results(verbose=True):
 
 
 def get_taxonomy_results(verbose=False):
-    """Return description about the possible results accessible via the taxon portal 
+    """Return description about the possible results accessible via the taxon portal.
 
-    Each taxonomy result is described with a short description
+    Each taxonomy result is described with a short description.
 
     :param verbose: boolean to define the printing info
 
@@ -115,9 +115,9 @@ def get_result(result, verbose=False):
 def get_filter_fields(result, verbose=False):
     """Return the filter fields of a result
 
-    This function returns the fields that can be used to build a query on a 
-    result on ENA. Each field is described in a dictionary with a short 
-    description and its type (text, number, etc). 
+    This function returns the fields that can be used to build a query on a
+    result on ENA. Each field is described in a dictionary with a short
+    description and its type (text, number, etc).
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
@@ -171,8 +171,8 @@ def get_sortable_fields(result, verbose=False):
     """Return the sortable fields of a result
 
     This function returns the fields that can be used to sort the output of a
-    query for a result on ENA. Each field is described in a dictionary with a 
-    short description and its type (text, number, etc). 
+    query for a result on ENA. Each field is described in a dictionary with a
+    short description and its type (text, number, etc).
 
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param verbose: boolean to define the printing info
@@ -206,7 +206,7 @@ def check_sortable_fields(fields, result):
 def get_filter_types(verbose=False):
     """Return the filters that can be used for the different type of data in a query on ENA
 
-    This function returns the filters that can be used for the different type of 
+    This function returns the filters that can be used for the different type of
     data (information available with the information on the filter fileds). For
     each type of data is given the operations applicable and a description of the
     type of expected values
@@ -352,8 +352,8 @@ def request_url(url, display, file=None):
 
     This function tooks an URL built to query or extract data from ENA and apply
     this URL. If a filepath is given, the function puts the result into the
-    file and returns the status of the request. Otherwise, the results of the 
-    request is returned by the function in different format depending of the 
+    file and returns the status of the request. Otherwise, the results of the
+    request is returned by the function in different format depending of the
     display format
 
     :param url: URL to request on ENA
@@ -387,7 +387,7 @@ def build_retrieve_url(
 ):
     """Build the URL to retrieve data or taxon
 
-    This function builds the URL to retrieve data or taxon on ENA. It takes 
+    This function builds the URL to retrieve data or taxon on ENA. It takes
     several arguments, check their validity before combining them to build the
     URL.
 
@@ -433,8 +433,7 @@ def retrieve_data(
 
     This function retrieves data (other than taxon) from ENA by:
 
-    - Building the URL based on the ids to retrieve and some parameters to 
-      format the results
+    - Building the URL based on the ids to retrieve and some parameters to format the results
     - Requesting the URL to extract the data
 
     :param ids: comma-separated identifiers for records other than Taxon
@@ -447,7 +446,7 @@ def retrieve_data(
     :param expanded: boolean to determine if a CON record is expanded
     :param header: boolean to obtain only the header of a record
 
-    :return: data corresponding to the requested ids and formatted given the parameters 
+    :return: data corresponding to the requested ids and formatted given the parameters
     """
     url = build_retrieve_url(
         ids=ids,
@@ -472,8 +471,7 @@ def retrieve_taxons(
     This function retrieves data (other than taxon) from ENA by:
 
     - Formatting the ids to query then on the Taxon Portal
-    - Building the URL based on the ids to retrieve and some parameters to 
-      format the results
+    - Building the URL based on the ids to retrieve and some parameters to format the results
     - Requesting the URL to extract the data
 
     :param ids: comma-separated taxon identifiers
@@ -528,7 +526,7 @@ def get_search_result_number(
 ):
     """Get the number of results for a query on a result
 
-    This function builds a query on ENA to extract the number of results 
+    This function builds a query on ENA to extract the number of results
     matching the query on ENA
 
     :param free_text_search: boolean to describe the type of query
@@ -560,7 +558,7 @@ def search_data(
     """Search ENA data
 
     This function
-    
+
     - Builds the URL for a given query to search/extract data on ENA database
     - Formats the results given the option defined
 
@@ -695,7 +693,7 @@ def search_all_data(
 def retrieve_filereport(accession, result, fields=None, file=None):
     """Retrieve a file (run or analysis) report
 
-    This function builds an URL to retrieve file (run or analysis) report from 
+    This function builds an URL to retrieve file (run or analysis) report from
     ENA and return the result of the request.
 
     :param accession: accession id
