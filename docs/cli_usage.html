@@ -195,21 +195,21 @@ Options:
   -h, --help  Show this message and exit.
 
 Commands:
-  get_analysis_fields       Get list of fields <span class="k">for</span> an analysis
-  get_display_options       Get list of options <span class="k">for</span> display
-  get_download_options      Get list of options <span class="k">for</span> download
-  get_filter_fields         Get filter fields
-  get_filter_types          Get the types of filters usable to build a query
-  get_results               Get list of possible results
-  get_returnable_fields     Get list of returnable fields
-  get_run_fields            Get list of fields <span class="k">for</span> a run
-  get_sortable_fields       Get the sortable fields <span class="k">for</span> a result
-  get_taxonomy_results      Get list of taxonomy results
-  retrieve_analysis_report  Retrieve analysis report
-  retrieve_data             Retrieve ENA data <span class="o">(</span>other than taxon and project<span class="o">)</span>
-  retrieve_run_report       Retrieve run report
-  retrieve_taxons           Retrieve ENA taxonomic data
-  search_data               Search data given a query
+  get_analysis_fields       Get the fields extractable <span class="k">for</span> an analysis.
+  get_display_options       Get the list of possible formats to display...
+  get_download_options      Get the options <span class="k">for</span> download of data from...
+  get_filter_fields         Get the filter fields of a result to build a...
+  get_filter_types          Return the filters usable <span class="k">for</span> the different...
+  get_results               Get the possible results <span class="o">(</span><span class="nb">type</span> of data<span class="o">)</span>.
+  get_returnable_fields     Get the fields extractable <span class="k">for</span> a result.
+  get_run_fields            Get the fields extractable <span class="k">for</span> a run.
+  get_sortable_fields       Get the fields of a result that can sorted.
+  get_taxonomy_results      Get list of taxonomy results.
+  retrieve_analysis_report  Retrieve analysis report from ENA.
+  retrieve_data             Retrieve ENA data <span class="o">(</span>other than taxon<span class="o">)</span>.
+  retrieve_run_report       Retrieve run report from ENA.
+  retrieve_taxons           Retrieve data from the ENA Taxon Portal.
+  search_data               Search data given a query.
 </pre></div>
 </div>
 <div class="section" id="commands">
@@ -229,28 +229,34 @@ Commands:
 
 <div class="section" id="enasearch-get-analysis-fields">
 <h4>get_analysis_fields<a class="headerlink" href="#enasearch-get-analysis-fields" title="Permalink to this headline">¶</a></h4>
-<p>Get list of fields for an analysis</p>
+<p>Get the fields extractable for an analysis.</p>
+<p>This function returns the fields as a list.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_analysis_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-display-options">
 <h4>get_display_options<a class="headerlink" href="#enasearch-get-display-options" title="Permalink to this headline">¶</a></h4>
-<p>Get list of options for display</p>
+<p>Get the list of possible formats to display the result.</p>
+<p>This function returns the possible formats to display the result of a query on ENA. Each format is described.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_display_options <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-download-options">
 <h4>get_download_options<a class="headerlink" href="#enasearch-get-download-options" title="Permalink to this headline">¶</a></h4>
-<p>Get list of options for download</p>
+<p>Get the options for download of data from ENA.</p>
+<p>Each option is described.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_download_options <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-filter-fields">
 <h4>get_filter_fields<a class="headerlink" href="#enasearch-get-filter-fields" title="Permalink to this headline">¶</a></h4>
-<p>Get filter fields</p>
+<p>Get the filter fields of a result to build a query.</p>
+<p>This function returns the fields that can be used to build a query on
+a result on ENA. Each field is described on a line with field id, its
+description, its type and to which results it is related</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_filter_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -264,21 +270,28 @@ Commands:
 </div>
 <div class="section" id="enasearch-get-filter-types">
 <h4>get_filter_types<a class="headerlink" href="#enasearch-get-filter-types" title="Permalink to this headline">¶</a></h4>
-<p>Get the types of filters usable to build a query</p>
+<p>Return the filters usable for the different type of data.</p>
+<p>This function returns the filters that can be used for the different type of
+data (information available with the information on the filter fileds). Each
+filter is described with its name, the possible operators or paramters, a
+description of the expected values</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_filter_types <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-results">
 <h4>get_results<a class="headerlink" href="#enasearch-get-results" title="Permalink to this headline">¶</a></h4>
-<p>Get list of possible results</p>
+<p>Get the possible results (type of data).</p>
+<p>This function return the possible results (or type of data) accessible with
+ENA with their ids and a short description</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_results <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-returnable-fields">
 <h4>get_returnable_fields<a class="headerlink" href="#enasearch-get-returnable-fields" title="Permalink to this headline">¶</a></h4>
-<p>Get list of returnable fields</p>
+<p>Get the fields extractable for a result.</p>
+<p>This function returns the fields as a list.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_returnable_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -292,14 +305,18 @@ Commands:
 </div>
 <div class="section" id="enasearch-get-run-fields">
 <h4>get_run_fields<a class="headerlink" href="#enasearch-get-run-fields" title="Permalink to this headline">¶</a></h4>
-<p>Get list of fields for a run</p>
+<p>Get the fields extractable for a run.</p>
+<p>This function returns the fields as a list.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_run_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-get-sortable-fields">
 <h4>get_sortable_fields<a class="headerlink" href="#enasearch-get-sortable-fields" title="Permalink to this headline">¶</a></h4>
-<p>Get the sortable fields for a result</p>
+<p>Get the fields of a result that can sorted.</p>
+<p>This function returns the fields that can be used to sort the output of a
+query for a result on ENA. Each field is described on a line with field id,
+its description, its type and to which results it is related</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_sortable_fields <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -313,14 +330,19 @@ Commands:
 </div>
 <div class="section" id="enasearch-get-taxonomy-results">
 <h4>get_taxonomy_results<a class="headerlink" href="#enasearch-get-taxonomy-results" title="Permalink to this headline">¶</a></h4>
-<p>Get list of taxonomy results</p>
+<p>Get list of taxonomy results.</p>
+<p>This function returns the  description about the possible results
+accessible via the taxon portal. Each taxonomy result is described with a
+short description</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch get_taxonomy_results <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="enasearch-retrieve-analysis-report">
 <h4>retrieve_analysis_report<a class="headerlink" href="#enasearch-retrieve-analysis-report" title="Permalink to this headline">¶</a></h4>
-<p>Retrieve analysis report</p>
+<p>Retrieve analysis report from ENA.</p>
+<p>The output can be redirected to a file and directly display to the standard
+output given the display chosen.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_analysis_report <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -346,7 +368,14 @@ Commands:
 </div>
 <div class="section" id="enasearch-retrieve-data">
 <h4>retrieve_data<a class="headerlink" href="#enasearch-retrieve-data" title="Permalink to this headline">¶</a></h4>
-<p>Retrieve ENA data (other than taxon and project)</p>
+<p>Retrieve ENA data (other than taxon).</p>
+<p>This function retrieves data (other than taxon) from ENA by:</p>
+<ul class="simple">
+<li>Building the URL based on the ids to retrieve and some parameters to format the results</li>
+<li>Requesting the URL to extract the data</li>
+</ul>
+<p>The output can be redirected to a file and directly display to the standard
+output given the display chosen.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_data <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -408,7 +437,9 @@ Commands:
 </div>
 <div class="section" id="enasearch-retrieve-run-report">
 <h4>retrieve_run_report<a class="headerlink" href="#enasearch-retrieve-run-report" title="Permalink to this headline">¶</a></h4>
-<p>Retrieve run report</p>
+<p>Retrieve run report from ENA.</p>
+<p>The output can be redirected to a file and directly display to the standard
+output given the display chosen.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_run_report <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -434,7 +465,15 @@ Commands:
 </div>
 <div class="section" id="enasearch-retrieve-taxons">
 <h4>retrieve_taxons<a class="headerlink" href="#enasearch-retrieve-taxons" title="Permalink to this headline">¶</a></h4>
-<p>Retrieve ENA taxonomic data</p>
+<p>Retrieve data from the ENA Taxon Portal.</p>
+<p>This function retrieves data (other than taxon) from ENA by:</p>
+<ul class="simple">
+<li>Formatting the ids to query then on the Taxon Portal</li>
+<li>Building the URL based on the ids to retrieve and some parameters to format the results</li>
+<li>Requesting the URL to extract the data</li>
+</ul>
+<p>The output can be redirected to a file and directly display to the standard
+output given the display chosen.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch retrieve_taxons <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>
@@ -502,7 +541,14 @@ Commands:
 </div>
 <div class="section" id="enasearch-search-data">
 <h4>search_data<a class="headerlink" href="#enasearch-search-data" title="Permalink to this headline">¶</a></h4>
-<p>Search data given a query</p>
+<p>Search data given a query.</p>
+<p>This function</p>
+<ul class="simple">
+<li>Extracts the number of possible results for the query</li>
+<li>Extracts the all the results of the query (by potentially running several times the search function)</li>
+</ul>
+<p>The output can be redirected to a file and directly display to the standard
+output given the display chosen.</p>
 <div class="highlight-shell"><div class="highlight"><pre><span></span>enasearch search_data <span class="o">[</span>OPTIONS<span class="o">]</span>
 </pre></div>
 </div>

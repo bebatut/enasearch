@@ -13,21 +13,21 @@ ENASearch can be used via command-line with:
       -h, --help  Show this message and exit.
 
     Commands:
-      get_analysis_fields       Get list of fields for an analysis
-      get_display_options       Get list of options for display
-      get_download_options      Get list of options for download
-      get_filter_fields         Get filter fields
-      get_filter_types          Get the types of filters usable to build a query
-      get_results               Get list of possible results
-      get_returnable_fields     Get list of returnable fields
-      get_run_fields            Get list of fields for a run
-      get_sortable_fields       Get the sortable fields for a result
-      get_taxonomy_results      Get list of taxonomy results
-      retrieve_analysis_report  Retrieve analysis report
-      retrieve_data             Retrieve ENA data (other than taxon and project)
-      retrieve_run_report       Retrieve run report
-      retrieve_taxons           Retrieve ENA taxonomic data
-      search_data               Search data given a query
+      get_analysis_fields       Get the fields extractable for an analysis.
+      get_display_options       Get the list of possible formats to display...
+      get_download_options      Get the options for download of data from...
+      get_filter_fields         Get the filter fields of a result to build a...
+      get_filter_types          Return the filters usable for the different...
+      get_results               Get the possible results (type of data).
+      get_returnable_fields     Get the fields extractable for a result.
+      get_run_fields            Get the fields extractable for a run.
+      get_sortable_fields       Get the fields of a result that can sorted.
+      get_taxonomy_results      Get list of taxonomy results.
+      retrieve_analysis_report  Retrieve analysis report from ENA.
+      retrieve_data             Retrieve ENA data (other than taxon).
+      retrieve_run_report       Retrieve run report from ENA.
+      retrieve_taxons           Retrieve data from the ENA Taxon Portal.
+      search_data               Search data given a query.
 
 Commands
 --------
