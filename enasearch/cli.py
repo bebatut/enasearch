@@ -43,6 +43,7 @@ def print_complex_field_dict(d):
 
 def print_display(results, display):
     """Print the results given the choosen display"""
+    results = results.encode("utf-8")
     if display == 'xml':
         print(dicttoxml(results))
     elif display == 'fasta' or display == 'fastq':
