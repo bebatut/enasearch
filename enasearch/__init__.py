@@ -373,6 +373,7 @@ def request_url(url, display, file=None):
     else:
         r = requests.get(url)
         r.raise_for_status()
+        print(r)
         if display == "xml":
             return xmltodict.parse(r.text)
         elif display == "fasta" or display == "fastq":
@@ -507,52 +508,45 @@ def retrieve_taxons(
     return request_url(url, display, file)
 
 
-def get_search_url(free_text_search):
+def get_search_url():
     """Get the prefix for the URL to search ENA database
-
-    :param free_text_search: boolean to describe the type of query
 
     :return: a string with the prefix of an URL to search ENA database
     """
-    url = baseUrl + "data/"
-    if not free_text_search:
-        url += "warehouse/"
-    url += "search?"
+    url = baseUrl + "portal/api/search?dataPortal=ena&"
     return url
 
 
 def get_search_result_number(
-    free_text_search, query, result, need_check_result=True
+    query, result, need_check_result=True
 ):
     """Get the number of results for a query on a result
 
     This function builds a query on ENA to extract the number of results
     matching the query on ENA
 
-    :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
 
     :return: an integer corresponding to the number of results of a query on ENA
     """
-    url = get_search_url(free_text_search)
+    url = get_search_url()
     url += "query=%s" % (query)
 
     if need_check_result:
         check_result(result)
     url += "&result=%s" % (result)
-
-    url += "&resultcount"
+    print(url)
     r = requests.get(
         url,
         headers={"accept": "application/json"})
     r.raise_for_status()
-    nb = r.text.split("\n")[0].split(": ")[1].replace(",", "")
+    nb = len(r.text.split("\n"))
     return int(nb)
 
 
 def search_data(
-    free_text_search, query, result, display, offset=None, length=None,
+    query, result, display, offset=None, length=None,
     download=None, file=None, fields=None, sortfields=None
 ):
     """Search ENA data
@@ -564,7 +558,6 @@ def search_data(
 
     The number of results for the query is limited at <lengthLimit>
 
-    :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param display: display option to specify the display format (accessible with get_display_options)
@@ -577,7 +570,7 @@ def search_data(
 
     :return: results of the request in a format defined in the parameters
     """
-    url = get_search_url(free_text_search)
+    url = get_search_url()
     url += "query=%s" % (query)
 
     check_result(result)
@@ -591,7 +584,7 @@ def search_data(
         url += "&length=%s" % (length)
 
     if offset is not None:
-        result_nb = get_search_result_number(free_text_search, query, result)
+        result_nb = get_search_result_number(query, result)
         if offset > result_nb:
             err_str = "The offset value must be lower than the possible number"
             err_str += " of results for the query"
@@ -611,11 +604,13 @@ def search_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
         url += "&download=%s" % (download)
+
+    print(url)
     return request_url(url, display, file)
 
 
 def search_all_data(
-    free_text_search, query, result, display, download=None, file=None
+    query, result, display, download=None, file=None
 ):
     """Search ENA data and get all results (not size limited)
 
@@ -625,7 +620,6 @@ def search_all_data(
     - Extracts the all the results of the query (by potentially running several
       times the search function)
 
-    :param free_text_search: boolean to describe the type of query
     :param query: query string, made up of filtering conditions, joined by logical ANDs, ORs and NOTs and bound by double quotes
     :param result: id of the result (partition of ENA db), accessible with get_results
     :param display: display option to specify the display format
@@ -641,14 +635,13 @@ def search_all_data(
     if download is not None or file is not None:
         check_download_file_options(download, file)
 
-    result_nb = get_search_result_number(free_text_search, query, result)
+    result_nb = get_search_result_number(query, result)
     quotient = int(result_nb / float(lengthLimit))
     start = 0
     all_results = []
     for i in range(quotient):
         start = lengthLimit * i
         all_results += search_data(
-            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,
@@ -664,7 +657,6 @@ def search_all_data(
             start = None
             remainder = None
         all_results += search_data(
-            free_text_search=free_text_search,
             query=query,
             result=result,
             display=display,

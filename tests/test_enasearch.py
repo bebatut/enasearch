@@ -34,25 +34,16 @@ def test_get_taxonomy_results():
 def test_get_search_result_number():
     """Test get_search_result_number function"""
     nb = enasearch.get_search_result_number(
-        free_text_search=False,
         query="tax_eq(10090)",
         result="assembly",
         need_check_result=True)
-    assert nb == 19
+    assert nb == 32
 
     nb = enasearch.get_search_result_number(
-        free_text_search=False,
         query="tax_tree(7147) AND dataclass=STD",
         result="coding_update",
         need_check_result=True)
     assert nb >= 17123
-
-    nb = enasearch.get_search_result_number(
-        free_text_search=True,
-        query="SMP1+homo",
-        result="sequence_release",
-        need_check_result=True)
-    assert nb >= 12
 
 
 def test_get_filter_types():
@@ -103,7 +94,6 @@ def test_get_sortable_fields():
 def test_search_data():
     """Test search_data function"""
     search_data = enasearch.search_data(
-        free_text_search=False,
         query="tax_tree(7147) AND dataclass=STD",
         result="coding_release",
         display="fasta",
@@ -113,20 +103,19 @@ def test_search_data():
         file=None,
         fields=None,
         sortfields=None)
+    print(search_data)
     assert len([seq.id for seq in search_data]) > 0
 
 
 def test_search_all_data():
     """Test search_all_data function"""
     search_data = enasearch.search_all_data(
-        free_text_search=True,
         query="kinase+homo+sapiens",
         result="sequence_update",
         display="fasta",
         download=None,
         file=None)
     nb = enasearch.get_search_result_number(
-        free_text_search=True,
         query="kinase+homo+sapiens",
         result="sequence_update",
         need_check_result=True)

@@ -21,15 +21,15 @@ def exception_handler(function):
     return handle_exception
 
 
-def print_list(l):
+def print_list(li):
     """Print list"""
-    for e in l:
+    for e in li:
         click.echo(e)
 
 
-def print_simple_dict(d):
+def print_simple_dict(dic):
     """Print a dictionary with fields as key and description as value"""
-    for res, des in d.items():
+    for res, des in dic.items():
         click.echo("%s\t%s" % (res, des['description']))
 
 
