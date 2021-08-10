@@ -695,7 +695,7 @@ def retrieve_filereport(accession, result, fields=None, file=None):
 
     :return: requested file report
     """
-    url = baseUrl + "data/warehouse/filereport?"
+    url = baseUrl + "portal/api/filereport?"
     url += "accession=%s" % (accession)
 
     if result not in ["read_run", "analysis"]:
